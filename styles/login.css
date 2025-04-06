@@ -1,0 +1,109 @@
+.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 40px;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+  
+/* Login Form Section */
+.login-form {
+    background-color: white;
+    padding: 40px;
+    border-radius: 0 0 8px 8px;
+    max-width: 400px;
+    min-width: 320px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.login-icon {
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    padding: 10px;
+    object-fit: contain;
+}
+  
+  
+.login-form h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+  
+/* Input Row with Icon */
+.input-group {
+    display: flex;
+    align-items: center;
+    background-color: var(--gray);
+    border-radius: 25px;
+    padding: 5px 15px;
+    margin-bottom: 20px;
+}
+  
+.input-group img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+  
+.input-group input {
+    border: none;
+    background: transparent;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    padding: 10px 0;
+}
+  
+/* Buttons */
+.button-row {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+  
+  
+.button-row button.admin {
+    background-color: var(--primary-color);
+    color: white;
+}
+  
+.signup-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+ }
+  
+.signup-link a {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-decoration: underline;
+}
+  
+/* Right Side Image */
+.login-image img {
+    max-width: 400px;
+    border-radius: 10px;
+}
+  
+ @media (max-width: 768px) {
+    .login-page {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .login-image img {
+      width: 100%;
+    }
+  
+    .button-row {
+      flex-direction: column;
+      gap: 10px;
+    }
+}
+  

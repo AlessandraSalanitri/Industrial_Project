@@ -1,0 +1,81 @@
+/* Footer Styles */
+footer {
+    width: 100vw; /* Ensures the footer always takes full viewport width */
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 40px 20px;
+    text-align: center;
+    margin-top: auto;
+    position: relative; /* Ensures proper positioning */
+    left: 0;
+    right: 0;
+  }
+  
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+  
+.footer-column {
+    flex: 1;
+    min-width: 250px;
+    padding: 10px;
+}
+  
+.footer-column h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+  
+.footer-column p, .footer-column ul {
+    font-size: 14px;
+}
+  
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+  
+.footer-column ul li {
+    margin-bottom: 5px;
+}
+  
+.footer-column ul li a {
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+  
+.footer-column ul li a:hover {
+    color: var(--secondary-color);
+}
+  
+/* Social Media Icons */
+.social-icons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 10px;
+}
+  
+.social-icons img {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s;
+}
+  
+.social-icons img:hover {
+    transform: scale(1.1);
+}
+  
+/* Responsive Design */
+@media (max-width: 800px) {
+    .footer-container {
+      flex-direction: column;
+      text-align: center;
+    }
+}
+

@@ -1,0 +1,30 @@
+/* This css ensure that the page fills the entire viewport */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+}
+  
+.layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Full height of the viewport */
+}
+  
+.content {
+    flex: 1; /* footer at the bottom */
+}
+  
+footer {
+    width: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 40px 20px;
+    text-align: center;
+    margin-top: auto; /* Ensures footer sticks to bottom */
+}
+  
