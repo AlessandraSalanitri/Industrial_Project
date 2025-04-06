@@ -1,35 +1,42 @@
-// pages/parent/dashboard.js
 import Layout from '../../components/Layout';
+import Image from 'next/image';
 import Link from 'next/link';
+import '../../styles/parent_dashboard.css';
 
 export default function ParentDashboard() {
   return (
     <Layout>
-      <div className="container">
-        <h1>Parent Dashboard</h1>
-        <p>Welcome, Parent!</p>
-        <div className="actions">
-          <Link href="/parent/create-story"><a className="btn">Create New Story</a></Link>
-          <Link href="/parent/my-stories"><a className="btn">My Stories</a></Link>
+      <div className="admin-dashboard">
+        <h1 className="dashboard-title">Admin Dashboard</h1>
+
+        <div className="dashboard-actions">
+          <div className="dashboard-card">
+            <Image
+              src="/assets/create_story.png"
+              alt="Create New Story"
+              width={280}
+              height={320}
+              className="dashboard-image"
+            />
+            <Link href="/parent/create-story" className="button button-primary">
+              Create new story
+            </Link>
+          </div>
+
+          <div className="dashboard-card">
+            <Image
+              src="/assets/saved_story.png"
+              alt="Manage Saved Story"
+              width={280}
+              height={320}
+              className="dashboard-image"
+            />
+            <Link href="/parent/my-stories" className="button button-primary">
+              Manage saved story
+            </Link>
+          </div>
         </div>
       </div>
-      <style jsx>{`
-        .container {
-          padding: 20px;
-        }
-        .actions {
-          margin-top: 20px;
-        }
-        .btn {
-          display: inline-block;
-          margin-right: 10px;
-          padding: 10px 15px;
-          background-color: #4B0082;
-          color: #fff;
-          text-decoration: none;
-          border-radius: 5px;
-        }
-      `}</style>
     </Layout>
   );
 }

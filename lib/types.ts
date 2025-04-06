@@ -11,6 +11,19 @@ export type TUserRole = {
   avatar?: string;
 };
 
+export type TUserDetails = {
+  id: string;
+  userId: string;
+  role: "child" | "parent";
+  avatar?: string;
+
+  // Optional extra fields to be added in the db only if the user do so from the edit details form
+  fullName?: string;
+  phoneNumber?: string;
+  address?: string;
+  creditCard?: string;
+};
+
 export type TMenuItem = {
   id: string;
   title: string;

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import AvatarPanel from './AvatarPanel';
+import AdminPanel from './AdminPanel'; 
 import { useUser } from '../context/UserContext';
 import { AnimatePresence } from "framer-motion";
 import '../styles/nav.css';
@@ -97,9 +98,14 @@ export default function Navbar() {
         </div>
       </div>
   
-      {/* Avatar Modal */}
+      {/* Conditional Panels */}
       <AnimatePresence>
-        {showAvatarPanel && <AvatarPanel onClose={() => setShowAvatarPanel(false)} />}
+          {showAvatarPanel && user?.role === "child" && (
+        <AvatarPanel onClose={() => setShowAvatarPanel(false)} />
+        )}
+          {showAvatarPanel && user?.role === "parent" && (
+        <AdminPanel onClose={() => setShowAvatarPanel(false)} />
+        )}
       </AnimatePresence>
     </header>
   );
