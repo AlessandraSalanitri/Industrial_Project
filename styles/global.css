@@ -3,26 +3,26 @@
 
 /* Colors */
 :root {
-    --primary-color: #4B0082;  /* Indigo */
-    --secondary-color: #FFD700; /* Golden Yellow */
-    --white: #FFFFFF;
-    --gray: #E2E8F0; /* Light Gray */
-    --dark-gray: #6d6d6d; /* Darker Gray for disabled buttons */
-    --black: black;
+  --primary-color: #4B0082;  /* Indigo */
+  --secondary-color: #FFD700; /* Golden Yellow */
+  --white: #FFFFFF;
+  --gray: #E2E8F0; /* Light Gray */
+  --dark-gray: #6d6d6d; /* Darker Gray for disabled buttons */
+  --black: black;
 }
   
 /* Typography */
 body {
-    font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 /*Logos*/
 .logo-left{  /*studioo logo - slightly bigger than decorative lines*/
-    width: 200px;
+  width: 200px;
 }
 
 .logo-right{  /* decorative lines*/
-    width: 110px;
+  width: 110px;
 }
 
 .logo-left,
@@ -34,138 +34,138 @@ body {
 
 /* Font Sizes */
 h1 {
-    font-size: 48px;
-    font-weight: bold;
+  font-size: 48px;
+  font-weight: bold;
 }
   
 h2 {
-    font-size: 32px;
-    font-weight: semi-bold;
+  font-size: 32px;
+  font-weight: semi-bold;
 }
   
 h3 {
-    font-size: 24px;
-    font-weight: medium;
+  font-size: 24px;
+  font-weight: medium;
 }
   
 p {
-    font-size: 16px;
-    font-weight: regular;
+  font-size: 16px;
+  font-weight: regular;
 }
 
 h1, h2, h3, p {
-    margin: 0 0 1rem;
-    line-height: 1.6;
+  margin: 0 0 1rem;
+  line-height: 1.6;
 }
   
   
 
 /* Buttons */
 .button {
-    border-radius: 30px;
-    padding: 12px 24px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s ease-in-out;
+  border-radius: 30px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
 }
   
 /* Primary Button */
 .button-primary {
-    background-color: var(--primary-color);
-    color: var(--white);
-    border: none;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
 }
   
 .button-primary:hover {
-    background-color: #3a0066;
+  background-color: #3a0066;
 }
   
 /* Secondary Button */
 .button-secondary {
-    background-color: var(--white);
-    color: var(--primary-color);
-    border: 2px solid var(--primary-color);
+  background-color: var(--white);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
 }
   
 .button-secondary:hover {
-    background-color: var(--gray);
+  background-color: var(--gray);
 }
   
 /* Disabled Button */
 .button-disabled {
-    background-color: var(--gray);
-    color: var(--dark-gray);
-    cursor: not-allowed;
+  background-color: var(--gray);
+  color: var(--dark-gray);
+  cursor: not-allowed;
 }
   
 
 /* layout wrapper for consistent page padding */
 .container {
-    padding: 40px 80px;
-    margin-top: 130px; 
-    max-width: 1200px;
-    margin: 0 auto;
+  padding: 40px 80px;
+  margin-top: 130px; 
+  max-width: 1200px;
+  margin: 0 auto;
   }
 
 
 @media (max-width: 768px) {
-    .container {
-      padding: 25px 40px;
-    }
+  .container {
+    padding: 25px 40px;
+  }
   
-    h1 {
-      font-size: 36px;
-    }
+  h1 {
+    font-size: 36px;
+  }
   
-    h2 {
-      font-size: 28px;
-    }
+  h2 {
+    font-size: 28px;
+  }
   
-    h3 {
-      font-size: 22px;
-    }
+  h3 {
+    font-size: 22px;
+  }
   
-    p {
-      font-size: 15px;
-    }
+  p {
+    font-size: 15px;
+  }
 }
   
 @media (max-width: 600px) {
-    .logo-left{  /*studioo logo - slightly bigger than decorative lines*/
-        width: 150px;
-    }
+  .logo-left{  /*studioo logo - slightly bigger than decorative lines*/
+    width: 150px;
+  }
     
-    .logo-right{  /* decorative lines*/
-        width: 100px;
-    }
+  .logo-right{  /* decorative lines*/
+    width: 100px;
+  }
 
 }
 @media (max-width: 480px) {
-    .container {
-      padding: 20px 20px;
-    }
+  .container {
+    padding: 20px 20px;
+  }
 
-    .logo-left{  /*studioo logo - slightly bigger than decorative lines*/
-        width: 120px;
-    }
+  .logo-left{  /*studioo logo - slightly bigger than decorative lines*/
+    width: 120px;
+  }
     
-    .logo-right{  /* decorative lines*/
-        width: 80px;
-    }
+  .logo-right{  /* decorative lines*/
+    width: 80px;
+  }
   
-    h1 {
-      font-size: 28px;
-    }
+  h1 {
+    font-size: 28px;
+  }
   
-    h2 {
-      font-size: 24px;
-    }
+  h2 {
+    font-size: 24px;
+  }
   
-    h3 {
-      font-size: 18px;
-    }
+  h3 {
+    font-size: 18px;
+  }
   
-    p {
-      font-size: 14px;
-    }
+  p {
+    font-size: 14px;
+  }
 }

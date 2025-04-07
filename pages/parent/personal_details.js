@@ -14,6 +14,7 @@ export default function PersonalDetailsPage() {
     phoneNumber: "",
     address: "",
     creditCard: "",
+    subscriptionPlan: "",
   });
   const [editField, setEditField] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -46,10 +47,10 @@ export default function PersonalDetailsPage() {
     setInputValue("");
   };
 
-  const renderField = (label, field) => (
+  const renderField = (label, field, disabled = false) => (
     <div className="detail-row" key={field}>
       <span className="detail-label">{label}:</span>
-      {editField === field ? (
+      {editField === field && !disabled ? (
         <>
           <input
             type="text"
@@ -63,9 +64,11 @@ export default function PersonalDetailsPage() {
           <span className="detail-value">
             {details[field] || <span className="placeholder">Add {label}</span>}
           </span>
+          {!disabled && (
           <button className="button button-secondary" onClick={() => handleEdit(field)}>
             Edit
           </button>
+           )}
         </>
       )}
     </div>
@@ -74,14 +77,17 @@ export default function PersonalDetailsPage() {
   return (
     <Layout>
         <div className="container">
-            <h1>Personal Details</h1>
+        <h2 className="personal_details-title">Personal Details</h2>
+        <h2 className="settings-title">Edit Your Details</h2>
             
             <div className="details-wrapper">
-                {renderField("Email", "email")}
+                {renderField("Email", "email", true)}
                 {renderField("Full Name", "fullName")}
                 {renderField("Phone Number", "phoneNumber")}
                 {renderField("Address", "address")}
                 {renderField("Credit Card", "creditCard")}
+                {renderField("Subscription Plan", "subscriptionPlan")}
+                
             </div>
         </div>
 

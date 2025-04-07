@@ -22,6 +22,9 @@ export type TUserDetails = {
   phoneNumber?: string;
   address?: string;
   creditCard?: string;
+
+  //Optional added by the subscription plan chosen
+  subscriptionPlan?: 'free' | 'pro' | 'unlimited';
 };
 
 export type TMenuItem = {

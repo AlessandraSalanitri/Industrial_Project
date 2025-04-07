@@ -12,6 +12,14 @@ export default function AdminPanel({ onClose }) {
     router.push('/parent/personal_details');
   };
 
+  const handleSubscription = () => {
+    router.push('/parent/subscription');
+  };
+
+  const handleSettings = () => {
+    router.push('/parent/settings');
+  };
+
   const goToDashboard = () => {
     router.push('/parent/dashboard');
   };
@@ -51,11 +59,11 @@ export default function AdminPanel({ onClose }) {
             <i className="icon">👤</i> Personal details
         </button>
         
-        <button className="admin-btn">
+        <button className="admin-btn" onClick={handleSubscription}>
             <i className="icon">🧾</i> Subscription
         </button>
         
-        <button className="admin-btn">
+        <button className="admin-btn" onClick={handleSettings}>
             <i className="icon">⚙️</i> Settings
         </button>
         

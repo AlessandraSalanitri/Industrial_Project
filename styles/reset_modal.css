@@ -1,0 +1,48 @@
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+  
+.reset-modal {
+    position: relative;
+    background: white;
+    padding: 30px;
+    width: 300px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    text-align: center;
+ }
+  
+.reset-modal input {
+    width: 100%;
+    padding: 10px 2px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--dark-gray);
+}
+  
+.reset-message {
+    font-size: 14px;
+    margin-top: 10px;
+}
+  
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-weight: bold;
+    font-size: 10px;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+  

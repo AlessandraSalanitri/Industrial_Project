@@ -1,6 +1,6 @@
 import Layout from '../components/Layout';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import '../styles/contact.css';
 
 export default function Contact() {
@@ -10,40 +10,66 @@ export default function Contact() {
     message: ''
   });
 
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsDarkMode(document.body.classList.contains("dark-mode"));
+    }
+  }, []);
+
+
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Message submission
-    alert(`Message sent to Studioo@info.com!\n\nName: ${formData.name}\nEmail: ${formData.email}\nMessage: ${formData.message}`);
+    alert(`Message sent to studioo@info.com!\n\nName: ${formData.name}\nEmail: ${formData.email}\nMessage: ${formData.message}`);
 
     // Reset form
     setFormData({ name: '', email: '', message: '' });
   };
 
+  
+
   return (
     <Layout>
       <div className="contact-page">
-        
       <div className="contact-info">
-      <a href="#" className="contact-item" aria-label="Phone Number">
-        <Image src="/assets/phone.svg" alt="Phone Icon" width={24} height={24} />
-        <span>077 XXX XX</span>
-      </a>
+        <a href="#" className="contact-item" aria-label="Phone Number">
+          <Image
+            src={isDarkMode ? "/assets/phoneDark.svg" : "/assets/phoneLight.svg"}
+            alt="Phone Icon"
+            width={24}
+            height={24}
+          />
+          <span>077 XXX XX</span>
+        </a>
 
-      <a href="#" className="contact-item" aria-label="Email">
-        <Image src="/assets/email.svg" alt="Email Icon" width={24} height={24} />
-        <span>Zstudioo@gmail.com</span>
-      </a>
+        <a href="#" className="contact-item" aria-label="Email">
+          <Image
+            src={isDarkMode ? "/assets/emailDark.svg" : "/assets/emailLight.svg"}
+            alt="Email Icon"
+            width={24}
+            height={24}
+          />
+          <span>studioo@info.com</span>
+        </a>
 
-      <a href="#" className="contact-item" aria-label="Address">
-        <Image src="/assets/location.svg" alt="Location Icon" width={24} height={24} />
-        <span>London - POSTCODE</span>
-      </a>
-    </div>
+        <a href="#" className="contact-item" aria-label="Address">
+          <Image
+            src={isDarkMode ? "/assets/locationDark.png" : "/assets/locationLight.png"}
+            alt="Location Icon"
+            width={45}
+            height={35}
+          />
+          <span>LONDON</span>
+        </a>
+      </div>
 
 
         {/* Contact Form */}

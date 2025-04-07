@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import signUp from "../firebase/auth/signup"; //usign signup helper- reducing load here
 import signIn from "../firebase/auth/signIn"; //using signin helper in firestore/auth.
+import ResetPasswordModal from '../components/ResetPasswordModal';
 import { useUser } from '../context/UserContext';
 import "../styles/auth.css";
 
@@ -19,6 +20,9 @@ export default function AuthPanel({ mode }) {
   const [form, setForm] = useState({ email: "", password: "", confirmPassword: "", role: "parent" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
+
+
 
   const handleSwitch = () => {
     setIsSignUp((prev) => !prev);
@@ -80,7 +84,7 @@ export default function AuthPanel({ mode }) {
       setLoading(false);
     }
   };
-  
+
 
   return (
     <div className="auth-wrapper">
@@ -140,6 +144,15 @@ export default function AuthPanel({ mode }) {
                 {isSignUp ? "Login here" : "Sign up here"}
               </button>
             </p>
+
+            {!isSignUp && (
+            <p className="forgot-password">
+              <span onClick={() => setShowResetModal(true)} className="link">
+                Forgot your password?
+              </span>
+            </p>
+           )}
+
             </div>
             <div className="auth-image">
             <Image
@@ -153,6 +166,7 @@ export default function AuthPanel({ mode }) {
         </motion.div>
         </AnimatePresence>
       </div>
+      {showResetModal && <ResetPasswordModal onClose={() => setShowResetModal(false)} />}
     </div>
   );
 }

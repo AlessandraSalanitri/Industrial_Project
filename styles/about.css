@@ -3,24 +3,24 @@
     padding: 80px 40px;
     max-width: 900px;
     margin: 0 auto;
-  }
+    margin-top: 40px;
+}
   
-  .about-container h1 {
+.about-container h1 {
     font-size: 36px;
     color: var(--primary-color);
     margin-bottom: 30px;
-  }
+}
   
-  .about-container p {
-    font-size: 16px;
-    line-height: 1.8;
-    color: #333;
-    margin-bottom: 40px;
-  }
+.about-container p {
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 40px;
+}
   
-  .about-image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-  }
+.about-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
   

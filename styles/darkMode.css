@@ -1,0 +1,281 @@
+/* === GLOBAL CSS DARK MODE === */
+.dark-mode {
+    --primary-color: #FFD700; /* In dark mode, golden yellow as primary */
+    --secondary-color: #4B0082; 
+    --white: #FFFFFF;
+    --gray: #1f1f1f;
+    --dark-gray: #999999;
+    --black: #000000;
+}
+
+.dark-mode p {
+  color: var(--white);
+}
+  
+body.dark-mode {
+    background-color: #121212;
+    color: var(--white);
+}
+
+.dark-mode .button-primary {
+    background-color: var(--primary-color);
+    color: var(--black);
+    border: none;
+}
+
+.dark-mode .button-primary:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color)
+}
+
+.dark-mode .button-secondary {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+  
+.dark-mode .button-secondary:hover {
+    background-color: var(--gray);
+}
+
+
+
+/* ======== NAVBAR DARK MODE ======== */
+body.dark-mode header {
+    background-color: #121212;
+}
+  
+body.dark-mode nav {
+    background-color: transparent;
+}
+   
+body.dark-mode nav ul li a:hover,
+body.dark-mode nav ul li .active {
+    color: var(--secondary-color);
+}
+  
+body.dark-mode .avatar-icon {
+    border: 2px solid var(--secondary-color);
+}
+
+.dark-mode .container {
+    background-color: transparent;
+    padding: 40px 80px;
+    margin-top: 130px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+  
+
+
+/* === CONTACT PAGE DARK MODE === */
+.dark-mode .contact-page {
+    background: linear-gradient(to bottom right, #121212 60%, var(--primary-color) 60%);
+}
+  
+.dark-mode .contact-info {
+    color: var(--white);
+}
+  
+.dark-mode .contact-item {
+    color: var(--white);
+}
+  
+.dark-mode .contact-item:hover {
+    color: var(--secondary-color);
+}
+  
+.dark-mode .contact-item img {
+    filter: brightness(1.5);
+}
+  
+.dark-mode .contact-form-container {
+    background-color: #222;
+    border: 1px solid #FFD700;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+  
+.dark-mode .contact-form-container h2 {
+    color: var(--white);
+}
+  
+.dark-mode input,
+.dark-mode textarea {
+    background-color: #333;
+    color: var(--white);
+    border: 1px solid #FFD700;
+}
+  
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder {
+    color: #aaa;
+}
+  
+.dark-mode .socials {
+    color: var(--white);
+}
+
+
+
+
+/* === ABOUT PAGE DARK MODE === */
+
+.dark-mode .about-container {
+    background-color: #121212;
+}
+
+.dark-mode .about-container h1 {
+    color: var(--secondary-color);
+}
+  
+.dark-mode .about-container p {
+    color: #f1f1f1;
+}
+
+.about-image {
+    border: 2px solid #FFD700;
+}
+
+
+/* === ADMIN_PANEL DARK MODE === */
+.dark-mode .admin-panel {
+    background-color: var(--dark-gray);
+    box-shadow: -5px 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .admin-header button {
+    background: #333;
+    border: 2px solid #666;
+    color: white;
+}
+
+.dark-mode .admin-content {
+    color: white;
+}
+  
+.dark-mode .admin-avatar img {
+    border-color: var(--secondary-color);
+}
+
+.dark-mode .admin-username {
+    background: #333;
+    color: white;
+    border: 1px solid #666;
+}
+  
+.dark-mode .admin-btn {
+    color: white;
+}
+
+.dark-mode .admin-username {
+    background: #333;
+    color: white;
+    border: 1px solid #666;
+}
+  
+.dark-mode .admin-btn {
+    color: var(--gray);
+}
+
+
+
+/* === PERSONAL DETAILS PAGE DARK MODE === */
+
+.dark-mode .personal-details-page {
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .personal-details-page h1 {
+    color: var(--secondary-color);
+}
+
+.dark-mode .detail-row {
+    background: #2a2a2a;
+    border: 1px solid #444;
+}
+
+.dark-mode .detail-label {
+    color: var(--secondary-color);
+}
+  
+.dark-mode .detail-value {
+    color: #cccccc;
+}
+
+
+
+
+/* ======== SUBSCRIPTION PLAN DARK MODE ======== */
+
+.dark-mode .subscription-wrapper {
+    background-color: #121212;
+    color: var(--white);
+}
+
+.dark-mode .subscription-wrapper {
+    background-color: #121212;
+    color: var(--white);
+}
+
+
+.dark-mode .billing-toggle span {
+    background: #2a2a2a;
+    color: #ccc;
+}
+  
+.dark-mode .billing-toggle .active {
+    background: var(--primary-color);
+    color: black;
+}
+  
+.dark-mode .plan-card {
+    background: VAR(--dark-gray);
+    color: var(--white);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+}
+  
+.dark-mode .plan-card:hover {
+    box-shadow: 0 6px 14px rgba(255, 255, 255, 0.1);
+}
+  
+.dark-mode .plan-card.selected {
+    border-color: var(--secondary-color);
+}
+  
+.dark-mode .plan-card .tag {
+    background: #333;
+    color: #bbb;
+}
+  
+.dark-mode .plan-card h3 {
+    color: var(--secondary-color);
+}
+  
+.dark-mode .plan-card .price {
+    color: var(--primary-color);
+}
+ 
+
+/* ======== SETTINGS DARK MODE ======== */
+
+.link-child-container input {
+    background-color: #333;
+    color: var(--white);
+    border-color: #666;
+}
+
+.dark-mode .info-box {
+    background-color: #1f1f1f;
+    border-left-color: var(--secondary-color);
+    color: var(--white);
+}
+
+/* ======== FOOTER DARK MODE REMAINS PURPLE======== */
+.footer {
+    background-color: var(--secondary-color);
+    color: var(--white);
+}
+
+  
