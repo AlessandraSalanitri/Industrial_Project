@@ -57,8 +57,8 @@ export default function Settings() {
             {voicesList.map((voice) => (
               <div key={voice.name} className={`voice-card ${selectedVoice === voice.name ? 'selected' : ''}`}>
                 <p>{voice.name}</p>
-                <button className="button button-secondary" onClick={() => handleVoicePreview(voice.name)}>Preview</button>
-                <button className="button button-primary" onClick={() => handleVoiceSelect(voice.name)}>Select</button>
+                <button className="button button-secondary" onClick={() => handleVoicePreview(voice.name)}>Hear Voice</button>
+                <button className="button button-primary" onClick={() => handleVoiceSelect(voice.name)}>Select Voice</button>
               </div>
             ))}
           </div>
@@ -84,7 +84,7 @@ export default function Settings() {
             <p>
               Linking your account with your child’s helps personalize their storytelling experience.
               When you create or edit stories, or choose a preferred narration voice, these changes
-              will automatically reflect in your child’s account — ensuring they always enjoy the
+              will automatically reflect in your child’s account, ensuring they always enjoy the
               stories the way you intended. It’s a simple way to stay connected and enhance their
               bedtime experience with just one click.
             </p>

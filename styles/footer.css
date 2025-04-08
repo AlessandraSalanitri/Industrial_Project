@@ -9,9 +9,9 @@ footer {
     position: relative; /* Ensures proper positioning */
     left: 0;
     right: 0;
-  }
+}
   
-  .footer-container {
+.footer-container {
     display: flex;
     justify-content: space-between;
     max-width: 1000px;

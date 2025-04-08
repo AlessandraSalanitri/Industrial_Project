@@ -79,6 +79,7 @@ export default function PersonalDetailsPage() {
         <div className="container">
         <h2 className="personal_details-title">Personal Details</h2>
         <h2 className="settings-title">Edit Your Details</h2>
+        <p>If you want to edit your password, click the Forgot password on the login page.</p>
             
             <div className="details-wrapper">
                 {renderField("Email", "email", true)}

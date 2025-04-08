@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import '../styles/footer.css';
 
+const isDarkMode = typeof window !== 'undefined' && document.body.classList.contains('dark-mode');
+
 export default function Footer() {
   return (
-    <footer>
+    <footer className={isDarkMode ? "dark" : ""}>
       <div className="footer-container">
         {/* Column 1: Company Info */}
         <div className="footer-column">
