@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { resetPassword } from '../firebase/auth/resetPassword'; // make sure this exists
+import { resetPassword } from '../firebase/auth/resetPassword'; // Make sure this exists
 import '../styles/reset_modal.css';
 
 export default function ResetPasswordModal({ onClose }) {
@@ -7,7 +7,8 @@ export default function ResetPasswordModal({ onClose }) {
   const [message, setMessage] = useState('');
 
   const handleReset = async () => {
-    const { success, error } = await resetPassword(email);
+    const trimmedEmail = email.trim().toLowerCase(); // sanitize here too (optional)
+    const { success, error } = await resetPassword(trimmedEmail);
     setMessage(success ? 'Reset email sent!' : error?.message || 'Error occurred.');
   };
 
