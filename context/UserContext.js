@@ -8,6 +8,7 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // <-- new
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -21,16 +22,15 @@ export const UserProvider = ({ children }) => {
         console.error("[UserContext] Failed to parse user:", err);
       }
     }
+    setLoading(false); // <-- important: done loading, even if nothing found
   }, []);
 
-
-  // use helpers here: firebase/auth/signin- signout
   const login = (userData) => {
     console.log("[UserContext] Logging in user:", userData);
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
   };
-  
+
   const logout = () => {
     console.log("[UserContext] Logging out user");
     localStorage.removeItem('user');
@@ -38,11 +38,10 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, login, logout }}>
+    <UserContext.Provider value={{ user, setUser, login, logout, loading }}>
       {children}
     </UserContext.Provider>
   );
 };
 
 export const useUser = () => useContext(UserContext);
-

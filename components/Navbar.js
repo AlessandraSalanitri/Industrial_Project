@@ -8,10 +8,16 @@ import { useUser } from '../context/UserContext';
 import { AnimatePresence } from "framer-motion";
 import '../styles/nav.css';
 
+
 export default function Navbar() {
   const router = useRouter();
-  const { user } = useUser(); // Only use what's actually provided by context
-  console.log("[Navbar] Current user:", user);
+  const { user, loading } = useUser();
+
+if (loading) return null; // or return a loading spinner if you want
+
+console.log("[Navbar] Current user:", user);
+
+  
 
   // UI state for avatar/profile panel
   const [showAvatarPanel, setShowAvatarPanel] = useState(false);

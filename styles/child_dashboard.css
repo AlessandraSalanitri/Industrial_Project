@@ -4,7 +4,35 @@
     padding: 100px 40px 60px;
     text-align: center;
 }
-  
-  
 
+.toggle-group {
+    display: flex;
+    gap: 10px;
+}
+.toggle-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: none;
+    background-color: #eee;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+  
+.toggle-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+  
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+  
+.theme-toggle.top-right {
+    position: fixed;
+    top: 16px;
+    right: 100px;
+    z-index: 9999;
+  }
   
