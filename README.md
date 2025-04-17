@@ -66,13 +66,13 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 
 ## TO DO - 08/04/25
-1. Enhance Reset password logic- If email do not exist, Error message pop-up {We did not found this email. If you do not have an account, please signup or double check you've insert the right email} -> FIREBASE AUTH SHOULD MANAGE CHANGING PASSWORD --- DO WE WANT THE USER TO BE ABLE TO CHANGE EMAI TOO? ✅
+1. Enhance Reset password logic- If email do not exist, Error message pop-up {We did not found this email. If you do not have an account, please signup or double check you've insert the right email} -> FIREBASE AUTH SHOULD MANAGE CHANGING PASSWORD --- DO WE WANT THE USER TO BE ABLE TO CHANGE EMAI TOO? ✅ DONE ✅
 
 2. Implment logic for dynamic Search and Filter by genre IN STORY LIST DASHBOARD
 
 3. Implement story play buttons -> (AI Story Generator needs to be implemented first)
 
-4. Add toggle mode light/dark in child accounts -- Add it in the navbar-next to avatar
+4. Add toggle mode light/dark in child accounts -- Add it in the navbar-next to avatar ✅ DONE ✅
 
 5. Check button disabled > GRAY as for requirements in settings for mode.
 

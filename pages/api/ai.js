@@ -1,3 +1,4 @@
+// pages/api/ai.js
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -10,32 +11,39 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch("https://api-inference.huggingface.co/models/tiiuae/falcon-rw-1b", {
-
+    const response = await fetch("https://api.cohere.ai/v1/generate", {
       method: "POST",
       headers: {
-        Authorization: "Bearer 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", // Replace with your actual token
+        Authorization: "Bearer tCSPm6NBT3jjr9MAAfNmiqRc8YK5JQcz4ztqoQpY",  // Replace this with your actual key
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        inputs: prompt,
-        parameters: {
-          temperature: 0.9,
-          max_new_tokens: 50, // You can go up to 500 later
-          top_p: 0.95,
-          return_full_text: false
-        },
+        model: "command", // Or use "command-light" for a faster/lighter model
+        prompt,
+        max_tokens: 100,
+        temperature: 0.9,
+        k: 0,
+        p: 0.95,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+        stop_sequences: ["--"], // Optional: custom stopping
+        return_likelihoods: "NONE"
       }),
     });
 
     const data = await response.json();
+
     console.log("🧠 AI raw output:", data);
 
-    const aiStory = data?.[0]?.generated_text?.trim() || "No story returned.";
+    if (!response.ok || !data.generations || data.generations.length === 0) {
+      return res.status(500).json({ error: "Failed to generate story from Cohere" });
+    }
+
+    const aiStory = data.generations[0].text.trim();
     res.status(200).json({ response: aiStory });
 
   } catch (err) {
-    console.error("❌ API call failed:", err);
-    res.status(500).json({ error: "Something went wrong" });
+    console.error("❌ Cohere API call failed:", err.message);
+    res.status(500).json({ error: "Server error while generating story" });
   }
 }

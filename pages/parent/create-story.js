@@ -1,22 +1,18 @@
-// pages/parent/create-story.js
 import { useState } from 'react';
 import Layout from '../../components/Layout';
 
 export default function CreateStory() {
   const [story, setStory] = useState('');
+  const [theme, setTheme] = useState('');
+  const [age, setAge] = useState('');
+  const [genre, setGenre] = useState('');
+  const [character, setCharacter] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setStory(e.target.value);
   };
 
-
-
-  // const handleGenerateAI = async () => {
-  //   // Example: Call your AI API to generate content
-  //   setStory(story + ' (AI generated content)');
-  // };
-
-//The user types a theme, clicks Generate AI Content, and we call your API to generate a full magical story.
   const handleGenerateAI = async () => {
     if (!theme.trim()) {
       alert("Please enter a theme!");
@@ -31,8 +27,11 @@ export default function CreateStory() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt: `Please create a magical bedtime story for a child aged ${age}. The genre is ${genre}. The main character or theme of the story is : ${character}. The story should have a beginning, middle, and happy ending. Make it simple, magical, friendly, imaginative, and easy to read aloud to children. Keep it engaging and age-appropriate.`,
-          
+          prompt: `Write a magical bedtime story for a child aged ${age || '5'}. 
+          Genre: ${genre || 'fantasy'}. 
+          Main character or theme: ${character || theme}.
+          The story should be simple, imaginative, and end happily. Make it fun to read aloud, like a fairy tale. 
+          Begin with: "Once upon a time..."`,
         }),
       });
 
@@ -45,16 +44,11 @@ export default function CreateStory() {
     setLoading(false);
   };
 
-  
-
-// TEXT TO AUDIO
   const handleConvertToAudio = async () => {
-    // Example: Call your TTS API to convert story text to audio
     alert('Converting story to audio...');
   };
 
   const handleSaveStory = () => {
-    // Example: Save the story to Firebase Firestore
     alert('Story saved!');
   };
 
@@ -62,6 +56,36 @@ export default function CreateStory() {
     <Layout>
       <div className="container">
         <h1>Create Story</h1>
+
+        <input
+          type="text"
+          placeholder="Theme"
+          value={theme}
+          onChange={(e) => setTheme(e.target.value)}
+          style={{ marginBottom: '10px', width: '100%', padding: '10px' }}
+        />
+        <input
+          type="text"
+          placeholder="Child's Age"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          style={{ marginBottom: '10px', width: '100%', padding: '10px' }}
+        />
+        <input
+          type="text"
+          placeholder="Genre"
+          value={genre}
+          onChange={(e) => setGenre(e.target.value)}
+          style={{ marginBottom: '10px', width: '100%', padding: '10px' }}
+        />
+        <input
+          type="text"
+          placeholder="Main Character or Theme"
+          value={character}
+          onChange={(e) => setCharacter(e.target.value)}
+          style={{ marginBottom: '10px', width: '100%', padding: '10px' }}
+        />
+
         <textarea
           placeholder="Type your story here..."
           value={story}
@@ -69,12 +93,16 @@ export default function CreateStory() {
           rows="10"
           style={{ width: '100%', padding: '10px', fontSize: '16px' }}
         ></textarea>
+
         <div className="actions">
-          <button onClick={handleGenerateAI} className="btn">Generate AI Content</button>
+          <button onClick={handleGenerateAI} className="btn" disabled={loading}>
+            {loading ? 'Generating...' : 'Generate AI Content'}
+          </button>
           <button onClick={handleConvertToAudio} className="btn">Convert to Audio</button>
           <button onClick={handleSaveStory} className="btn">Save Story</button>
         </div>
       </div>
+
       <style jsx>{`
         .container {
           padding: 20px;
@@ -91,6 +119,10 @@ export default function CreateStory() {
           padding: 10px 15px;
           cursor: pointer;
           border-radius: 5px;
+        }
+        .btn:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
         }
       `}</style>
     </Layout>
