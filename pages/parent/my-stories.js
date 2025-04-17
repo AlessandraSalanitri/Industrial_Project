@@ -1,13 +1,44 @@
 // pages/parent/my-stories.js
 import Layout from '../../components/Layout';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestoreDB } from '../../firebase/firebaseConfig'; // Import firestoreDB
 
 export default function MyStories() {
-  // Dummy data for stories
-  const stories = [
-    { id: 1, title: 'The Magical Forest' },
-    { id: 2, title: 'Journey to the Stars' }
-  ];
+  const [stories, setStories] = useState([]);
+  const [selectedStory, setSelectedStory] = useState(null); // State for selected story to show content
+
+  useEffect(() => {
+    // Fetch stories from Firestore when component mounts
+    const fetchStories = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(firestoreDB, 'stories'));
+        const storiesData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          title: doc.data().title,
+          content: doc.data().content,
+          theme: doc.data().theme,
+          age: doc.data().age,
+          genre: doc.data().genre,
+          character: doc.data().character,
+        }));
+        setStories(storiesData);
+      } catch (error) {
+        console.error('Error fetching stories:', error);
+      }
+    };
+
+    fetchStories();
+  }, []); // Empty array to run this only once when the component mounts
+
+  const handleSelectStory = (story) => {
+    setSelectedStory(story);
+  };
+
+  const handleCloseStory = () => {
+    setSelectedStory(null); // Close the selected story view
+  };
 
   return (
     <Layout>
@@ -16,11 +47,31 @@ export default function MyStories() {
         <ul>
           {stories.map((story) => (
             <li key={story.id}>
-              {story.title} - 
-              <Link href={`/parent/create-story?id=${story.id}`}><a>Edit</a></Link>
+              <span onClick={() => handleSelectStory(story)} style={{ cursor: 'pointer', color: '#4B0082', textDecoration: 'underline' }}>
+                {story.title}
+              </span> - 
+              <Link href={`/parent/create-story?id=${story.id}`} legacyBehavior>
+                <a>Edit</a>
+              </Link>
             </li>
           ))}
         </ul>
+
+        {/* Conditional rendering of the selected story */}
+        {selectedStory && (
+          <div className="story-content">
+            <button onClick={handleCloseStory} style={{ marginBottom: '20px' }}>
+              Close Story
+            </button>
+            <h2>{selectedStory.title}</h2>
+            <p><strong>Theme:</strong> {selectedStory.theme}</p>
+            <p><strong>Age:</strong> {selectedStory.age}</p>
+            <p><strong>Genre:</strong> {selectedStory.genre}</p>
+            <p><strong>Main Character:</strong> {selectedStory.character}</p>
+            <p><strong>Story Content:</strong></p>
+            <p>{selectedStory.content}</p>
+          </div>
+        )}
       </div>
       <style jsx>{`
         .container {
@@ -37,6 +88,23 @@ export default function MyStories() {
           margin-left: 10px;
           color: #4B0082;
           text-decoration: underline;
+        }
+        .story-content {
+          margin-top: 20px;
+          padding: 20px;
+          background-color: #f4f4f4;
+          border-radius: 5px;
+        }
+        .story-content button {
+          background-color: #4B0082;
+          color: white;
+          padding: 10px;
+          border: none;
+          cursor: pointer;
+          border-radius: 5px;
+        }
+        .story-content button:hover {
+          background-color: #3e0062;
         }
       `}</style>
     </Layout>

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import Layout from '../../components/Layout';
+import { firestoreDB } from '../../firebase/firebaseConfig'; // Import Firestore DB reference
+import { collection, addDoc } from 'firebase/firestore'; // Import addDoc and collection from Firestore
 
 export default function CreateStory() {
   const [story, setStory] = useState('');
@@ -48,8 +50,42 @@ export default function CreateStory() {
     alert('Converting story to audio...');
   };
 
-  const handleSaveStory = () => {
-    alert('Story saved!');
+  const handleSaveStory = async () => {
+    if (!story.trim()) {
+      alert('There is no story to save!');
+      return;
+    }
+  
+    // Prompt for a custom story name
+    const storyName = prompt("Enter a name for your story:");
+    if (!storyName || storyName.trim() === '') {
+      alert('Story name is required!');
+      return;
+    }
+  
+    try {
+      // Save the story to Firestore in the "stories" collection
+      const docRef = await addDoc(collection(firestoreDB, "stories"), {
+        title: storyName, // Use the entered name for the story
+        content: story,
+        theme: theme,
+        age: age,
+        genre: genre,
+        character: character,
+        createdAt: new Date(),
+      });
+  
+      alert('Story saved successfully!');
+      // Optionally reset the form after saving
+      setStory('');
+      setTheme('');
+      setAge('');
+      setGenre('');
+      setCharacter('');
+    } catch (error) {
+      console.error('Error saving story:', error);
+      alert(`Failed to save the story. Error: ${error.message}`);
+    }
   };
 
   return (
