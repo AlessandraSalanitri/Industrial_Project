@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
-import { firestoreDB } from '../../firebase/firebaseConfig'; // Import Firestore DB reference
-import { collection, addDoc } from 'firebase/firestore'; // Import addDoc and collection from Firestore
+import { firestoreDB } from '../../firebase/firebaseConfig';
+import { collection, addDoc } from 'firebase/firestore';
 
 export default function CreateStory() {
   const [story, setStory] = useState('');
@@ -10,6 +11,8 @@ export default function CreateStory() {
   const [genre, setGenre] = useState('');
   const [character, setCharacter] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const handleChange = (e) => {
     setStory(e.target.value);
@@ -55,18 +58,16 @@ export default function CreateStory() {
       alert('There is no story to save!');
       return;
     }
-  
-    // Prompt for a custom story name
+
     const storyName = prompt("Enter a name for your story:");
     if (!storyName || storyName.trim() === '') {
       alert('Story name is required!');
       return;
     }
-  
+
     try {
-      // Save the story to Firestore in the "stories" collection
       const docRef = await addDoc(collection(firestoreDB, "stories"), {
-        title: storyName, // Use the entered name for the story
+        title: storyName,
         content: story,
         theme: theme,
         age: age,
@@ -74,9 +75,8 @@ export default function CreateStory() {
         character: character,
         createdAt: new Date(),
       });
-  
+
       alert('Story saved successfully!');
-      // Optionally reset the form after saving
       setStory('');
       setTheme('');
       setAge('');
@@ -86,6 +86,10 @@ export default function CreateStory() {
       console.error('Error saving story:', error);
       alert(`Failed to save the story. Error: ${error.message}`);
     }
+  };
+
+  const handleBack = () => {
+    router.push('/');
   };
 
   return (
@@ -136,6 +140,7 @@ export default function CreateStory() {
           </button>
           <button onClick={handleConvertToAudio} className="btn">Convert to Audio</button>
           <button onClick={handleSaveStory} className="btn">Save Story</button>
+          <button onClick={handleBack} className="btn">Back</button>
         </div>
       </div>
 
@@ -147,6 +152,7 @@ export default function CreateStory() {
           margin-top: 20px;
           display: flex;
           gap: 10px;
+          flex-wrap: wrap;
         }
         .btn {
           background-color: #4B0082;

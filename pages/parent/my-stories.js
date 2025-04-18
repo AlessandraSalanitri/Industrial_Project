@@ -1,16 +1,17 @@
-// pages/parent/my-stories.js
 import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { collection, getDocs } from 'firebase/firestore';
-import { firestoreDB } from '../../firebase/firebaseConfig'; // Import firestoreDB
+import { firestoreDB } from '../../firebase/firebaseConfig';
 
 export default function MyStories() {
   const [stories, setStories] = useState([]);
-  const [selectedStory, setSelectedStory] = useState(null); // State for selected story to show content
+  const [selectedStory, setSelectedStory] = useState(null);
+
+  const router = useRouter();
 
   useEffect(() => {
-    // Fetch stories from Firestore when component mounts
     const fetchStories = async () => {
       try {
         const querySnapshot = await getDocs(collection(firestoreDB, 'stories'));
@@ -30,14 +31,18 @@ export default function MyStories() {
     };
 
     fetchStories();
-  }, []); // Empty array to run this only once when the component mounts
+  }, []);
 
   const handleSelectStory = (story) => {
     setSelectedStory(story);
   };
 
   const handleCloseStory = () => {
-    setSelectedStory(null); // Close the selected story view
+    setSelectedStory(null);
+  };
+
+  const handleBack = () => {
+    router.push('/');
   };
 
   return (
@@ -47,7 +52,10 @@ export default function MyStories() {
         <ul>
           {stories.map((story) => (
             <li key={story.id}>
-              <span onClick={() => handleSelectStory(story)} style={{ cursor: 'pointer', color: '#4B0082', textDecoration: 'underline' }}>
+              <span
+                onClick={() => handleSelectStory(story)}
+                style={{ cursor: 'pointer', color: '#4B0082', textDecoration: 'underline' }}
+              >
                 {story.title}
               </span> - 
               <Link href={`/parent/create-story?id=${story.id}`} legacyBehavior>
@@ -57,7 +65,6 @@ export default function MyStories() {
           ))}
         </ul>
 
-        {/* Conditional rendering of the selected story */}
         {selectedStory && (
           <div className="story-content">
             <button onClick={handleCloseStory} style={{ marginBottom: '20px' }}>
@@ -72,7 +79,13 @@ export default function MyStories() {
             <p>{selectedStory.content}</p>
           </div>
         )}
+
+        {/* Back Button */}
+        <button onClick={handleBack} className="back-button">
+          Back
+        </button>
       </div>
+
       <style jsx>{`
         .container {
           padding: 20px;
@@ -104,6 +117,18 @@ export default function MyStories() {
           border-radius: 5px;
         }
         .story-content button:hover {
+          background-color: #3e0062;
+        }
+        .back-button {
+          margin-top: 30px;
+          background-color: #4B0082;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          cursor: pointer;
+          border-radius: 5px;
+        }
+        .back-button:hover {
           background-color: #3e0062;
         }
       `}</style>

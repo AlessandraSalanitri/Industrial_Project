@@ -52,7 +52,7 @@ export default function AuthPanel({ mode }) {
           setError(error.message || "Signup failed.");
           return;
         }
-        router.push("/login"); //redirect to login, after signup
+        router.push("/signIn"); //redirect to login, after signup
       } else {
         const { result, error } = await signIn(form.email, form.password);
   
