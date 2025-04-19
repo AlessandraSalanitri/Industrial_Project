@@ -17,6 +17,10 @@ export default function CreateStory() {
   const [character, setCharacter] = useState('');
   const [loading, setLoading] = useState(false);
 
+//ugly saving box
+  const [showModal, setShowModal] = useState(false);
+  const [storyName, setStoryName] = useState('');
+
   const router = useRouter();
 
   const handleGenerateAI = async () => {
@@ -46,18 +50,24 @@ export default function CreateStory() {
 
   const handleConvertToAudio = () => alert('Converting story to audio...');
 
+
+
+  //SAVE STORY BUTTON- UPDATED!!
   const handleSaveStory = async () => {
     if (!story.trim()) {
-      alert('There is no story to save!');
+      alert("There is no story to save!");
       return;
     }
-
-    const storyName = prompt("Enter a name for your story:");
-    if (!storyName || storyName.trim() === '') {
-      alert('Story name is required!');
+  
+    setShowModal(true); // Show the modal
+  };
+  
+  const confirmSave = async () => {
+    if (!storyName.trim()) {
+      alert("Please enter a name for your story.");
       return;
     }
-
+  
     try {
       await addDoc(collection(firestoreDB, "stories"), {
         title: storyName,
@@ -71,9 +81,10 @@ export default function CreateStory() {
         character,
         createdAt: new Date(),
       });
-
-      alert('Story saved successfully!');
+  
+      alert("Story saved successfully!");
       setStory('');
+      setStoryName('');
       setAge('');
       setGenre('');
       setSetting('');
@@ -81,14 +92,18 @@ export default function CreateStory() {
       setTone('');
       setLength('');
       setCharacter('');
+      setShowModal(false); // Close modal
     } catch (error) {
-      console.error('Error saving story:', error);
+      console.error("Error saving story:", error);
       alert(`Failed to save the story. Error: ${error.message}`);
     }
   };
+  
 
+
+
+  //BACK BUTTON FROM SAVE STORY
   const handleBack = () => router.push('/');
-
   return (
     <Layout>
       <div className="container">
@@ -194,6 +209,27 @@ export default function CreateStory() {
           <button onClick={handleBack} className="btn">Back</button>
         </div>
       </div>
+
+
+{/* SAVE STORY BUTTON */}
+      {showModal && (
+      <div className="modal-backdrop">
+        <div className="modal-content">
+          <h2>Name Your Story</h2>
+          <input
+            type="text"
+            placeholder="Whiskers in Wonderwood..."
+            value={storyName}
+            onChange={(e) => setStoryName(e.target.value)}
+          />
+          <div className="modal-actions">
+            <button className="save-btn" onClick={confirmSave}>Save</button>
+            <button className="cancel-btn" onClick={() => setShowModal(false)}>Cancel</button>
+          </div>
+        </div>
+      </div>
+    )}
+
 
       <style jsx>{`
         .container {
