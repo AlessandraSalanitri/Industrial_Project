@@ -3,24 +3,25 @@ import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { firestoreDB } from '../../firebase/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
+import '../../styles/create_story.css';
+
 
 export default function CreateStory() {
   const [story, setStory] = useState('');
-  const [theme, setTheme] = useState('');
   const [age, setAge] = useState('');
   const [genre, setGenre] = useState('');
+  const [setting, setSetting] = useState('');
+  const [moral, setMoral] = useState('');
+  const [tone, setTone] = useState('');
+  const [length, setLength] = useState('');
   const [character, setCharacter] = useState('');
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
-  const handleChange = (e) => {
-    setStory(e.target.value);
-  };
-
   const handleGenerateAI = async () => {
-    if (!theme.trim()) {
-      alert("Please enter a theme!");
+    if (!character.trim()) {
+      alert("Please enter the main character or theme!");
       return;
     }
 
@@ -31,13 +32,7 @@ export default function CreateStory() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          prompt: `Write a magical bedtime story for a child aged ${age || '5'}. 
-          Genre: ${genre || 'fantasy'}. 
-          Main character or theme: ${character || theme}.
-          The story should be simple, imaginative, and end happily. Make it fun to read aloud, like a fairy tale. 
-          Begin with: "Once upon a time..."`,
-        }),
+        body: JSON.stringify({ age, genre, setting, moral, tone, length, character }),
       });
 
       const data = await response.json();
@@ -49,9 +44,7 @@ export default function CreateStory() {
     setLoading(false);
   };
 
-  const handleConvertToAudio = async () => {
-    alert('Converting story to audio...');
-  };
+  const handleConvertToAudio = () => alert('Converting story to audio...');
 
   const handleSaveStory = async () => {
     if (!story.trim()) {
@@ -66,21 +59,27 @@ export default function CreateStory() {
     }
 
     try {
-      const docRef = await addDoc(collection(firestoreDB, "stories"), {
+      await addDoc(collection(firestoreDB, "stories"), {
         title: storyName,
         content: story,
-        theme: theme,
-        age: age,
-        genre: genre,
-        character: character,
+        age,
+        genre,
+        setting,
+        moral,
+        tone,
+        length,
+        character,
         createdAt: new Date(),
       });
 
       alert('Story saved successfully!');
       setStory('');
-      setTheme('');
       setAge('');
       setGenre('');
+      setSetting('');
+      setMoral('');
+      setTone('');
+      setLength('');
       setCharacter('');
     } catch (error) {
       console.error('Error saving story:', error);
@@ -88,51 +87,103 @@ export default function CreateStory() {
     }
   };
 
-  const handleBack = () => {
-    router.push('/');
-  };
+  const handleBack = () => router.push('/');
 
   return (
     <Layout>
       <div className="container">
         <h1>Create Story</h1>
 
+        <select value={age} onChange={(e) => setAge(e.target.value)}>
+          <option value="">Child's Age</option>
+          <option value="Under 3">Under 3</option>
+          <option value="3-5">3-5</option>
+          <option value="6-8">6-8</option>
+          <option value="9-11">9-11</option>
+          <option value="12-14">12-14</option>
+        </select>
+
+        <select value={genre} onChange={(e) => setGenre(e.target.value)}>
+          <option value="">Genre</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Science Fiction">Science Fiction</option>
+          <option value="Mystery">Mystery</option>
+          <option value="Humor">Humor</option>
+          <option value="Historical Fiction">Historical Fiction</option>
+          <option value="Animal Stories">Animal Stories</option>
+        </select>
+
+        <select value={setting} onChange={(e) => setSetting(e.target.value)}>
+          <option value="">Setting</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Science Fiction">Science Fiction</option>
+          <option value="Mystery">Mystery</option>
+          <option value="Historical">Historical</option>
+          <option value="Modern-Day">Modern-Day</option>
+          <option value="Urban">Urban</option>
+          <option value="Urban Fantasy">Urban Fantasy</option>
+          <option value="Animal-Based">Animal-Based</option>
+          <option value="Magical Realism">Magical Realism</option>
+          <option value="Survival">Survival</option>
+        </select>
+
+        <select value={moral} onChange={(e) => setMoral(e.target.value)}>
+          <option value="">Moral</option>
+          <option value="Friendship and Teamwork">Friendship & Teamwork</option>
+          <option value="Courage and Bravery">Courage & Bravery</option>
+          <option value="Kindness and Empathy">Kindness & Empathy</option>
+          <option value="Honesty and Integrity">Honesty & Integrity</option>
+          <option value="Perseverance and Hard Work">Perseverance & Hard Work</option>
+          <option value="Responsibility and Accountability">Responsibility & Accountability</option>
+          <option value="Self-Respect and Confidence">Self-Respect & Confidence</option>
+          <option value="Fairness and Justice">Fairness & Justice</option>
+          <option value="Patience and Temperance">Patience & Temperance</option>
+          <option value="Gratitude and Contentment">Gratitude & Contentment</option>
+          <option value="Environmental Awareness">Environmental Awareness</option>
+          <option value="Creativity and Imagination">Creativity & Imagination</option>
+        </select>
+
+        <select value={tone} onChange={(e) => setTone(e.target.value)}>
+          <option value="">Tone</option>
+          <option value="Lighthearted and Fun">Lighthearted & Fun</option>
+          <option value="Serious and Reflective">Serious & Reflective</option>
+          <option value="Adventurous and Exciting">Adventurous & Exciting</option>
+          <option value="Mysterious and Suspenseful">Mysterious & Suspenseful</option>
+          <option value="Optimistic and Hopeful">Optimistic & Hopeful</option>
+          <option value="Funny and Humorous">Funny & Humorous</option>
+          <option value="Romantic and Heartfelt">Romantic & Heartfelt</option>
+          <option value="Educational and Informative">Educational & Informative</option>
+          <option value="Fantasy and Magical">Fantasy & Magical</option>
+          <option value="Heroic and Noble">Heroic & Noble</option>
+        </select>
+
+        <select value={length} onChange={(e) => setLength(e.target.value)}>
+          <option value="">Reading Length</option>
+          <option value="Short (2 minutes)">Short (2 minutes)</option>
+          <option value="Medium (5 minutes)">Medium (5 minutes)</option>
+          <option value="Long (7 minutes)">Long (7 minutes)</option>
+        </select>
+
+
+        <label htmlFor="character">Main Character</label>
         <input
+          id="character"
           type="text"
-          placeholder="Theme"
-          value={theme}
-          onChange={(e) => setTheme(e.target.value)}
-          style={{ marginBottom: '10px', width: '100%', padding: '10px' }}
-        />
-        <input
-          type="text"
-          placeholder="Child's Age"
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          style={{ marginBottom: '10px', width: '100%', padding: '10px' }}
-        />
-        <input
-          type="text"
-          placeholder="Genre"
-          value={genre}
-          onChange={(e) => setGenre(e.target.value)}
-          style={{ marginBottom: '10px', width: '100%', padding: '10px' }}
-        />
-        <input
-          type="text"
-          placeholder="Main Character or Theme"
+          placeholder="e.g., Luna the clumsy dragon, Penny the Penguin..."
           value={character}
           onChange={(e) => setCharacter(e.target.value)}
-          style={{ marginBottom: '10px', width: '100%', padding: '10px' }}
         />
 
+        <label htmlFor="story">Generated Story</label>
         <textarea
-          placeholder="Type your story here..."
+          id="story"
           value={story}
-          onChange={handleChange}
-          rows="10"
-          style={{ width: '100%', padding: '10px', fontSize: '16px' }}
+          readOnly
+          placeholder="Your story will appear here..."
         ></textarea>
+
 
         <div className="actions">
           <button onClick={handleGenerateAI} className="btn" disabled={loading}>
@@ -147,6 +198,11 @@ export default function CreateStory() {
       <style jsx>{`
         .container {
           padding: 20px;
+        }
+        select, input {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 10px;
         }
         .actions {
           margin-top: 20px;
