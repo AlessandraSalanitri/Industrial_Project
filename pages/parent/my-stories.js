@@ -2,27 +2,21 @@ import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { firestoreDB } from '../../firebase/firebaseConfig';
 
 export default function MyStories() {
   const [stories, setStories] = useState([]);
   const [selectedStory, setSelectedStory] = useState(null);
-
   const router = useRouter();
 
   useEffect(() => {
     const fetchStories = async () => {
       try {
         const querySnapshot = await getDocs(collection(firestoreDB, 'stories'));
-        const storiesData = querySnapshot.docs.map(doc => ({
+        const storiesData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          title: doc.data().title,
-          content: doc.data().content,
-          theme: doc.data().theme,
-          age: doc.data().age,
-          genre: doc.data().genre,
-          character: doc.data().character,
+          ...doc.data(),
         }));
         setStories(storiesData);
       } catch (error) {
@@ -31,7 +25,7 @@ export default function MyStories() {
     };
 
     fetchStories();
-  }, []);
+  }, []); // Initial load
 
   const handleSelectStory = (story) => {
     setSelectedStory(story);
@@ -42,28 +36,60 @@ export default function MyStories() {
   };
 
   const handleBack = () => {
+    // Triggering re-fetch when navigating back
     router.push('/');
+  };
+
+  const handleDeleteStory = async (id) => {
+    try {
+      await deleteDoc(doc(firestoreDB, 'stories', id));
+      setStories(stories.filter((story) => story.id !== id));
+    } catch (error) {
+      console.error('Error deleting story:', error);
+    }
   };
 
   return (
     <Layout>
       <div className="container">
         <h1>My Stories</h1>
-        <ul>
-          {stories.map((story) => (
-            <li key={story.id}>
-              <span
-                onClick={() => handleSelectStory(story)}
-                style={{ cursor: 'pointer', color: '#4B0082', textDecoration: 'underline' }}
-              >
-                {story.title}
-              </span> - 
-              <Link href={`/parent/create-story?id=${story.id}`} legacyBehavior>
-                <a>Edit</a>
-              </Link>
-            </li>
-          ))}
-        </ul>
+
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Theme</th>
+              <th>Age</th>
+              <th>Genre</th>
+              <th>Main Character</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stories.map((story, index) => (
+              <tr key={story.id}>
+                <td>{index + 1}</td>
+                <td>{story.title}</td>
+                <td>{story.theme}</td>
+                <td>{story.age}</td>
+                <td>{story.genre}</td>
+                <td>{story.character}</td>
+                <td>
+                  <div className="action-buttons">
+                    <button onClick={() => handleSelectStory(story)}>View</button>
+                    <Link href={`/parent/create-story?id=${story.id}`}>
+                      <button>Edit</button>
+                    </Link>
+                    <button onClick={() => handleDeleteStory(story.id)} className="delete-btn">
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
         {selectedStory && (
           <div className="story-content">
@@ -90,24 +116,70 @@ export default function MyStories() {
         .container {
           padding: 20px;
         }
-        ul {
-          list-style: none;
-          padding: 0;
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+          table-layout: fixed;
         }
-        li {
-          margin: 10px 0;
+
+        th, td {
+          border: 1px solid #ddd;
+          padding: 10px;
+          text-align: left;
+          word-break: break-word;
+          max-width: 150px;
+          overflow: hidden;
         }
-        a {
-          margin-left: 10px;
-          color: #4B0082;
-          text-decoration: underline;
+
+        th {
+          background-color: #4B0082;
+          color: white;
         }
+
+        th:nth-child(1), td:nth-child(1) {
+          width: 50px; /* Set the width to make the number column narrower */
+          text-align: center; /* Center the numbers */
+        }
+
+        .action-buttons {
+          display: flex;
+          flex-wrap: nowrap;
+          gap: 8px;
+          margin-right: 4px;
+        }
+
+        .action-buttons button {
+          white-space: nowrap;
+          padding: 6px 10px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          background-color: #4B0082;
+          color: white;
+          font-size: 0.85rem;
+        }
+
+        .action-buttons button:hover {
+          background-color: #3e0062;
+        }
+
+        .action-buttons .delete-btn {
+          background-color: #cc0000;
+        }
+
+        .action-buttons .delete-btn:hover {
+          background-color: #990000;
+        }
+
         .story-content {
           margin-top: 20px;
           padding: 20px;
           background-color: #f4f4f4;
           border-radius: 5px;
         }
+
         .story-content button {
           background-color: #4B0082;
           color: white;
@@ -116,9 +188,11 @@ export default function MyStories() {
           cursor: pointer;
           border-radius: 5px;
         }
+
         .story-content button:hover {
           background-color: #3e0062;
         }
+
         .back-button {
           margin-top: 30px;
           background-color: #4B0082;
@@ -128,6 +202,7 @@ export default function MyStories() {
           cursor: pointer;
           border-radius: 5px;
         }
+
         .back-button:hover {
           background-color: #3e0062;
         }
