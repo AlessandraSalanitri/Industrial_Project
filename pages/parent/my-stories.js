@@ -25,7 +25,7 @@ export default function MyStories() {
     };
 
     fetchStories();
-  }, []); // Initial load
+  }, []);
 
   const handleSelectStory = (story) => {
     setSelectedStory(story);
@@ -36,7 +36,6 @@ export default function MyStories() {
   };
 
   const handleBack = () => {
-    // Triggering re-fetch when navigating back
     router.push('/');
   };
 
@@ -78,7 +77,7 @@ export default function MyStories() {
                 <td>
                   <div className="action-buttons">
                     <button onClick={() => handleSelectStory(story)}>View</button>
-                    <Link href={`/parent/create-story?id=${story.id}`}>
+                    <Link href={`/parent/edit-story?id=${story.id}`}>
                       <button>Edit</button>
                     </Link>
                     <button onClick={() => handleDeleteStory(story.id)} className="delete-btn">
@@ -106,7 +105,6 @@ export default function MyStories() {
           </div>
         )}
 
-        {/* Back Button */}
         <button onClick={handleBack} className="back-button">
           Back
         </button>
@@ -121,7 +119,6 @@ export default function MyStories() {
           width: 100%;
           border-collapse: collapse;
           margin-top: 20px;
-          table-layout: fixed;
         }
 
         th, td {
@@ -129,8 +126,6 @@ export default function MyStories() {
           padding: 10px;
           text-align: left;
           word-break: break-word;
-          max-width: 150px;
-          overflow: hidden;
         }
 
         th {
@@ -139,19 +134,17 @@ export default function MyStories() {
         }
 
         th:nth-child(1), td:nth-child(1) {
-          width: 50px; /* Set the width to make the number column narrower */
-          text-align: center; /* Center the numbers */
+          width: 50px;
+          text-align: center;
         }
 
         .action-buttons {
           display: flex;
           flex-wrap: nowrap;
           gap: 8px;
-          margin-right: 4px;
         }
 
         .action-buttons button {
-          white-space: nowrap;
           padding: 6px 10px;
           border: none;
           border-radius: 4px;
