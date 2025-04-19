@@ -5,7 +5,6 @@ import { firestoreDB } from '../../firebase/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 import '../../styles/create_story.css';
 
-
 export default function CreateStory() {
   const [story, setStory] = useState('');
   const [age, setAge] = useState('');
@@ -17,7 +16,6 @@ export default function CreateStory() {
   const [character, setCharacter] = useState('');
   const [loading, setLoading] = useState(false);
 
-//ugly saving box
   const [showModal, setShowModal] = useState(false);
   const [storyName, setStoryName] = useState('');
 
@@ -50,24 +48,21 @@ export default function CreateStory() {
 
   const handleConvertToAudio = () => alert('Converting story to audio...');
 
-
-
-  //SAVE STORY BUTTON- UPDATED!!
   const handleSaveStory = async () => {
     if (!story.trim()) {
       alert("There is no story to save!");
       return;
     }
-  
-    setShowModal(true); // Show the modal
+
+    setShowModal(true);
   };
-  
+
   const confirmSave = async () => {
     if (!storyName.trim()) {
       alert("Please enter a name for your story.");
       return;
     }
-  
+
     try {
       await addDoc(collection(firestoreDB, "stories"), {
         title: storyName,
@@ -81,7 +76,7 @@ export default function CreateStory() {
         character,
         createdAt: new Date(),
       });
-  
+
       alert("Story saved successfully!");
       setStory('');
       setStoryName('');
@@ -92,18 +87,15 @@ export default function CreateStory() {
       setTone('');
       setLength('');
       setCharacter('');
-      setShowModal(false); // Close modal
+      setShowModal(false);
     } catch (error) {
       console.error("Error saving story:", error);
       alert(`Failed to save the story. Error: ${error.message}`);
     }
   };
-  
 
-
-
-  //BACK BUTTON FROM SAVE STORY
   const handleBack = () => router.push('/');
+
   return (
     <Layout>
       <div className="container">
@@ -181,7 +173,6 @@ export default function CreateStory() {
           <option value="Long (7 minutes)">Long (7 minutes)</option>
         </select>
 
-
         <label htmlFor="character">Main Character</label>
         <input
           id="character"
@@ -191,15 +182,6 @@ export default function CreateStory() {
           onChange={(e) => setCharacter(e.target.value)}
         />
 
-        <label htmlFor="story">Generated Story</label>
-        <textarea
-          id="story"
-          value={story}
-          readOnly
-          placeholder="Your story will appear here..."
-        ></textarea>
-
-
         <div className="actions">
           <button onClick={handleGenerateAI} className="btn" disabled={loading}>
             {loading ? 'Generating...' : 'Generate AI Content'}
@@ -208,57 +190,77 @@ export default function CreateStory() {
           <button onClick={handleSaveStory} className="btn">Save Story</button>
           <button onClick={handleBack} className="btn">Back</button>
         </div>
-      </div>
 
-
-{/* SAVE STORY BUTTON */}
-      {showModal && (
-      <div className="modal-backdrop">
-        <div className="modal-content">
-          <h2>Name Your Story</h2>
-          <input
-            type="text"
-            placeholder="Whiskers in Wonderwood..."
-            value={storyName}
-            onChange={(e) => setStoryName(e.target.value)}
-          />
-          <div className="modal-actions">
-            <button className="save-btn" onClick={confirmSave}>Save</button>
-            <button className="cancel-btn" onClick={() => setShowModal(false)}>Cancel</button>
+        {story && (
+          <div className="generated-story">
+            <label htmlFor="story">Generated Story</label>
+            <textarea
+              id="story"
+              value={story}
+              readOnly
+              placeholder="Your story will appear here..."
+            ></textarea>
           </div>
-        </div>
+        )}
+
+        {showModal && (
+          <div className="modal-backdrop">
+            <div className="modal-content">
+              <h2>Name Your Story</h2>
+              <input
+                type="text"
+                placeholder="Whiskers in Wonderwood..."
+                value={storyName}
+                onChange={(e) => setStoryName(e.target.value)}
+              />
+              <div className="modal-actions">
+                <button className="save-btn" onClick={confirmSave}>Save</button>
+                <button className="cancel-btn" onClick={() => setShowModal(false)}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <style jsx>{`
+          .container {
+            padding: 20px;
+          }
+          select, input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+          }
+          .actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+          }
+          .btn {
+            background-color: #4B0082;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+          }
+          .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+          }
+          .generated-story {
+            margin-top: 20px;
+          }
+          .generated-story textarea {
+            width: 100%;
+            height: 300px;
+            padding: 10px;
+            resize: vertical;
+            font-size: 1rem;
+            line-height: 1.5;
+          }
+        `}</style>
       </div>
-    )}
-
-
-      <style jsx>{`
-        .container {
-          padding: 20px;
-        }
-        select, input {
-          width: 100%;
-          padding: 10px;
-          margin-bottom: 10px;
-        }
-        .actions {
-          margin-top: 20px;
-          display: flex;
-          gap: 10px;
-          flex-wrap: wrap;
-        }
-        .btn {
-          background-color: #4B0082;
-          color: #fff;
-          border: none;
-          padding: 10px 15px;
-          cursor: pointer;
-          border-radius: 5px;
-        }
-        .btn:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
-        }
-      `}</style>
     </Layout>
   );
 }
