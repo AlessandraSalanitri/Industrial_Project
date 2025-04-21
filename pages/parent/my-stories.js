@@ -11,6 +11,7 @@ export default function MyStories() {
   const [filterLetter, setFilterLetter] = useState(null);
   const [genreFilter, setGenreFilter] = useState(null);
   const [ageFilter, setAgeFilter] = useState(null);
+  const [audio, setAudio] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -36,6 +37,16 @@ export default function MyStories() {
 
   const handleCloseStory = () => {
     setSelectedStory(null);
+    window.speechSynthesis.cancel();
+  };
+
+  const handleReadStory = () => {
+    if (!selectedStory?.content) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(selectedStory.content);
+    utterance.lang = 'en-GB'; // British English
+    utterance.rate = 1;
+    window.speechSynthesis.speak(utterance);
   };
 
   const handleBack = () => {
@@ -55,6 +66,10 @@ export default function MyStories() {
     setFilterLetter(null);
     setGenreFilter(null);
     setAgeFilter(null);
+  };
+
+  const handlePlayAudio = (audioUrl) => {
+    setAudio(audioUrl);
   };
 
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -142,6 +157,7 @@ export default function MyStories() {
               <th>Genre</th>
               <th>Main Character</th>
               <th>Actions</th>
+              <th>Audio</th>
             </tr>
           </thead>
           <tbody>
@@ -164,11 +180,20 @@ export default function MyStories() {
                       </button>
                     </div>
                   </td>
+                  <td>
+                    {story.audio ? (
+                      <button onClick={() => handlePlayAudio(story.audio)}>
+                        Listen
+                      </button>
+                    ) : (
+                      <span>No Audio</span>
+                    )}
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6" style={{ textAlign: 'center' }}>
+                <td colSpan="7" style={{ textAlign: 'center' }}>
                   No stories found{filterLetter ? ` for letter "${filterLetter}"` : ''}.
                 </td>
               </tr>
@@ -178,15 +203,25 @@ export default function MyStories() {
 
         {selectedStory && (
           <div className="story-content">
-            <button onClick={handleCloseStory} style={{ marginBottom: '20px' }}>
-              Close Story
-            </button>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+              <button onClick={handleCloseStory}>Close Story</button>
+              <button onClick={handleReadStory}>Read Story</button>
+            </div>
             <h2>{selectedStory.title}</h2>
             <p><strong>Age:</strong> {selectedStory.age}</p>
             <p><strong>Genre:</strong> {selectedStory.genre}</p>
             <p><strong>Main Character:</strong> {selectedStory.character}</p>
             <p><strong>Story Content:</strong></p>
             <p>{selectedStory.content}</p>
+          </div>
+        )}
+
+        {audio && (
+          <div className="audio-player">
+            <audio controls>
+              <source src={audio} type="audio/mp3" />
+              Your browser does not support the audio element.
+            </audio>
           </div>
         )}
 
@@ -198,6 +233,9 @@ export default function MyStories() {
       <style jsx>{`
         .container {
           padding: 20px;
+          width: fit-content;
+          max-width: 100%;
+          margin: 0 auto;
         }
 
         .subtitle {
@@ -284,14 +322,8 @@ export default function MyStories() {
           color: white;
         }
 
-        th:nth-child(1), td:nth-child(1) {
-          width: 50px;
-          text-align: center;
-        }
-
         .action-buttons {
           display: flex;
-          flex-wrap: nowrap;
           gap: 8px;
         }
 
@@ -349,6 +381,14 @@ export default function MyStories() {
 
         .back-button:hover {
           background-color: #3e0062;
+        }
+
+        .audio-player {
+          margin-top: 20px;
+        }
+
+        .audio-player audio {
+          width: 100%;
         }
       `}</style>
     </Layout>

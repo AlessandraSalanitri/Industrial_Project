@@ -1,0 +1,105 @@
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+  }
+  
+  .alphabet-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 1rem;
+  }
+  
+  .alphabet-filter button {
+    padding: 6px 10px;
+    border: none;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .alphabet-filter button.active {
+    background-color: #0070f3;
+    color: white;
+  }
+  
+  .alphabet-filter button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .additional-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+  }
+  
+  .reset-btn {
+    background-color: #ff5a5f;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+  }
+  
+  table th,
+  table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .action-buttons button {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    background-color: #f0f0f0;
+  }
+  
+  .action-buttons .delete-btn {
+    background-color: #f87171;
+    color: white;
+  }
+  
+  .story-content {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  
+  .audio-player {
+    margin-bottom: 2rem;
+  }
+  
+  .back-button {
+    background-color: #0070f3;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  

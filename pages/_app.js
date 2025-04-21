@@ -2,6 +2,8 @@ import '@/styles/global.css'
 import '@/styles/darkMode.css'
 import { UserProvider } from '../context/UserContext';
 import { useState, useEffect } from 'react';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 
 function MyApp({ Component, pageProps }) {
   const [darkMode, setDarkMode] = useState(false);

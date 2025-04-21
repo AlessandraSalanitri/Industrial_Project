@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
-import { firestoreDB } from '../../firebase/firebaseConfig';
+import { firestoreDB, storage } from '../../firebase/firebaseConfig'; // Import Firebase storage
 import { collection, addDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Firebase storage functions
 import '../../styles/create_story.css';
 
 export default function CreateStory() {
@@ -15,11 +16,26 @@ export default function CreateStory() {
   const [length, setLength] = useState('');
   const [character, setCharacter] = useState('');
   const [loading, setLoading] = useState(false);
-
   const [showModal, setShowModal] = useState(false);
   const [storyName, setStoryName] = useState('');
+  const [audioUrl, setAudioUrl] = useState(''); // To store the URL of the saved audio
 
   const router = useRouter();
+
+  // Stop speech when navigating away
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      window.speechSynthesis.cancel(); // Stop any ongoing speech
+    };
+
+    // Add event listener for the route change
+    router.events.on('routeChangeStart', handleBeforeUnload);
+
+    // Cleanup event listener when the component is unmounted
+    return () => {
+      router.events.off('routeChangeStart', handleBeforeUnload);
+    };
+  }, [router.events]);
 
   const handleGenerateAI = async () => {
     if (!character.trim()) {
@@ -46,7 +62,42 @@ export default function CreateStory() {
     setLoading(false);
   };
 
-  const handleConvertToAudio = () => alert('Converting story to audio...');
+  const handleConvertToAudio = async () => {
+    if (!story.trim()) {
+      alert('No story generated to convert to audio!');
+      return;
+    }
+
+    // Use SpeechSynthesis API to convert text to speech
+    const speech = new SpeechSynthesisUtterance(story);
+    speech.voice = speechSynthesis.getVoices().find(voice => voice.name === 'Google UK English Male') || speechSynthesis.getVoices()[0];
+    speech.pitch = 1;
+    speech.rate = 1;
+    speech.volume = 1;
+
+    // Capture audio as Blob
+    const audioBlob = await new Promise((resolve, reject) => {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const audioDestination = audioContext.createMediaStreamDestination();
+      const recorder = new MediaRecorder(audioDestination.stream);
+      
+      recorder.ondataavailable = event => {
+        resolve(event.data);
+      };
+
+      recorder.onerror = reject;
+
+      window.speechSynthesis.speak(speech);
+    });
+
+    // Upload the audio blob to Firebase Storage
+    const audioRef = ref(storage, `audio_stories/${storyName || 'untitled'}_${Date.now()}.mp3`);
+    await uploadBytes(audioRef, audioBlob);
+    const audioURL = await getDownloadURL(audioRef);
+    setAudioUrl(audioURL); // Set the URL to the state
+
+    alert('Audio generated and uploaded!');
+  };
 
   const handleSaveStory = async () => {
     if (!story.trim()) {
@@ -64,6 +115,7 @@ export default function CreateStory() {
     }
 
     try {
+      // Save story content along with audio URL
       await addDoc(collection(firestoreDB, "stories"), {
         title: storyName,
         content: story,
@@ -74,6 +126,7 @@ export default function CreateStory() {
         tone,
         length,
         character,
+        audioUrl, // Save the audio URL
         createdAt: new Date(),
       });
 
@@ -87,6 +140,7 @@ export default function CreateStory() {
       setTone('');
       setLength('');
       setCharacter('');
+      setAudioUrl(''); // Clear audio URL after saving
       setShowModal(false);
     } catch (error) {
       console.error("Error saving story:", error);
@@ -101,6 +155,7 @@ export default function CreateStory() {
       <div className="container">
         <h1>Create Story</h1>
 
+        {/* Story Inputs */}
         <select value={age} onChange={(e) => setAge(e.target.value)}>
           <option value="">Child's Age</option>
           <option value="Under 3">Under 3</option>
