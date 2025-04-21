@@ -8,6 +8,7 @@ import { firestoreDB } from '../../firebase/firebaseConfig';
 export default function MyStories() {
   const [stories, setStories] = useState([]);
   const [selectedStory, setSelectedStory] = useState(null);
+  const [filterLetter, setFilterLetter] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -48,17 +49,44 @@ export default function MyStories() {
     }
   };
 
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const availableLetters = new Set(
+    stories.map((s) => s.title?.[0]?.toUpperCase()).filter(Boolean)
+  );
+  const filteredStories = filterLetter
+    ? stories.filter(
+        (story) => story.title?.[0]?.toUpperCase() === filterLetter
+      )
+    : stories;
+
   return (
     <Layout>
       <div className="container">
         <h1>My Stories</h1>
+
+        <div className="alphabet-filter">
+          {alphabet.map((letter) => (
+            <button
+              key={letter}
+              onClick={() => setFilterLetter(letter)}
+              disabled={!availableLetters.has(letter)}
+              className={filterLetter === letter ? 'active' : ''}
+            >
+              {letter}
+            </button>
+          ))}
+          {filterLetter && (
+            <button onClick={() => setFilterLetter(null)} className="clear-filter">
+              Clear
+            </button>
+          )}
+        </div>
 
         <table>
           <thead>
             <tr>
               <th>#</th>
               <th>Title</th>
-              <th>Theme</th>
               <th>Age</th>
               <th>Genre</th>
               <th>Main Character</th>
@@ -66,27 +94,34 @@ export default function MyStories() {
             </tr>
           </thead>
           <tbody>
-            {stories.map((story, index) => (
-              <tr key={story.id}>
-                <td>{index + 1}</td>
-                <td>{story.title}</td>
-                <td>{story.theme}</td>
-                <td>{story.age}</td>
-                <td>{story.genre}</td>
-                <td>{story.character}</td>
-                <td>
-                  <div className="action-buttons">
-                    <button onClick={() => handleSelectStory(story)}>View</button>
-                    <Link href={`/parent/edit-story?id=${story.id}`}>
-                      <button>Edit</button>
-                    </Link>
-                    <button onClick={() => handleDeleteStory(story.id)} className="delete-btn">
-                      Delete
-                    </button>
-                  </div>
+            {filteredStories.length > 0 ? (
+              filteredStories.map((story, index) => (
+                <tr key={story.id}>
+                  <td>{index + 1}</td>
+                  <td>{story.title}</td>
+                  <td>{story.age}</td>
+                  <td>{story.genre}</td>
+                  <td>{story.character}</td>
+                  <td>
+                    <div className="action-buttons">
+                      <button onClick={() => handleSelectStory(story)}>View</button>
+                      <Link href={`/parent/edit-story?id=${story.id}`}>
+                        <button>Edit</button>
+                      </Link>
+                      <button onClick={() => handleDeleteStory(story.id)} className="delete-btn">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" style={{ textAlign: 'center' }}>
+                  No stories found{filterLetter ? ` for letter "${filterLetter}"` : ''}.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
 
@@ -96,7 +131,6 @@ export default function MyStories() {
               Close Story
             </button>
             <h2>{selectedStory.title}</h2>
-            <p><strong>Theme:</strong> {selectedStory.theme}</p>
             <p><strong>Age:</strong> {selectedStory.age}</p>
             <p><strong>Genre:</strong> {selectedStory.genre}</p>
             <p><strong>Main Character:</strong> {selectedStory.character}</p>
@@ -115,6 +149,37 @@ export default function MyStories() {
           padding: 20px;
         }
 
+        .alphabet-filter {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          margin: 10px 0 20px 0;
+        }
+
+        .alphabet-filter button {
+          padding: 6px 10px;
+          font-size: 0.85rem;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          background-color: #4b0082;
+          color: white;
+        }
+
+        .alphabet-filter button:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
+
+        .alphabet-filter button.active {
+          background-color: #3e0062;
+        }
+
+        .clear-filter {
+          margin-left: 10px;
+          background-color: #888;
+        }
+
         table {
           width: 100%;
           border-collapse: collapse;
@@ -129,7 +194,7 @@ export default function MyStories() {
         }
 
         th {
-          background-color: #4B0082;
+          background-color: #4b0082;
           color: white;
         }
 
@@ -149,7 +214,7 @@ export default function MyStories() {
           border: none;
           border-radius: 4px;
           cursor: pointer;
-          background-color: #4B0082;
+          background-color: #4b0082;
           color: white;
           font-size: 0.85rem;
         }
@@ -174,7 +239,7 @@ export default function MyStories() {
         }
 
         .story-content button {
-          background-color: #4B0082;
+          background-color: #4b0082;
           color: white;
           padding: 10px;
           border: none;
@@ -188,7 +253,7 @@ export default function MyStories() {
 
         .back-button {
           margin-top: 30px;
-          background-color: #4B0082;
+          background-color: #4b0082;
           color: white;
           padding: 10px 20px;
           border: none;
