@@ -9,6 +9,8 @@ export default function MyStories() {
   const [stories, setStories] = useState([]);
   const [selectedStory, setSelectedStory] = useState(null);
   const [filterLetter, setFilterLetter] = useState(null);
+  const [genreFilter, setGenreFilter] = useState(null);
+  const [ageFilter, setAgeFilter] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -49,20 +51,38 @@ export default function MyStories() {
     }
   };
 
+  const handleClearFilters = () => {
+    setFilterLetter(null);
+    setGenreFilter(null);
+    setAgeFilter(null);
+  };
+
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   const availableLetters = new Set(
     stories.map((s) => s.title?.[0]?.toUpperCase()).filter(Boolean)
   );
-  const filteredStories = filterLetter
-    ? stories.filter(
-        (story) => story.title?.[0]?.toUpperCase() === filterLetter
-      )
-    : stories;
+
+  let filteredStories = stories;
+
+  if (filterLetter) {
+    filteredStories = filteredStories.filter(
+      (story) => story.title?.[0]?.toUpperCase() === filterLetter
+    );
+  }
+
+  if (genreFilter) {
+    filteredStories = filteredStories.filter((story) => story.genre === genreFilter);
+  }
+
+  if (ageFilter) {
+    filteredStories = filteredStories.filter((story) => story.age === ageFilter);
+  }
 
   return (
     <Layout>
       <div className="container">
         <h1>My Stories</h1>
+        <p className="subtitle">Your saved stories. Filter, view, edit, or delete them below.</p>
 
         <div className="alphabet-filter">
           {alphabet.map((letter) => (
@@ -75,11 +95,42 @@ export default function MyStories() {
               {letter}
             </button>
           ))}
-          {filterLetter && (
-            <button onClick={() => setFilterLetter(null)} className="clear-filter">
-              Clear
-            </button>
-          )}
+        </div>
+
+        <div className="additional-filters">
+          <label>
+            Genre:
+            <select
+              value={genreFilter || ''}
+              onChange={(e) => setGenreFilter(e.target.value || null)}
+            >
+              <option value="">All</option>
+              {[...new Set(stories.map((s) => s.genre))].map((genre) => (
+                <option key={genre} value={genre}>
+                  {genre}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            Age:
+            <select
+              value={ageFilter || ''}
+              onChange={(e) => setAgeFilter(e.target.value || null)}
+            >
+              <option value="">All</option>
+              {[...new Set(stories.map((s) => s.age))].map((age) => (
+                <option key={age} value={age}>
+                  {age}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <button onClick={handleClearFilters} className="reset-btn">
+            Clear Filters
+          </button>
         </div>
 
         <table>
@@ -149,6 +200,12 @@ export default function MyStories() {
           padding: 20px;
         }
 
+        .subtitle {
+          font-size: 1rem;
+          color: #555;
+          margin-bottom: 10px;
+        }
+
         .alphabet-filter {
           display: flex;
           flex-wrap: wrap;
@@ -175,9 +232,38 @@ export default function MyStories() {
           background-color: #3e0062;
         }
 
-        .clear-filter {
-          margin-left: 10px;
+        .additional-filters {
+          display: flex;
+          gap: 12px;
+          align-items: flex-end;
+          margin-bottom: 20px;
+        }
+
+        .additional-filters label {
+          display: flex;
+          flex-direction: column;
+          font-size: 0.9rem;
+        }
+
+        .additional-filters select {
+          padding: 5px;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+        }
+
+        .reset-btn {
+          align-self: flex-end;
+          padding: 6px 12px;
+          border: none;
           background-color: #888;
+          color: white;
+          border-radius: 4px;
+          cursor: pointer;
+          height: fit-content;
+        }
+
+        .reset-btn:hover {
+          background-color: #4b0082;
         }
 
         table {
