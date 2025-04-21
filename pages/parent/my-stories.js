@@ -97,7 +97,7 @@ export default function MyStories() {
     <Layout>
       <div className="container">
         <h1>My Stories</h1>
-        <p className="subtitle">Your saved stories. Filter, view, edit, or delete them below.</p>
+        <p className="subtitle"></p>
 
         <div className="alphabet-filter">
           {alphabet.map((letter) => (

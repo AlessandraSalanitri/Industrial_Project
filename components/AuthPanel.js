@@ -1,28 +1,30 @@
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import signUp from "../firebase/auth/signup"; //usign signup helper- reducing load here
-import signIn from "../firebase/auth/signIn"; //using signin helper in firestore/auth.
+import signUp from "../firebase/auth/signup"; // Using signup helper
+import signIn from "../firebase/auth/signIn"; // Using signin helper
 import ResetPasswordModal from '../components/ResetPasswordModal';
 import { useUser } from '../context/UserContext';
 import "../styles/auth.css";
 
 export default function AuthPanel({ mode }) {
   const router = useRouter();
-  const { login } = useUser(); 
+  const { login } = useUser();
   const [isSignUp, setIsSignUp] = useState(false);
+
   useEffect(() => {
     if (mode === 'signup') {
-      setIsSignUp(true);
+      setIsSignUp(true);  // Toggle the signup mode if mode is "signup"
+    } else {
+      setIsSignUp(false); // Set to false for login
     }
   }, [mode]);
+
   const [form, setForm] = useState({ email: "", password: "", confirmPassword: "", role: "parent" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
-
-
 
   const handleSwitch = () => {
     setIsSignUp((prev) => !prev);
@@ -52,7 +54,7 @@ export default function AuthPanel({ mode }) {
           setError(error.message || "Signup failed.");
           return;
         }
-        router.push("/signIn"); //redirect to login, after signup
+        router.push("/login"); // Corrected redirection after sign-up to `/login`
       } else {
         const { result, error } = await signIn(form.email, form.password);
   
@@ -62,7 +64,6 @@ export default function AuthPanel({ mode }) {
         }
 
         login(result); // result contains: userId, email, role, avatar
-  
   
         if (result?.role === "parent") {
           router.push("/parent/dashboard");
@@ -74,7 +75,7 @@ export default function AuthPanel({ mode }) {
             router.push("/child/dashboard");
           }
         } else {
-          router.push("/"); // fallback
+          router.push("/"); // fallback to home page if role is undefined
         }
       }
     } catch (err) {
@@ -84,91 +85,87 @@ export default function AuthPanel({ mode }) {
     }
   };
 
-
   return (
     <div className="auth-wrapper">
       <div className={`auth-panel ${mode === 'signup' ? 'signup-mode' : ''}`}>
-      <AnimatePresence mode="wait">
-        <motion.div
-            key={isSignUp ? 'signup-panel' : 'login-panel'}
-            className={`auth-panel ${isSignUp ? 'signup-mode' : ''}`}
-            initial={{ x: isSignUp ? 300 : -300, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: isSignUp ? -300 : 300, opacity: 0 }}
-            transition={{ duration: 0.5 }}
-        >
-            <div className="form-box">
-            <h2>{isSignUp ? "Sign Up" : "Login"}</h2>
-            {error && <p className="error">{error}</p>}
-            <form onSubmit={handleSubmit}>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={form.email}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={form.password}
-                onChange={handleChange}
-                required
-              />
-              {isSignUp && (
-                <>
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    value={form.confirmPassword}
-                    onChange={handleChange}
-                    required
-                  />
-                  <select name="role" value={form.role} onChange={handleChange}>
-                    <option value="parent">Parent</option>
-                    <option value="child">Child</option>
-                  </select>
-                </>
-              )}
-              <button className={`button ${isSignUp ? "button-primary" : "button-secondary"}`} type="submit" disabled={loading}>
-                {loading ? "Please wait..." : isSignUp ? "Sign Up" : "Login"}
-              </button>
-            </form>
-            <p className="switch-text">
-              {isSignUp ? "Already have an account?" : "Don't have an account?"}
-              <button type="button" onClick={handleSwitch} className="link">
-                {isSignUp ? "Login here" : "Sign up here"}
-              </button>
-            </p>
+        <AnimatePresence mode="wait">
+          <motion.div
+              key={isSignUp ? 'signup-panel' : 'login-panel'}
+              className={`auth-panel ${isSignUp ? 'signup-mode' : ''}`}
+              initial={{ x: isSignUp ? 300 : -300, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: isSignUp ? -300 : 300, opacity: 0 }}
+              transition={{ duration: 0.5 }}
+          >
+              <div className="form-box">
+              <h2>{isSignUp ? "Sign Up" : "Login"}</h2>
+              {error && <p className="error">{error}</p>}
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                />
+                {isSignUp && (
+                  <>
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      placeholder="Confirm Password"
+                      value={form.confirmPassword}
+                      onChange={handleChange}
+                      required
+                    />
+                    <select name="role" value={form.role} onChange={handleChange}>
+                      <option value="parent">Parent</option>
+                      <option value="child">Child</option>
+                    </select>
+                  </>
+                )}
+                <button className={`button ${isSignUp ? "button-primary" : "button-secondary"}`} type="submit" disabled={loading}>
+                  {loading ? "Please wait..." : isSignUp ? "Sign Up" : "Login"}
+                </button>
+              </form>
+              <p className="switch-text">
+                {isSignUp ? "Already have an account?" : "Don't have an account?"}
+                <button type="button" onClick={handleSwitch} className="link">
+                  {isSignUp ? "Login here" : "Sign up here"}
+                </button>
+              </p>
 
-            {!isSignUp && (
-            <p className="forgot-password">
-              <span onClick={() => setShowResetModal(true)} className="link">
-                Forgot your password?
-              </span>
-            </p>
-           )}
+              {!isSignUp && (
+              <p className="forgot-password">
+                <span onClick={() => setShowResetModal(true)} className="link">
+                  Forgot your password?
+                </span>
+              </p>
+             )}
 
-            </div>
-            <div className="auth-image">
-            <Image
-              src="/assets/login_img.png"
-              alt="Visual"
-              width={350}
-              height={350}
-              className="auth-image"
-            />
-            </div>
-        </motion.div>
+              </div>
+              <div className="auth-image">
+              <Image
+                src="/assets/login_img.png"
+                alt="Visual"
+                width={350}
+                height={350}
+                className="auth-image"
+              />
+              </div>
+          </motion.div>
         </AnimatePresence>
       </div>
       {showResetModal && <ResetPasswordModal onClose={() => setShowResetModal(false)} />}
     </div>
   );
 }
-
-
-
