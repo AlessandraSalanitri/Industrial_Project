@@ -44,6 +44,14 @@ export default function ParentDashboard() {
 
           {/* Add the button to switch to restricted child mode */}
           <div className="dashboard-card">
+          <Image
+              src="/assets/child.png"
+              alt="Child Mode"
+              width={280}
+              height={320}
+              className="dashboard-image"
+            />
+            
             <button
               className="button button-primary"
               onClick={switchToChildMode}  // When clicked, enable restricted mode
