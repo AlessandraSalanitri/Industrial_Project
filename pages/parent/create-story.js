@@ -5,6 +5,7 @@ import { firestoreDB, storage } from '../../firebase/firebaseConfig'; // Import 
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Firebase storage functions
 import '../../styles/create_story.css';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 export default function CreateStory() {
   const [story, setStory] = useState('');
@@ -21,6 +22,17 @@ export default function CreateStory() {
   const [audioUrl, setAudioUrl] = useState(''); // To store the URL of the saved audio
 
   const router = useRouter();
+
+  const [user, setUser] = useState(null);
+  // This ensures the user variable is properly set once a user logs in.
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+  
+    return () => unsubscribe();
+  }, []);
 
   // Stop speech when navigating away
   useEffect(() => {
@@ -109,13 +121,17 @@ export default function CreateStory() {
   };
 
   const confirmSave = async () => {
+    if (!user) {
+      alert("You need to be logged in to save stories.");
+      return;
+    }
+  
     if (!storyName.trim()) {
       alert("Please enter a name for your story.");
       return;
     }
-
+  
     try {
-      // Save story content along with audio URL
       await addDoc(collection(firestoreDB, "stories"), {
         title: storyName,
         content: story,
@@ -126,10 +142,11 @@ export default function CreateStory() {
         tone,
         length,
         character,
-        audioUrl, // Save the audio URL
+        audioUrl,
         createdAt: new Date(),
+        userId: user.uid, // Binds story to current user
       });
-
+  
       alert("Story saved successfully!");
       setStory('');
       setStoryName('');
@@ -140,7 +157,7 @@ export default function CreateStory() {
       setTone('');
       setLength('');
       setCharacter('');
-      setAudioUrl(''); // Clear audio URL after saving
+      setAudioUrl('');
       setShowModal(false);
     } catch (error) {
       console.error("Error saving story:", error);

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { firestoreDB } from '../../firebase/firebaseConfig';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 export default function MyStories() {
   const [stories, setStories] = useState([]);
@@ -13,23 +14,35 @@ export default function MyStories() {
   const [ageFilter, setAgeFilter] = useState(null);
   const [audio, setAudio] = useState(null);
   const router = useRouter();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const fetchStories = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(firestoreDB, 'stories'));
-        const storiesData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setStories(storiesData);
-      } catch (error) {
-        console.error('Error fetching stories:', error);
-      }
-    };
-
-    fetchStories();
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+  
+    return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+  const fetchStories = async () => {
+    if (!user) return; // wait for user to load
+
+    try {
+      const querySnapshot = await getDocs(collection(firestoreDB, 'stories'));
+      const storiesData = querySnapshot.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((story) => story.userId === user.uid); // filter by current user
+
+      setStories(storiesData);
+    } catch (error) {
+      console.error('Error fetching stories:', error);
+    }
+  };
+
+  fetchStories();
+  }, [user]);
 
   const handleSelectStory = (story) => {
     setSelectedStory(story);
