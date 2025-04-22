@@ -3,6 +3,8 @@ import Layout from '../../components/Layout';
 import StoryList from '../../components/StoryList';
 import '../../styles/child_dashboard.css';
 import '../../styles/darkMode.css'; // make sure this is present
+import { EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+import { firebaseAuth } from '../../firebase/firebaseConfig'; // adjust path if needed
 
 export default function ChildDashboard() {
   const [darkMode, setDarkMode] = useState(false);
@@ -30,11 +32,29 @@ export default function ChildDashboard() {
   };
 
   // Function to handle exiting restricted mode (only available for parent)
-  const exitRestrictedMode = () => {
-    localStorage.setItem('restrictedMode', 'false'); // Disable restricted mode
-    window.location.href = '/parent/dashboard';  // Navigate back to parent dashboard
+  const exitRestrictedMode = async () => {
+    const password = prompt('Enter parent password to exit restricted mode');
+    if (!password) return;
+  
+    try {
+      const user = firebaseAuth.currentUser;
+  
+      if (!user || !user.email) {
+        alert('No user is currently logged in.');
+        return;
+      }
+  
+      const credential = EmailAuthProvider.credential(user.email, password);
+      await reauthenticateWithCredential(user, credential);
+  
+      localStorage.setItem('restrictedMode', 'false');
+      alert('Exiting restricted mode...');
+      window.location.href = '/parent/dashboard';
+    } catch (error) {
+      console.error('Failed to exit restricted mode:', error);
+      alert('Incorrect password. Please try again.');
+    }
   };
-
   return (
     <Layout>
       <div className="child-dashboard">
@@ -58,9 +78,7 @@ export default function ChildDashboard() {
         <StoryList />
 
         {/* Display restricted mode message */}
-        <div className="restricted-access">
-          <p>You are currently in restricted mode. Please contact the parent to exit.</p>
-        </div>
+        
 
         {/* Allow parent to exit restricted mode */}
         <div className="exit-restricted-mode">
