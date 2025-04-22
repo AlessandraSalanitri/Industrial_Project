@@ -13,7 +13,11 @@ export default function ChildDashboard() {
   const [isRestricted, setIsRestricted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const [selectedStory, setSelectedStory] = useState(null); // NEW: For viewing full story content
+  const [selectedStory, setSelectedStory] = useState(null);
+
+  // NEW: States for secure password modal
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [parentPassword, setParentPassword] = useState('');
 
   useEffect(() => {
     const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
@@ -65,33 +69,47 @@ export default function ChildDashboard() {
     }
   };
 
+  // UPDATED: Secure password entry
   const exitRestrictedMode = async () => {
-    const password = prompt('Enter parent password to exit restricted mode');
-    if (!password) return;
-
+    if (!parentPassword) {
+      alert('Please enter a password');
+      return;
+    }
+  
     try {
       const currentUser = firebaseAuth.currentUser;
       if (!currentUser || !currentUser.email) {
         alert('No user is currently logged in.');
         return;
       }
-
-      const credential = EmailAuthProvider.credential(currentUser.email, password);
+  
+      const credential = EmailAuthProvider.credential(currentUser.email, parentPassword);
       await reauthenticateWithCredential(currentUser, credential);
-
+  
       localStorage.setItem('restrictedMode', 'false');
       alert('Exiting restricted mode...');
       setIsRestricted(false);
+      setShowPasswordModal(false);
+      setParentPassword('');
       window.location.href = '/parent/dashboard';
     } catch (error) {
       console.error('Failed to exit restricted mode:', error);
-      alert('Incorrect password. Please try again.');
+  
+      // Handle Firebase auth errors explicitly
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+        alert('Incorrect password. Please try again.');
+      } else {
+        alert('An unexpected error occurred. Please try again later.');
+      }
+  
+      // Reset password input and close modal just in case
+      setParentPassword('');
+      setShowPasswordModal(true); // Optionally keep modal open
     }
   };
-
   const handlePlayStory = (story) => {
     console.log("Play story:", story);
-    setSelectedStory(story); // NEW: Show full story content
+    setSelectedStory(story);
   };
 
   if (isLoading) {
@@ -119,12 +137,44 @@ export default function ChildDashboard() {
         )}
 
         <div className="exit-restricted-mode">
-          <button className="button button-secondary" onClick={exitRestrictedMode}>
+          <button className="button button-secondary" onClick={() => setShowPasswordModal(true)}>
             Exit Restricted Mode (Parent Only)
           </button>
         </div>
 
-        {/* NEW: Story Content Display */}
+        {/* Password Modal */}
+        {showPasswordModal && (
+          <div className="password-modal" style={{
+            marginTop: '20px',
+            backgroundColor: '#f0f0f0',
+            padding: '20px',
+            borderRadius: '10px',
+            maxWidth: '400px'
+          }}>
+            <h3>Enter Parent Password</h3>
+            <input
+              type="password"
+              value={parentPassword}
+              placeholder="Enter password"
+              onChange={(e) => setParentPassword(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '10px',
+                marginBottom: '10px',
+                borderRadius: '5px',
+                border: '1px solid #ccc'
+              }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <button className="button button-primary" onClick={exitRestrictedMode}>Confirm</button>
+              <button className="button button-secondary" onClick={() => {
+                setShowPasswordModal(false);
+                setParentPassword('');
+              }}>Cancel</button>
+            </div>
+          </div>
+        )}
+
         {selectedStory && (
           <div className="story-content-view" style={{ marginTop: '30px', backgroundColor: '#f4f4f4', padding: '20px', borderRadius: '8px' }}>
             <h2>{selectedStory.title}</h2>
