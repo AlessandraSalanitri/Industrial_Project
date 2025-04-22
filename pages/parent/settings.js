@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
+import { firebaseAuth, firestoreDB } from '../../firebase/firebaseConfig'; // Import firestoreDB
+import { collection, addDoc } from 'firebase/firestore'; // Import Firestore functions
 import '../../styles/settings.css';
 
 const voicesList = [
@@ -13,6 +16,18 @@ export default function Settings() {
   const [darkMode, setDarkMode] = useState(false);
   const [selectedVoice, setSelectedVoice] = useState('');
   const [childEmail, setChildEmail] = useState('');
+  const [user, setUser] = useState(null); // State to hold the current user data
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check if the user is authenticated and set the user state
+    const currentUser = firebaseAuth.currentUser;
+    if (currentUser) {
+      setUser(currentUser); // Set user if logged in
+    } else {
+      router.push('/login'); // Redirect to login if no user is found
+    }
+  }, []);
 
   useEffect(() => {
     document.body.classList.toggle('dark-mode', darkMode);
@@ -31,9 +46,36 @@ export default function Settings() {
     setSelectedVoice(voiceName);
   };
 
-  const handleChildLink = () => {
-    alert(`Child account linked with: ${childEmail}`);
-    // Add logic to store this link in Firestore or context
+  const handleChildLink = async () => {
+    if (!childEmail) {
+      alert('Please enter a valid email.');
+      return;
+    }
+
+    if (!user) {
+      alert('You must be signed in to link an account.');
+      return;
+    }
+
+    try {
+      // Reference to the Firestore collection where linked accounts are stored
+      const linkedAccountsRef = collection(firestoreDB, 'linkedAccounts');
+      
+      // Add a new document with the user's ID and the child's email
+      await addDoc(linkedAccountsRef, {
+        parentId: user.uid,
+        childEmail: childEmail,
+      });
+
+      // Provide feedback to the user
+      alert(`Child account linked with: ${childEmail}`);
+
+      // Optionally clear the input after linking
+      setChildEmail('');
+    } catch (error) {
+      console.error('Error linking child account:', error);
+      alert('There was an error linking the account. Please try again.');
+    }
   };
 
   return (
@@ -77,8 +119,8 @@ export default function Settings() {
             <button className="button button-primary" onClick={handleChildLink}>
               Link Account
             </button>
-            </div>
-            
+          </div>
+
           <div className="info-box">
             <h4>Why Link Your Account?</h4>
             <p>
@@ -88,7 +130,6 @@ export default function Settings() {
               stories the way you intended. It’s a simple way to stay connected and enhance their
               bedtime experience with just one click.
             </p>
-          
           </div>
         </div>
 
