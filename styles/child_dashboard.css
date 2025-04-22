@@ -35,4 +35,31 @@
     right: 100px;
     z-index: 9999;
   }
+  .restricted-mode {
+    /* Prevent child from accessing parent dashboard by hiding elements */
+  }
+  
+  .restricted-access {
+    background-color: #ffcccb;
+    color: #e60000;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 1rem;
+  }
+  
+  .exit-restricted-mode {
+    margin-top: 1.5rem;
+  }
+  
+  .exit-restricted-mode button {
+    background-color: #4b0082;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .exit-restricted-mode button:hover {
+    background-color: #3a0066;
+  }
   

@@ -4,6 +4,12 @@ import Link from 'next/link';
 import '../../styles/parent_dashboard.css';
 
 export default function ParentDashboard() {
+  // Function to set restricted mode
+  const switchToChildMode = () => {
+    localStorage.setItem('restrictedMode', 'true');  // Set restricted mode
+    window.location.href = '/child/dashboard'; // Redirect to child dashboard
+  };
+
   return (
     <Layout>
       <div className="admin-dashboard">
@@ -34,6 +40,16 @@ export default function ParentDashboard() {
             <Link href="/parent/my-stories" className="button button-primary">
               Manage saved story
             </Link>
+          </div>
+
+          {/* Add the button to switch to restricted child mode */}
+          <div className="dashboard-card">
+            <button
+              className="button button-primary"
+              onClick={switchToChildMode}  // When clicked, enable restricted mode
+            >
+              Switch to Child Mode
+            </button>
           </div>
         </div>
       </div>

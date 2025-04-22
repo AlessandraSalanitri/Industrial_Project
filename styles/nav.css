@@ -169,3 +169,6 @@ nav ul li a:hover, .active {
   }
 
 }
+.avatar-icon[style*='not-allowed'] {
+  filter: grayscale(100%);
+}
