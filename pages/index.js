@@ -5,6 +5,8 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import '../styles/home_page.css';
+import { PaintBrush, BookOpen, Clock, MoonStars, Sparkle, Heart, StarAndCrescent   } from 'phosphor-react';
+
 
 export default function Home() {
   const { user } = useUser();
@@ -33,15 +35,40 @@ export default function Home() {
 
         {/* Text content on the right */}
         <div className="home-content">
-          <h2>AI Bedtime Story Telling</h2>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-            Lorem Ipsum has been the industry standard dummy text ever since the 1500s.
-          </p>
-          <p>
-            It has survived not only five centuries, but also the leap into electronic typesetting, 
-            remaining essentially unchanged.
-          </p>
+        <h2 class="hero-heading">AI Bedtime Story Telling</h2>
+
+        <p className="tagline">
+        <MoonStars size={20} weight="fill" color="#4B0082" style={{ marginRight: '6px' }} />
+        Bedtime just got easier — and more magical.
+        {/* <Sparkle size={20} weight="fill" color="#4B0082" style={{ marginLeft: '6px' }} /> */}
+        </p>
+
+
+        <p>
+          Turn your child’s imagination into a <strong>custom bedtime story</strong> in seconds. Whether you’re short on time or want something truly special, our AI creates heartwarming tales based on your child’s <strong>age, interests, and favorite themes</strong>.
+        </p>
+
+        <ul className="features">
+        <li>
+          <PaintBrush size={20} weight="fill" style={{ marginRight: '8px', color: '#4B0082' }} />
+          <strong>Fully customizable</strong>
+        </li>
+        <li>
+          <BookOpen size={20} weight="fill" style={{ marginRight: '8px', color: '#4B0082' }} />
+          <strong>Read aloud</strong> or let the app narrate
+        </li>
+        <li>
+          <Clock size={20} weight="fill" style={{ marginRight: '8px', color: '#4B0082' }} />
+          <strong>Save time</strong>, skip the stress — enjoy more snuggles
+        </li>
+        </ul>
+
+        <p className="closing">
+        Because every child deserves a story that’s just for them
+        <Heart size={20} weight="fill" color="#c4c4c4" style={{ marginLeft: '8px' }} />
+        </p>
+
+
           <div className="buttons">
           <Link href="/login" legacyBehavior>
             <a className="button button-primary">LOGIN</a>
