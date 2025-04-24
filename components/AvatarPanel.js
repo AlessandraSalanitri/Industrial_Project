@@ -13,8 +13,7 @@ export default function AvatarPanel({ onClose }) {
   const [showPasswordInput, setShowPasswordInput] = useState(false);
   const [parentPassword, setParentPassword] = useState('');
 
-  const isSimulatedChild = user?.email?.includes('-child@simulated.com');
-
+  const isSimulatedChild = user?.isSimulated;
 
   const handleLogout = () => {
     logout();
@@ -27,14 +26,20 @@ export default function AvatarPanel({ onClose }) {
       const credential = EmailAuthProvider.credential(currentUser.email, parentPassword);
       await reauthenticateWithCredential(currentUser, credential);
 
-      localStorage.removeItem('mode'); // optional: clear mode if stored
+      localStorage.removeItem('mode');
       router.push('/parent/dashboard');
+
     } catch (error) {
+
       alert('Wrong password. Please try again.');
     }
   };
 
   const avatarSrc = user?.avatar ? `/assets/avatars/${user.avatar}.png` : null;
+
+  console.log("User email in AvatarPanel:", user?.email);
+  console.log("Is Simulated Child:", isSimulatedChild);
+
 
   return (
     <motion.div

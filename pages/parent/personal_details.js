@@ -85,8 +85,18 @@ export default function PersonalDetailsPage() {
                 {renderField("Phone Number", "phoneNumber")}
                 {renderField("Address", "address")}
                 {renderField("Credit Card", "creditCard")}
-                {renderField("Subscription Plan", "subscriptionPlan")}
-                
+                <div className="detail-row">
+                  <span className="detail-label">Subscription Plan:</span>
+                  <span className="detail-value">
+                    {details.subscriptionPlan || <span className="placeholder">No Plan Selected</span>}
+                  </span>
+                  <button 
+                    className="button button-secondary"
+                    onClick={() => router.push('/parent/subscription')}
+                  >
+                    Change Plan
+                  </button>
+                </div>               
             </div>
         </div>
 

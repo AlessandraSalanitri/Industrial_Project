@@ -4,23 +4,24 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import Image from "next/image";
 import { useUser } from '../context/UserContext';
 import "../styles/story_list.css";
+import StoryModal from "../components/StoryModal";
 
-export default function StoryList({ onPlay }) {
+
+export default function StoryList() {
   const { user } = useUser();
   const [stories, setStories] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
   const [filteredStories, setFilteredStories] = useState([]);
+  const [modalStory, setModalStory] = useState(null);
+ 
 
   useEffect(() => {
-    if (user) {
-      const getEffectiveChildEmail = () => {
-        const rawEmail = user?.email || firebaseAuth.currentUser?.email;
-        return rawEmail?.includes('-child@simulated.com') ? rawEmail : `${rawEmail}-child@simulated.com`;
-      };
-      fetchUserStories(getEffectiveChildEmail());
+    if (user?.email) {
+      fetchUserStories(user.email);
     }
   }, [user]);
+  
 
   const fetchUserStories = async (childEmail) => {
     try {
@@ -50,41 +51,32 @@ export default function StoryList({ onPlay }) {
   };
 
   useEffect(() => {
-    applyFilters(searchText, selectedGenre, stories);
+    let filtered = [...stories];
+    if (selectedGenre) filtered = filtered.filter((s) => s.genre === selectedGenre);
+    if (searchText.trim())
+      filtered = filtered.filter((s) =>
+        s.title.toLowerCase().includes(searchText.toLowerCase())
+      );
+    setFilteredStories(filtered);
   }, [searchText, selectedGenre, stories]);
 
-  const applyFilters = (search, genre, allStories) => {
-    let filtered = [...allStories];
-
-    if (genre) {
-      filtered = filtered.filter(story => story.genre === genre);
-    }
-
-    if (search.trim()) {
-      filtered = filtered.filter(story =>
-        story.title.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-
-    setFilteredStories(filtered);
-  };
 
   return (
-    <>
+    <div className="story-list-container">
       <h1>Story List</h1>
 
       <div className="dashboard-controls">
         <input
           type="text"
           placeholder="Search by title"
-          className="search-input"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
+          className="search-input"
         />
         <select
-          className="filter-select"
           value={selectedGenre}
           onChange={(e) => setSelectedGenre(e.target.value)}
+          className="filter-select"
         >
           <option value="">All Genres</option>
           <option value="Fantasy">Fantasy</option>
@@ -95,8 +87,7 @@ export default function StoryList({ onPlay }) {
           <option value="Historical Fiction">Historical Fiction</option>
           <option value="Animal Stories">Animal Stories</option>
         </select>
-
-        <button onClick={() => { setSearchText(''); setSelectedGenre(''); }}>
+        <button onClick={() => { setSearchText(""); setSelectedGenre(""); }}>
           Reset Filters
         </button>
       </div>
@@ -107,29 +98,31 @@ export default function StoryList({ onPlay }) {
             <div className="story-title">{story.title}</div>
             <div className="story-thumbnail">
               <Image
-                src={story.thumbnail || "/assets/sample_story.png"}
+                src={story.thumbnail || "/assets/story/sample_story.png"}
                 alt={story.title}
-                width={900}
-                height={400}
+                width={140}
+                height={140}
+                style={{ borderRadius: "50%" }}
               />
-              <button className="play-button" onClick={() => onPlay?.(story)}>
+              <button className="play-button" onClick={() => setModalStory(story)}>
                 ▶
               </button>
             </div>
-            <button
-              className="button button-primary"
-              onClick={() => onPlay?.(story)}
-            >
-              Play
+            <button className="play-action" onClick={() => setModalStory(story)}>
+              Play Story
             </button>
-            {story.audioUrl && (
-              <a href={story.audioUrl} download className="button button-secondary">
-                Download Audio
-              </a>
-            )}
           </div>
         ))}
+
+        {modalStory && (
+          <StoryModal
+            isOpen={true} // 
+            story={modalStory}
+            onClose={() => setModalStory(null)}
+          />
+        )}
+
       </div>
-    </>
+    </div>
   );
 }

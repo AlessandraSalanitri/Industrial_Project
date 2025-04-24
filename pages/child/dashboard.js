@@ -13,19 +13,21 @@ export default function ChildDashboard() {
   const [user, setUser] = useState(null);
   const [selectedStory, setSelectedStory] = useState(null);
 
+  //check wether the child account is a simulated account or a real account (to distinguish if should display exit child mode or not in the avatar)
   useEffect(() => {
     const unsubscribe = firebaseAuth.onAuthStateChanged(async (currentUser) => {
       if (currentUser) {
-        const isSimulated = currentUser.email.includes('-child@simulated.com');
-        const simulatedEmail = isSimulated ? currentUser.email : `${currentUser.email}-child@simulated.com`;
-  
         const userDoc = await getDoc(doc(firestoreDB, 'users', currentUser.uid));
         const userData = userDoc.exists() ? userDoc.data() : {};
   
+        const isSimulated = localStorage.getItem('mode') === 'child';
+        const simulatedEmail = `${currentUser.email}-child@simulated.com`;
+  
         const finalUser = {
           userId: currentUser.uid,
-          email: simulatedEmail,  // use simulated email in child mode
-          role: 'child',
+          email: isSimulated ? simulatedEmail : currentUser.email,
+          role: isSimulated ? 'child' : userData.role || 'child',
+          isSimulated,
           ...userData
         };
   
@@ -35,6 +37,7 @@ export default function ChildDashboard() {
   
     return () => unsubscribe();
   }, []);
+  
 
   useEffect(() => {
     if (user) {
@@ -51,34 +54,35 @@ export default function ChildDashboard() {
 
   const fetchStories = async () => {
     setIsLoading(true);
-
+  
     try {
       const emailToCheck = user?.email;
-
+  
       if (!emailToCheck) {
         console.warn("No child email available for fetching stories.");
         setIsLoading(false);
         return;
       }
-
+  
       const linkedQuery = query(
         collection(firestoreDB, 'linkedAccounts'),
         where('childEmail', '==', emailToCheck)
       );
+  
       const snapshot = await getDocs(linkedQuery);
-
       const parentIds = snapshot.docs.map(doc => doc.data().parentId);
-
+  
       if (parentIds.length === 0) {
         console.log("There is no linked parents found, skipping story fetch.");
         setIsLoading(false);
         return;
       }
-
+  
       const storiesQuery = query(
         collection(firestoreDB, 'stories'),
         where('userId', 'in', parentIds)
       );
+  
       const storiesSnap = await getDocs(storiesQuery);
       const storiesData = storiesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setStories(storiesData);
@@ -88,6 +92,7 @@ export default function ChildDashboard() {
       setIsLoading(false);
     }
   };
+  
 
   const handlePlayStory = (story) => {
     setSelectedStory(story);

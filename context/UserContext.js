@@ -18,18 +18,20 @@ export const UserProvider = ({ children }) => {
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
-        
-        if (simulatedChildMode) {
-          const simulatedEmail = `${parsedUser.email}-child@simulated.com`;
   
-          setUser({
-            ...parsedUser,
-            role: 'child',
-            email: simulatedEmail, // Inject the simulated child email
-          });
-        } else {
-          setUser(parsedUser);
-        }
+        const finalUser = simulatedChildMode
+          ? {
+              ...parsedUser,
+              email: `${parsedUser.email}-child@simulated.com`,
+              role: 'child',
+              isSimulated: true,
+            }
+          : {
+              ...parsedUser,
+              isSimulated: false,
+            };
+  
+        setUser(finalUser);
       } catch (err) {
         console.error("[UserContext] Failed to parse user:", err);
       }
@@ -39,8 +41,22 @@ export const UserProvider = ({ children }) => {
   }, []);
   
   const login = (userData) => {
-    localStorage.setItem('user', JSON.stringify(userData));
-    setUser(userData);
+    const simulatedChildMode = localStorage.getItem('mode') === 'child';
+  
+    const updatedUser = simulatedChildMode
+      ? {
+          ...userData,
+          email: `${userData.email}-child@simulated.com`,
+          role: 'child',
+          isSimulated: true,
+        }
+      : {
+          ...userData,
+          isSimulated: false,
+        };
+  
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
   };
 
   const logout = () => {

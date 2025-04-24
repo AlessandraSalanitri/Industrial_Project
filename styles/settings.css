@@ -1,6 +1,6 @@
 
 .settings-container {
-    padding-top: 40px;
+    padding-top: 5%;
 }
   
 .settings-title {
@@ -21,17 +21,20 @@
 }
   
 .toggle-group {
-    display: flex;
-    gap: 10px;
+    display: inline-flex;
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    overflow: hidden;
+    background: #eee;
 }
   
 .toggle-btn {
-    padding: 6px 14px;
-    border-radius: 20px;
+    padding: 8px 20px;
+    font-weight: 500;
     border: none;
-    background-color: #eee;
-    font-size: 0.95rem;
+    background: transparent;
     cursor: pointer;
+    transition: background 0.3s ease;
 }
   
 .toggle-btn.active {
@@ -60,6 +63,7 @@
   
 .voice-card {
     background: var(--gray);
+    border-color: 1px solid var(--dark-gray);
     border-radius: 15px;
     padding: 20px;
     width: 180px;
@@ -67,7 +71,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px; /* spacing between preview/select */
+    gap: 8px; /* spacing between preview/select */
 }
 
 

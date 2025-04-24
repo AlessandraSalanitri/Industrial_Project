@@ -39,7 +39,7 @@ export default function SubscriptionPage() {
             <span className="tag">Basic plan</span>
             <h3>Studio Free</h3>
             <p>Limited features, for casual use</p>
-            <button className="button-secondary">Get started</button>
+            <button className="button button-secondary">Get started</button>
           </div>
 
           <div className={`plan-card ${selectedPlan === "pro" ? "selected" : ""}`} onClick={() => handleSelectPlan("pro")}>
@@ -47,7 +47,7 @@ export default function SubscriptionPage() {
             <h3>Studio Pro</h3>
             <p>Advanced features for 2 users</p>
             <p className="price">{billingCycle === "monthly" ? "£ XX / mo" : "£ XX / yr"}</p>
-            <button className="button-primary">Start a free trial</button>
+            <button className="button button-primary">Start a free trial</button>
           </div>
 
           <div className={`plan-card ${selectedPlan === "unlimited" ? "selected" : ""}`} onClick={() => handleSelectPlan("unlimited")}>
@@ -55,13 +55,13 @@ export default function SubscriptionPage() {
             <h3>Studio Unlimited</h3>
             <p>Everything unlocked, no limits</p>
             <p className="price">{billingCycle === "monthly" ? "£ XX / mo" : "£ XX / yr"}</p>
-            <button className="button-primary">Start a free trial</button>
+            <button className="button button-primary">Start a free trial</button>
           </div>
         </div>
 
         <div className="subscription-buttons">
-          <button className="button-secondary" onClick={() => router.back()}>Go back</button>
-          <button className="button-primary" onClick={handleConfirm}>Confirm</button>
+          <button className="button button-secondary" onClick={() => router.back()}>Go back</button>
+          <button className="button button-primary" onClick={handleConfirm}>Confirm</button>
         </div>
       </div>
     </Layout>

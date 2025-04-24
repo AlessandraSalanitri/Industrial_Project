@@ -27,7 +27,6 @@ export default function ParentDashboard() {
       const snapshot = await getDocs(linkedQuery);
   
       if (snapshot.empty) {
-        // Create the link
         await addDoc(collection(firestoreDB, "linkedAccounts"), {
           childEmail: simulatedChildEmail,
           parentId: parentId,
@@ -35,15 +34,17 @@ export default function ParentDashboard() {
         console.log("Simulated child link created.");
       }
   
+      // Inform UserContext this is a simulated session
+      localStorage.setItem('mode', 'child');
+  
       // Redirect to child dashboard
       window.location.href = "/child/dashboard";
     } catch (error) {
       console.error("Error linking simulated child account:", error);
     }
   };
-
-
   
+
   return (
     <Layout>
       <div className="admin-dashboard">

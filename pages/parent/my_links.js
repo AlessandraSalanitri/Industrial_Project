@@ -3,34 +3,32 @@ import { useUser } from '../../context/UserContext';
 import { firestoreDB } from '../../firebase/firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import Layout from '../../components/Layout';
+import { useRouter } from 'next/router';
+import '../../styles/my_links.css';
 
 export default function MyLinks() {
-  const { user, loading } = useUser(); // Importing user context to get user data
+  const { user, loading } = useUser();
   const [linkedAccounts, setLinkedAccounts] = useState([]);
   const [fetching, setFetching] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    // If the user is still loading, do not proceed
     if (loading) return;
 
-    if (!user?.userId) { 
+    if (!user?.userId) {
       console.warn('User not found!');
       setFetching(false);
       return;
     }
 
-    // Function to fetch linked accounts
     const fetchLinks = async () => {
       try {
         const q = query(
           collection(firestoreDB, 'linkedAccounts'),
-          where('parentId', '==', user.userId) 
+          where('parentId', '==', user.userId)
         );
         const snapshot = await getDocs(q);
-        console.log("Firestore query snapshot:", snapshot); // Log the snapshot
-
         const links = snapshot.docs.map(doc => doc.data().childEmail);
-        console.log("Fetched linked accounts:", links); // Log the fetched linked accounts
         setLinkedAccounts(links);
       } catch (err) {
         console.error('Error fetching linked accounts:', err);
@@ -40,25 +38,40 @@ export default function MyLinks() {
     };
 
     fetchLinks();
-  }, [user, loading]); // Re-run whenever `user` or `loading` changes
+  }, [user, loading]);
 
   if (loading || fetching) return <Layout><p>Loading...</p></Layout>;
 
   return (
     <Layout>
       <div className="container">
-        <h2 className="subtitle">Linked Accounts</h2>
+        <h2 className="page-title">Linked Accounts</h2>
         {linkedAccounts.length === 0 ? (
-          <p className="no-links-found">No linked accounts found.</p>
+          <p className="no-links">No linked accounts found.</p>
         ) : (
-          <ul className="linked-accounts">
-            {linkedAccounts.map((email, index) => (
-              <li key={index}>{email}</li>
-            ))}
-          </ul>
+          <table className="links-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Child Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {linkedAccounts.map((email, i) => (
+                <tr key={i}>
+                  <td>{i + 1}</td>
+                  <td>{email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
-        
-        <button className="link-button" onClick={() => alert('Link another child')}>Link Another Account</button> 
+
+        <div className="link-actions">
+          <button className="button button-primary" onClick={() => router.push('/parent/settings')}>
+            Link Another Account
+          </button>
+        </div>
       </div>
     </Layout>
   );

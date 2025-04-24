@@ -35,7 +35,7 @@ export default function Home() {
 
         {/* Text content on the right */}
         <div className="home-content">
-        <h2 class="hero-heading">AI Bedtime Story Telling</h2>
+        <h2 className="hero-heading">AI Bedtime Story Telling</h2>
 
         <p className="tagline">
         <MoonStars size={20} weight="fill" color="#4B0082" style={{ marginRight: '6px' }} />

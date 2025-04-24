@@ -11,13 +11,14 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
   
-.personal-details-page h1 {
-    font-size: 32px;
+.settings-title {
     color: var(--primary-color);
     margin-bottom: 30px;
+    margin-top: 40px;
     text-align: center;
 }
   
+
 .detail-row {
     display: flex;
     justify-content: space-between;

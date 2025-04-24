@@ -40,7 +40,7 @@
   
 .story-card {
     position: relative;
-    width: 160px;
+    width: 200px;
     background: white;
     border-radius: 20px;
     padding: 10px 10px 20px;
@@ -81,6 +81,7 @@
     font-size: 20px;
     cursor: pointer;
 }
+    
 
 .play-button:hover{
     background: var(--primary-color);
@@ -105,7 +106,7 @@
     border: 2px solid var(--primary-color);
     color: var(--primary-color);
     border-radius: 20px;
-    padding: 5px 20px;
+    padding: 8px 20px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
@@ -116,8 +117,63 @@
     color: var(--white);
 }
 
+.dashboard-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+  
+/* Input */
+.search-input {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 1px solid var(--primary-color);
+    background-color: var(--white);
+    color: var(--black);
+    font-size: 14px;
+    transition: border-color 0.3s, background 0.3s;
+}
+  
+/* Select Dropdown */
+.filter-select {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 1px solid var(--primary-color);
+    background-color: var(--white);
+    color: var(--black);
+    font-size: 14px;
+    transition: border-color 0.3s, background 0.3s;
+}
+  
+/* Reset Button */
+.dashboard-controls button {
+    padding: 10px 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    background-color: var(--white);
+    color: var(--primary-color);
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+  
+.dashboard-controls button:hover {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+  
   
 /* Responsive */
+@media (min-width: 800px) and (max-width: 1000px) {
+    .story-grid {
+    gap: 10px;
+
+} 
+}
+
 @media (max-width: 500px) {
     .story-card {
       max-width: 100%;

@@ -158,7 +158,7 @@ export default function Settings() {
 
         {/* Mode Toggle */}
         <div className="setting-row">
-          <span className="setting-label">Mode</span>
+          <span className="setting-label">Choose light or dark mode</span>
           <div className="toggle-group">
             <button className={`toggle-btn ${!darkMode ? 'active' : ''}`} onClick={() => setDarkMode(false)}>Light</button>
             <button className={`toggle-btn ${darkMode ? 'active' : ''}`} onClick={() => setDarkMode(true)}>Dark</button>

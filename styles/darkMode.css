@@ -1,11 +1,11 @@
 /* === GLOBAL CSS DARK MODE === */
 .dark-mode {
-    --secondary-color: #FFD700; /* In dark mode, golden yellow as primary */
+    --secondary-color: #E2E8F0; /* In dark mode, golden yellow as primary */
     --primary-color: #4B0082; 
     --white: #FFFFFF;
     --gray: #1f1f1f;
-    --dark-gray: #999999;
-    --black: #000000;
+    --alt: #FFD700;
+    --background-color: #121212;
 }
 
 .dark-mode p {
@@ -13,18 +13,18 @@
 }
   
 body.dark-mode {
-    background-color: #121212;
+    background-color: var(--background-color);
     color: var(--white);
 }
 
 .dark-mode .button-primary {
     background-color: var(--primary-color);
-    color: var(--secondary-color);
-    border: 2px solid var(--secondary-color);
+    color: var(--alt);
+    border: 2px solid var(--alt);
 }
 
 .dark-mode .button-primary:hover {
-    background-color: var(--dark-gray);
+    background-color: var(--alt);
     color: var(--primary-color);
     border: 2px solid var(--primary-color);
 }
@@ -36,14 +36,14 @@ body.dark-mode {
 }
   
 .dark-mode .button-secondary:hover {
-    background-color: var(--dark-gray);
+    background-color: var(--alt);
 }
 
 
 
 /* ======== NAVBAR DARK MODE ======== */
 body.dark-mode header {
-    background-color: #121212;
+    background-color: var(--background-color);
 }
   
 body.dark-mode nav {
@@ -52,7 +52,7 @@ body.dark-mode nav {
    
 body.dark-mode nav ul li a:hover,
 body.dark-mode nav ul li .active {
-    color: var(--secondary-color);
+    color: var(--alt);
 }
   
 body.dark-mode .avatar-icon {
@@ -118,25 +118,33 @@ body.dark-mode .avatar-icon {
 
 
 
-
 /* === ABOUT PAGE DARK MODE === */
 
 .dark-mode .about-container {
-    background-color: #121212;
+    background-color: var(--background-color);
 }
-
+  
 .dark-mode .about-container h1 {
     color: var(--secondary-color);
 }
   
-.dark-mode .about-container p {
-    color: #f1f1f1;
-}
+.dark-mode .about-card {
+    background-color: var(--background-color);
 
-.about-image {
-    border: 2px solid #FFD700;
 }
-
+  
+.dark-mode .about-card p {
+    color: #e0e0e0;
+}
+  
+.dark-mode .about-card .closing-line {
+    color: var(--alt);
+}
+  
+.dark-mode .about-image {
+    border-color: var(--secondary-color);
+}
+  
 
 /* === ADMIN_PANEL DARK MODE === */
 .dark-mode .admin-panel {
@@ -210,31 +218,31 @@ body.dark-mode .avatar-icon {
 /* ======== SUBSCRIPTION PLAN DARK MODE ======== */
 
 .dark-mode .subscription-wrapper {
-    background-color: #121212;
-    color: var(--white);
+    background-color: var(--background-color);
+    color: var(--secondary-color);
 }
 
 .dark-mode .subscription-wrapper {
-    background-color: #121212;
+    background-color: var(--background-color);
     color: var(--white);
 }
 
 
 .dark-mode .billing-toggle span {
-    background: #2a2a2a;
-    color: #ccc;
+    background: var(--secondary-color);
+    color: var(--background-color);
 }
   
 .dark-mode .billing-toggle .active {
     background: var(--primary-color);
-    color: black;
+    color: var(--white);
 }
   
 .dark-mode .plan-card {
     background: VAR(--dark-gray);
     color: var(--white);
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
-    border: 1px solid #333;
+    border: 1px solid var(--primary-color);
 }
   
 .dark-mode .plan-card:hover {
@@ -246,8 +254,8 @@ body.dark-mode .avatar-icon {
 }
   
 .dark-mode .plan-card .tag {
-    background: #333;
-    color: #bbb;
+    background: #5f5f5f;
+    color: var(--background-color);
 }
   
 .dark-mode .plan-card h3 {
@@ -259,51 +267,152 @@ body.dark-mode .avatar-icon {
 }
  
 
+
+/* ======== LINKED ACCOUNTS DARK MODE ======== */
+
+.dark-mode .links-table th,
+.dark-mode .links-table td {
+  padding: 12px 16px;
+  border: 1px solid var(--dark-gray);
+  text-align: left;
+  background: var(--background-color);
+  font-size: 15px;
+}
+
+.dark-mode .links-table th {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+
 /* ======== SETTINGS DARK MODE ======== */
 
-.link-child-container input {
+.dark-mode .link-child-container input {
     background-color: #333;
     color: var(--white);
-    border-color: #666;
+    border-color: var(--primary-color);
+}
+
+.dark-mode .link-child-container input:hover,
+.dark-mode .link-child-container input:active {
+    border-color: var(--alt);
 }
 
 .dark-mode .info-box {
     background-color: #1f1f1f;
-    border-left-color: var(--secondary-color);
+    border-left-color: var(--alt);
     color: var(--white);
 }
 
+.dark-mode .voice-card.selected {
+    border: 2px solid var(--primary-color);
+}
+
+/* ======== STORY LIST DARK MODE ======== */
 
 
+.dark-mode .play-button {
+    position: absolute;
+    background: var(--alt);
+    border: 3px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 50%;
+    width: 45px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+}
 
-/* ======== FOOTER DARK MODE REMAINS PURPLE======== */
+.dark-mode .play-button:hover{
+    background: var(--primary-color);
+    border: 3px solid var(--alt);
+    color: var(--secondary-color);
+    width: 50px;
+    height: 50px;
+}
 
-footer.dark {
-    background-color: #1a1a1a; /* darker background */
+.dark-mode .story-card {
+    background: var(--background-color);
+    display: flex;
+    border: 1px solid var(--alt);
+}
+
+.dark-mode .play-action {
+    background-color: var(--primary-color);
+    border: 2px solid var(--alt);
     color: var(--white);
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
 }
   
-footer.dark .footer-column h3 {
+.dark-mode .play-action:hover {
+    border: 2px solid var(--primary-color);
+    background: var(--alt);
+    color: var(--background-color);
+}
+
+.dark-mode .search-input,
+.dark-mode .filter-select {
+  background-color: #222;
+  color: var(--white);
+  border: 1px solid var(--secondary-color);
+}
+
+.dark-mode .dashboard-controls button {
+  background-color: #222;
+  color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.dark-mode .dashboard-controls button:hover {
+  background-color: var(--secondary-color);
+  color: var(--black);
+}
+
+
+
+
+/* === STORY MODAL DARK MODE === */
+.dark-mode .story-modal {
+    background-color: #1c1c1c;
+    color: #eee;
+}
+  
+.dark-mode .story-modal-title {
     color: var(--secondary-color);
 }
   
-footer.dark .footer-column p,
-footer.dark .footer-column ul li,
-footer.dark .footer-column ul li a {
+.dark-mode .story-modal-text {
+    color: #f1f1f1;
+}
+  
+.dark-mode .story-modal-progress {
+    background-color: #333;
+}
+  
+.dark-mode .story-modal-progress-bar {
+    background-color: var(--secondary-color);
+}
+  
+.dark-mode .story-modal-controls button {
+    background-color: #2c2c2c;
+    color: var(--white);
+    border: 1px solid var(--secondary-color);
+}
+  
+.dark-mode .story-modal-controls button:hover {
+    background-color: var(--secondary-color);
+    color: #1c1c1c;
+}
+
+/* ======== FOOTER DARK MODE REMAINS PURPLE======== */
+
+.dark-mode footer {
+    background-color: var(--primary-color);
     color: var(--white);
 }
   
-footer.dark .footer-column ul li a:hover {
-    color: var(--primary-color);
-}
-  
-footer.dark .social-icons img {
-    filter: brightness(90%) grayscale(20%);
-}
-  
-footer.dark .social-icons img:hover {
-    filter: brightness(100%);
-}
-
-
   
