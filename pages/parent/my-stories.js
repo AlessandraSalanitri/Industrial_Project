@@ -1,10 +1,13 @@
 import Layout from '../../components/Layout';
+import '../../styles/mystories.css';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { firestoreDB } from '../../firebase/firebaseConfig';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { MoonStars } from 'phosphor-react';
+
 
 export default function MyStories() {
   const [stories, setStories] = useState([]);
@@ -220,12 +223,33 @@ export default function MyStories() {
               <button onClick={handleCloseStory}>Close Story</button>
               <button onClick={handleReadStory}>Read Story</button>
             </div>
-            <h2>{selectedStory.title}</h2>
+
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+            <div className="story-title">
+            <MoonStars weight="fill" size={28} style={{ color: '#4B0082', marginRight: '8px', verticalAlign: 'middle' }} />
+            <strong>{selectedStory.title.replace(/\*\*/g, '')}</strong>
+            </div>
+            </div>
+
+
             <p><strong>Age:</strong> {selectedStory.age}</p>
             <p><strong>Genre:</strong> {selectedStory.genre}</p>
             <p><strong>Main Character:</strong> {selectedStory.character}</p>
             <p><strong>Story Content:</strong></p>
-            <p>{selectedStory.content}</p>
+
+
+            <div className="story-paragraphs">
+            {selectedStory.content
+              .split('\n\n')
+              .filter((para, idx) => !(idx === 0 && para.startsWith('**') && para.endsWith('**')))
+              .map((para, index) => (
+                <p key={index}>{para}</p>
+              ))}
+          </div>
+
+
+
+
           </div>
         )}
 

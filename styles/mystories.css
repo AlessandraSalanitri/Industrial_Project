@@ -83,16 +83,38 @@
   }
   
   .story-content {
+    max-width: 1000px;          /* Shrinks width for better focus */
+    margin: 20px auto;         /* Centers it with top margin */
     background: #fafafa;
     border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 2rem;
+    padding: 30px;             /* More padding = more breathing space */
+    border-radius: 10px;
+    line-height: 1.75;         /* Better line spacing */
+    font-size: 1.1rem;         /* Slightly larger font */
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05); /* soft shadow for visual box */
   }
+  
+  
+
+
   
   .audio-player {
     margin-bottom: 2rem;
   }
+
+  .story-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #4B0082;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px #aaa;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  
   
   .back-button {
     background-color: #0070f3;
@@ -103,3 +125,10 @@
     cursor: pointer;
   }
   
+  .story-paragraphs p {
+    margin-bottom: 1em;
+    line-height: 1.6;
+    font-size: 1.05rem;
+  }
+  
+

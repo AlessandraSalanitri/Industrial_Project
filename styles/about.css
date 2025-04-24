@@ -22,5 +22,47 @@
   max-width: 100%;
   height: auto;
   border-radius: 10px;
+  border: none !important;              /* ← explicitly remove any border */
+  outline: none !important;             /* ← remove any possible focus outline */
+  box-shadow: none !important;          /* ← in case it's a visual glow or effect */
 }
+
+
+.about-image {
+  border: none !important;
+  outline: none !important;
+}
+
   
+
+
+/* added for the text from about us -diana */
+.about-card {
+  background: #fdfcff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 50px;
+  text-align: left;
+  /* border-left: 6px solid #4B0082;
+  padding-left: 24px; */
+}
+
+.about-card p {
+  font-size: 18px;
+  line-height: 1.9;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.about-card em {
+  font-style: italic;
+  color: #666;
+}
+
+.closing-line {
+  font-style: italic;
+  font-weight: 500;
+  text-align: center;
+  color: #4B0082;
+}

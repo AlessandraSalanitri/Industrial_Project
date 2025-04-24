@@ -7,14 +7,30 @@ export default function About() {
     <Layout>
       <div className="about-container">
         <h1>About Us</h1>
+        <div className="about-card">
         <p>
-          Lorem Ipsum has been the industry's standard dummy 
-          text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type 
-          specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, 
-          remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets 
-          containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker 
-          including versions of Lorem Ipsum.
+          At <strong>Studioo</strong>, we believe bedtime should be a moment of connection, creativity, and calm.
+          Our journey began with a simple question:
+          <em> “What if stories could be crafted in seconds, just for your child?”</em>
         </p>
+
+        <p>
+          Born from passion and powered by AI, our app helps parents create unique, magical stories tailored
+          to each child’s age, interests, and imagination — no writing skills or time crunch required.
+        </p>
+
+        <p>
+          Whether you're tucking in a toddler or entertaining a curious grade-schooler,
+          we make it possible to <strong>listen or read along</strong>, laugh, bond, and dream together.
+        </p>
+
+        <p>
+          <strong>Our team</strong> — a group of developers, designers, and storytellers — came together to build
+          this project with heart. We're students, dreamers, and believers in better bedtime.
+        </p>
+
+        <p className="closing-line">And we’re just getting started 🚀</p>
+      </div>
 
         <div className="about-image">
           <Image

@@ -76,3 +76,39 @@
     padding: 20px 50px;
   }
 }
+
+
+
+/* Added for home page writting -diana */
+
+.hero-heading {
+  font-size: 2.5rem;
+  color: #4B0082;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.tagline {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.features {
+  list-style: none;
+  padding-left: 0;
+  margin: 20px 0;
+}
+
+.features li {
+  font-size: 1.1rem;
+  padding: 6px 0;
+}
+
+.closing {
+  font-style: italic;
+  color: #c4c4c4;
+  font-size: 1.1rem;
+  margin-top: 20px;
+}
