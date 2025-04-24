@@ -1,21 +1,56 @@
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { firebaseAuth, firestoreDB } from "../../firebase/firebaseConfig";
 import Layout from '../../components/Layout';
 import Image from 'next/image';
 import Link from 'next/link';
 import '../../styles/parent_dashboard.css';
 
 export default function ParentDashboard() {
-  // Function to set restricted mode
-  const switchToChildMode = () => {
-    localStorage.setItem('restrictedMode', 'true');  // Set restricted mode
-    window.location.href = '/child/dashboard'; // Redirect to child dashboard
+  const switchToChildMode = async () => {
+    const currentUser = firebaseAuth.currentUser;
+  
+    if (!currentUser) {
+      console.error("No authenticated user found.");
+      return;
+    }
+  
+    const parentEmail = currentUser.email;
+    const parentId = currentUser.uid;
+    const simulatedChildEmail = `${parentEmail}-child@simulated.com`;
+  
+    try {
+      // Check if the link already exists
+      const linkedQuery = query(
+        collection(firestoreDB, "linkedAccounts"),
+        where("childEmail", "==", simulatedChildEmail)
+      );
+      const snapshot = await getDocs(linkedQuery);
+  
+      if (snapshot.empty) {
+        // Create the link
+        await addDoc(collection(firestoreDB, "linkedAccounts"), {
+          childEmail: simulatedChildEmail,
+          parentId: parentId,
+        });
+        console.log("Simulated child link created.");
+      }
+  
+      // Redirect to child dashboard
+      window.location.href = "/child/dashboard";
+    } catch (error) {
+      console.error("Error linking simulated child account:", error);
+    }
   };
 
+
+  
   return (
     <Layout>
       <div className="admin-dashboard">
         <h1 className="dashboard-title">Admin Dashboard</h1>
 
         <div className="dashboard-actions">
+          {/* Create story card */}
           <div className="dashboard-card">
             <Image
               src="/assets/create_story.png"
@@ -29,6 +64,7 @@ export default function ParentDashboard() {
             </Link>
           </div>
 
+          {/* Manage story saved card */}
           <div className="dashboard-card">
             <Image
               src="/assets/saved_story.png"
@@ -42,21 +78,20 @@ export default function ParentDashboard() {
             </Link>
           </div>
 
-          {/* Add the button to switch to restricted child mode */}
+          {/* Redirect to child dashboard with parent account -- can exit the child account and go back to parent through exit in avatar panel*/}
           <div className="dashboard-card">
-          <Image
+            <Image
               src="/assets/child.png"
               alt="Child Mode"
               width={280}
               height={320}
               className="dashboard-image"
             />
-            
             <button
               className="button button-primary"
-              onClick={switchToChildMode}  // When clicked, enable restricted mode
+              onClick={switchToChildMode} // Redirect to child dashboard
             >
-              Switch to Child Mode
+              Enter Child Mode
             </button>
           </div>
         </div>

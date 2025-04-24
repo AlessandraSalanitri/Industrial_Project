@@ -9,7 +9,6 @@ import "../../styles/personal_details.css";
 export default function PersonalDetailsPage() {
   const { user } = useUser();
   const [details, setDetails] = useState({
-    email: "",
     fullName: "",
     phoneNumber: "",
     address: "",
@@ -82,7 +81,6 @@ export default function PersonalDetailsPage() {
         <p>If you want to edit your password, click the Forgot password on the login page.</p>
             
             <div className="details-wrapper">
-                {renderField("Email", "email", true)}
                 {renderField("Full Name", "fullName")}
                 {renderField("Phone Number", "phoneNumber")}
                 {renderField("Address", "address")}

@@ -2,15 +2,36 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useUser } from '../context/UserContext';
+import { useState } from 'react';
+import { EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+import { firebaseAuth } from '../firebase/firebaseConfig';
 import '../styles/avatar_panel.css';
 
 export default function AvatarPanel({ onClose }) {
   const router = useRouter();
   const { user, logout } = useUser();
+  const [showPasswordInput, setShowPasswordInput] = useState(false);
+  const [parentPassword, setParentPassword] = useState('');
+
+  const isSimulatedChild = user?.email?.includes('-child@simulated.com');
+
 
   const handleLogout = () => {
     logout();
     router.push('/login');
+  };
+
+  const handleExitToParent = async () => {
+    try {
+      const currentUser = firebaseAuth.currentUser;
+      const credential = EmailAuthProvider.credential(currentUser.email, parentPassword);
+      await reauthenticateWithCredential(currentUser, credential);
+
+      localStorage.removeItem('mode'); // optional: clear mode if stored
+      router.push('/parent/dashboard');
+    } catch (error) {
+      alert('Wrong password. Please try again.');
+    }
   };
 
   const avatarSrc = user?.avatar ? `/assets/avatars/${user.avatar}.png` : null;
@@ -29,24 +50,62 @@ export default function AvatarPanel({ onClose }) {
 
       <div className="avatar-content">
         <button
-        className="button button-secondary"
-        onClick={() => router.push("/child/create_avatar")}>Create Avatar </button>
+          className="button button-secondary"
+          onClick={() => router.push("/child/create_avatar")}
+        >
+          Create Avatar
+        </button>
 
         <Image
-        src={avatarSrc}
-        alt="Avatar"
-        width={140}
-        height={140}
-        className="avatar-img"
-      />
-
+          src={avatarSrc}
+          alt="Avatar"
+          width={140}
+          height={140}
+          className="avatar-img"
+        />
 
         <div className="username">{user?.email}</div>
 
         <div className="avatar-actions">
           <button className="button button-primary" onClick={handleLogout}>
-            <span className="icon">&#x21B5;</span> Logout
+            <span className="icon">↵</span> Logout
           </button>
+
+          {/* Only show exit for simulated child access */}
+          {isSimulatedChild && (
+            <>
+              <button
+                className="button button-secondary"
+                onClick={() => setShowPasswordInput(true)}
+              >
+                Exit to Parent Dashboard
+              </button>
+
+              {showPasswordInput && (
+                <div style={{ marginTop: '10px' }}>
+                  <input
+                    type="password"
+                    placeholder="Enter your password"
+                    value={parentPassword}
+                    onChange={(e) => setParentPassword(e.target.value)}
+                    style={{ padding: '8px', marginBottom: '10px', width: '100%' }}
+                  />
+                  <button
+                    className="button button-primary"
+                    onClick={handleExitToParent}
+                  >
+                    Confirm Exit
+                  </button>
+                  <button
+                    className="button button-secondary"
+                    onClick={() => setShowPasswordInput(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </motion.div>

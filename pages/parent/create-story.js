@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
-import { firestoreDB, storage } from '../../firebase/firebaseConfig'; // Import Firebase storage
-import { collection, addDoc } from 'firebase/firestore';
+import { firestoreDB } from '../../firebase/firebaseConfig'; // Import Firebase storage
+import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Firebase storage functions
 import '../../styles/create_story.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -75,40 +76,52 @@ export default function CreateStory() {
   };
 
   const handleConvertToAudio = async () => {
-    if (!story.trim()) {
-      alert('No story generated to convert to audio!');
-      return;
+
+    if (!story.trim()) 
+      return alert("No story generated!");
+  
+    if (!user) 
+      return alert("You must be logged in to generate audio.");
+  
+    try {
+      const userDocRef = doc(firestoreDB, 'users', user.uid);
+      const userSnap = await getDoc(userDocRef);
+      const userData = userSnap.data();
+      const voiceId = userData?.selectedVoice?.id;
+  
+      if (!voiceId) return alert("Go to Settings and select a voice first.");
+
+      const apiKey = process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY;
+
+      if (!apiKey) {
+        throw new Error("API key is not set in environment variables.");
+      }
+  
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "xi-api-key": apiKey,
+        },
+        body: JSON.stringify({
+          text: story,
+          model_id: "eleven_monolingual_v1",
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.75,
+          },
+        }),
+      });
+  
+      const blob = await response.blob();
+      const audioUrl = URL.createObjectURL(blob);
+      setAudioUrl(audioUrl);
+  
+      alert("Audio generated!");
+    } catch (err) {
+      console.error("Audio error:", err);
+      alert("Something went wrong with audio generation.");
     }
-
-    // Use SpeechSynthesis API to convert text to speech
-    const speech = new SpeechSynthesisUtterance(story);
-    speech.voice = speechSynthesis.getVoices().find(voice => voice.name === 'Google UK English Male') || speechSynthesis.getVoices()[0];
-    speech.pitch = 1;
-    speech.rate = 1;
-    speech.volume = 1;
-
-    // Capture audio as Blob
-    const audioBlob = await new Promise((resolve, reject) => {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const audioDestination = audioContext.createMediaStreamDestination();
-      const recorder = new MediaRecorder(audioDestination.stream);
-      
-      recorder.ondataavailable = event => {
-        resolve(event.data);
-      };
-
-      recorder.onerror = reject;
-
-      window.speechSynthesis.speak(speech);
-    });
-
-    // Upload the audio blob to Firebase Storage
-    const audioRef = ref(storage, `audio_stories/${storyName || 'untitled'}_${Date.now()}.mp3`);
-    await uploadBytes(audioRef, audioBlob);
-    const audioURL = await getDownloadURL(audioRef);
-    setAudioUrl(audioURL); // Set the URL to the state
-
-    alert('Audio generated and uploaded!');
   };
 
   const handleSaveStory = async () => {
@@ -131,8 +144,11 @@ export default function CreateStory() {
       return;
     }
   
+    const storyId = uuidv4();
+
     try {
       await addDoc(collection(firestoreDB, "stories"), {
+        id: storyId,
         title: storyName,
         content: story,
         age,
@@ -174,7 +190,7 @@ export default function CreateStory() {
 
         {/* Story Inputs */}
         <select value={age} onChange={(e) => setAge(e.target.value)}>
-          <option value="">Child's Age</option>
+          <option value="">Age</option>
           <option value="Under 3">Under 3</option>
           <option value="3-5">3-5</option>
           <option value="6-8">6-8</option>
@@ -184,6 +200,7 @@ export default function CreateStory() {
 
         <select value={genre} onChange={(e) => setGenre(e.target.value)}>
           <option value="">Genre</option>
+          
           <option value="Fantasy">Fantasy</option>
           <option value="Adventure">Adventure</option>
           <option value="Science Fiction">Science Fiction</option>

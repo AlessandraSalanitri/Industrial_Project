@@ -2,43 +2,60 @@
 // then in navbar the condition of display based on the user logged in, and his role,
 // displays either the avatar (if user == child) or the profile icon (if user == parent)
 // Makes user data available globally via useUser()
+
 import { createContext, useContext, useEffect, useState } from 'react';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // <-- new
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
-    console.log("[UserContext] Reading user from localStorage:", storedUser);
+    const simulatedChildMode = localStorage.getItem('mode') === 'child';
+  
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
-        console.log("[UserContext] Parsed user:", parsedUser);
-        setUser(parsedUser);
+        
+        if (simulatedChildMode) {
+          const simulatedEmail = `${parsedUser.email}-child@simulated.com`;
+  
+          setUser({
+            ...parsedUser,
+            role: 'child',
+            email: simulatedEmail, // Inject the simulated child email
+          });
+        } else {
+          setUser(parsedUser);
+        }
       } catch (err) {
         console.error("[UserContext] Failed to parse user:", err);
       }
     }
-    setLoading(false); // <-- important: done loading, even if nothing found
+  
+    setLoading(false);
   }, []);
-
+  
   const login = (userData) => {
-    console.log("[UserContext] Logging in user:", userData);
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
   };
 
   const logout = () => {
-    console.log("[UserContext] Logging out user");
     localStorage.removeItem('user');
     setUser(null);
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, login, logout, loading }}>
+    <UserContext.Provider value={{
+      user,
+      setUser,
+      login,
+      logout,
+      loading
+    }}>
       {children}
     </UserContext.Provider>
   );

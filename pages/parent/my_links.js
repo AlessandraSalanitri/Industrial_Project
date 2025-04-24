@@ -5,7 +5,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import Layout from '../../components/Layout';
 
 export default function MyLinks() {
-  const { user, loading } = useUser(); // user is coming from context
+  const { user, loading } = useUser(); // Importing user context to get user data
   const [linkedAccounts, setLinkedAccounts] = useState([]);
   const [fetching, setFetching] = useState(true);
 
@@ -13,7 +13,7 @@ export default function MyLinks() {
     // If the user is still loading, do not proceed
     if (loading) return;
 
-    if (!user?.userId) { // userId should be used here instead of user?.uid
+    if (!user?.userId) { 
       console.warn('User not found!');
       setFetching(false);
       return;
@@ -24,7 +24,7 @@ export default function MyLinks() {
       try {
         const q = query(
           collection(firestoreDB, 'linkedAccounts'),
-          where('parentId', '==', user.userId) // Use userId here instead of uid
+          where('parentId', '==', user.userId) 
         );
         const snapshot = await getDocs(q);
         console.log("Firestore query snapshot:", snapshot); // Log the snapshot
@@ -57,8 +57,8 @@ export default function MyLinks() {
             ))}
           </ul>
         )}
-
-        <button className="link-button" onClick={() => alert('Link another child')}>Link Another Account</button>
+        
+        <button className="link-button" onClick={() => alert('Link another child')}>Link Another Account</button> 
       </div>
     </Layout>
   );

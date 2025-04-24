@@ -3,30 +3,37 @@ import Layout from '../../components/Layout';
 import StoryList from '../../components/StoryList';
 import '../../styles/child_dashboard.css';
 import '../../styles/darkMode.css';
-import { EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { firebaseAuth, firestoreDB } from '../../firebase/firebaseConfig';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDoc, doc, query, where, getDocs } from 'firebase/firestore';
 
 export default function ChildDashboard() {
   const [darkMode, setDarkMode] = useState(false);
   const [stories, setStories] = useState([]);
-  const [isRestricted, setIsRestricted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [selectedStory, setSelectedStory] = useState(null);
 
-  // NEW: States for secure password modal
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [parentPassword, setParentPassword] = useState('');
-
   useEffect(() => {
-    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
-      setUser(user);
+    const unsubscribe = firebaseAuth.onAuthStateChanged(async (currentUser) => {
+      if (currentUser) {
+        const isSimulated = currentUser.email.includes('-child@simulated.com');
+        const simulatedEmail = isSimulated ? currentUser.email : `${currentUser.email}-child@simulated.com`;
+  
+        const userDoc = await getDoc(doc(firestoreDB, 'users', currentUser.uid));
+        const userData = userDoc.exists() ? userDoc.data() : {};
+  
+        const finalUser = {
+          userId: currentUser.uid,
+          email: simulatedEmail,  // use simulated email in child mode
+          role: 'child',
+          ...userData
+        };
+  
+        setUser(finalUser);
+      }
     });
-
-    return () => {
-      unsubscribe();
-    };
+  
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -46,21 +53,34 @@ export default function ChildDashboard() {
     setIsLoading(true);
 
     try {
-      if (!user) {
-        console.warn("No user logged in");
+      const emailToCheck = user?.email;
+
+      if (!emailToCheck) {
+        console.warn("No child email available for fetching stories.");
         setIsLoading(false);
         return;
       }
 
-      const storiesRef = collection(firestoreDB, 'stories');
-      const q = query(storiesRef, where('userId', '==', user.uid));
-      const snapshot = await getDocs(q);
+      const linkedQuery = query(
+        collection(firestoreDB, 'linkedAccounts'),
+        where('childEmail', '==', emailToCheck)
+      );
+      const snapshot = await getDocs(linkedQuery);
 
-      const storiesData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const parentIds = snapshot.docs.map(doc => doc.data().parentId);
 
+      if (parentIds.length === 0) {
+        console.log("There is no linked parents found, skipping story fetch.");
+        setIsLoading(false);
+        return;
+      }
+
+      const storiesQuery = query(
+        collection(firestoreDB, 'stories'),
+        where('userId', 'in', parentIds)
+      );
+      const storiesSnap = await getDocs(storiesQuery);
+      const storiesData = storiesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setStories(storiesData);
     } catch (error) {
       console.error('Error fetching stories:', error);
@@ -69,46 +89,7 @@ export default function ChildDashboard() {
     }
   };
 
-  // UPDATED: Secure password entry
-  const exitRestrictedMode = async () => {
-    if (!parentPassword) {
-      alert('Please enter a password');
-      return;
-    }
-  
-    try {
-      const currentUser = firebaseAuth.currentUser;
-      if (!currentUser || !currentUser.email) {
-        alert('No user is currently logged in.');
-        return;
-      }
-  
-      const credential = EmailAuthProvider.credential(currentUser.email, parentPassword);
-      await reauthenticateWithCredential(currentUser, credential);
-  
-      localStorage.setItem('restrictedMode', 'false');
-      alert('Exiting restricted mode...');
-      setIsRestricted(false);
-      setShowPasswordModal(false);
-      setParentPassword('');
-      window.location.href = '/parent/dashboard';
-    } catch (error) {
-      console.error('Failed to exit restricted mode:', error);
-  
-      // Handle Firebase auth errors explicitly
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
-        alert('Incorrect password. Please try again.');
-      } else {
-        alert('An unexpected error occurred. Please try again later.');
-      }
-  
-      // Reset password input and close modal just in case
-      setParentPassword('');
-      setShowPasswordModal(true); // Optionally keep modal open
-    }
-  };
   const handlePlayStory = (story) => {
-    console.log("Play story:", story);
     setSelectedStory(story);
   };
 
@@ -129,51 +110,6 @@ export default function ChildDashboard() {
         </div>
 
         <StoryList stories={stories} onPlay={handlePlayStory} />
-
-        {isRestricted && (
-          <div className="restricted-access">
-            <p>You are currently in restricted mode. Please contact the parent to exit.</p>
-          </div>
-        )}
-
-        <div className="exit-restricted-mode">
-          <button className="button button-secondary" onClick={() => setShowPasswordModal(true)}>
-            Exit Restricted Mode (Parent Only)
-          </button>
-        </div>
-
-        {/* Password Modal */}
-        {showPasswordModal && (
-          <div className="password-modal" style={{
-            marginTop: '20px',
-            backgroundColor: '#f0f0f0',
-            padding: '20px',
-            borderRadius: '10px',
-            maxWidth: '400px'
-          }}>
-            <h3>Enter Parent Password</h3>
-            <input
-              type="password"
-              value={parentPassword}
-              placeholder="Enter password"
-              onChange={(e) => setParentPassword(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '10px',
-                marginBottom: '10px',
-                borderRadius: '5px',
-                border: '1px solid #ccc'
-              }}
-            />
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-              <button className="button button-primary" onClick={exitRestrictedMode}>Confirm</button>
-              <button className="button button-secondary" onClick={() => {
-                setShowPasswordModal(false);
-                setParentPassword('');
-              }}>Cancel</button>
-            </div>
-          </div>
-        )}
 
         {selectedStory && (
           <div className="story-content-view" style={{ marginTop: '30px', backgroundColor: '#f4f4f4', padding: '20px', borderRadius: '8px' }}>

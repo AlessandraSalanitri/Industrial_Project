@@ -44,9 +44,10 @@ export default function AdminPanel({ onClose }) {
     fetchLinkedAccounts(); // Fetch linked accounts on load
   }, []);
 
-  // Navigate to My Links page when the button is clicked
+  // Check if the user has linked accounts
   const goToMyLinks = () => {
-    router.push('/parent/my_links');
+    router.push('/parent/my_links'); 
+    
   };
 
   return (
@@ -72,13 +73,12 @@ export default function AdminPanel({ onClose }) {
             <i className="icon">👤</i> Personal details
           </button>
 
-          {/* Use goToMyLinks to navigate to My Links page */}
-          <button className="admin-btn" onClick={goToMyLinks}>
-            <i className="icon">🔗</i> My Links
-          </button>
-
           <button className="admin-btn" onClick={handleSubscription}>
             <i className="icon">🧾</i> Subscription
+          </button>
+
+          <button className="admin-btn" onClick={goToMyLinks}>
+          <i className="icon">🔗</i> Linked account 
           </button>
 
           <button className="admin-btn" onClick={handleSettings}>
