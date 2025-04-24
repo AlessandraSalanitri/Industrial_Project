@@ -6,6 +6,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Firebase storage functions
 import '../../styles/create_story.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { MoonStars } from 'phosphor-react';
 
 export default function CreateStory() {
   const [story, setStory] = useState('');
@@ -49,12 +50,13 @@ export default function CreateStory() {
     };
   }, [router.events]);
 
+  // GENERATE STORY AI
   const handleGenerateAI = async () => {
     if (!character.trim()) {
       alert("Please enter the main character or theme!");
       return;
     }
-
+  
     setLoading(true);
     try {
       const response = await fetch("/api/ai", {
@@ -64,16 +66,23 @@ export default function CreateStory() {
         },
         body: JSON.stringify({ age, genre, setting, moral, tone, length, character }),
       });
-
+  
       const data = await response.json();
-      setStory(data.response || "Oops! Something went wrong.");
+      const generatedStory = data.response || "Oops! Something went wrong.";
+      setStory(generatedStory);
+  
+      // 👇 Grab the first line of the story (remove quotes)
+      const titleLine = generatedStory.split('\n')[0].replace(/^"|"$/g, '');
+      setStoryName(titleLine); // Set as default editable story title
+  
     } catch (error) {
       console.error("Error generating story:", error);
       setStory("Error: Could not generate story.");
     }
     setLoading(false);
   };
-
+  
+// AUDIO AI_text to speech
   const handleConvertToAudio = async () => {
     if (!story.trim()) {
       alert('No story generated to convert to audio!');
@@ -263,17 +272,31 @@ export default function CreateStory() {
           <button onClick={handleBack} className="btn">Back</button>
         </div>
 
+{/* TITLE OF THE STORY  */}
         {story && (
           <div className="generated-story">
             <label htmlFor="story">Generated Story</label>
+
+            {/* Custom title display */}
+            {story.startsWith('**') && (
+              <div className="story-title">
+            <MoonStars size={28} weight="fill" style={{ marginRight: '6px', color: '#4B0082', verticalAlign: 'middle' }} />
+            <strong>{story.split('\n')[0].replace(/\*\*/g, '')}</strong>
+              </div>
+            )}
+
             <textarea
               id="story"
-              value={story}
+              value={
+                story.startsWith('**') ? story.split('\n').slice(1).join('\n') : story
+              }
               readOnly
               placeholder="Your story will appear here..."
             ></textarea>
           </div>
         )}
+
+
 
         {showModal && (
           <div className="modal-backdrop">

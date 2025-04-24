@@ -156,4 +156,15 @@
     background-color: #eee;
     color: #333;
   }
+
+  
+  .story-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #4B0082;
+  }
   
