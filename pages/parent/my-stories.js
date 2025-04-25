@@ -22,6 +22,12 @@ export default function MyStories() {
   }, []);
 
   useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel(); // Stop any ongoing speech if exiting the page
+    };
+  }, []);
+
+  useEffect(() => {
     if (!user) return;
     const fetchStories = async () => {
       const snapshot = await getDocs(collection(firestoreDB, 'stories'));
@@ -42,8 +48,22 @@ export default function MyStories() {
 
 
   const handleDeleteStory = async (id) => {
-    await deleteDoc(doc(firestoreDB, 'stories', id));
-    setStories(prev => prev.filter(story => story.id !== id));
+    try {
+      await deleteDoc(doc(firestoreDB, 'stories', id));  // Delete the story from Firestore
+      console.log(`Deleted story with ID: ${id}`);
+  
+      // Re-fetch stories to ensure database and UI are fully in sync
+      const snapshot = await getDocs(collection(firestoreDB, 'stories'));
+      const userStories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(story => story.userId === user.uid);
+        
+      setStories(userStories);  // Update the stories with fresh data
+  
+      alert('Story deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting story:', error);
+      alert('Failed to delete the story. Please try again.');
+    }
   };
 
   function handleReadStory(content) {
@@ -52,6 +72,18 @@ export default function MyStories() {
     utterance.lang = 'en-GB';
     utterance.rate = 1;
     window.speechSynthesis.speak(utterance);
+  }
+
+  function handlePauseStory() {
+    window.speechSynthesis.pause();
+  }
+  
+  function handleResumeStory() {
+    window.speechSynthesis.resume();
+  }
+  
+  function handleStopStory() {
+    window.speechSynthesis.cancel();
   }
   
 
@@ -99,7 +131,6 @@ export default function MyStories() {
               <th>Genre</th>
               <th>Character</th>
               <th>Actions</th>
-              <th>Audio</th>
             </tr>
           </thead>
           <tbody>
@@ -113,12 +144,11 @@ export default function MyStories() {
                 <td>
                   <div className="action-buttons">
                     <button onClick={() => setSelectedStory(story)}>View</button>
-                    <Link href={`/parent/edit-story?id=${story.id}`}><button>Edit</button></Link>
+                    <Link href={{ pathname: '/parent/edit-story', query: { id: story.id } }}>
+                      <button>Edit</button>
+                    </Link>
                     <button className="delete-btn" onClick={() => handleDeleteStory(story.id)}>Delete</button>
                   </div>
-                </td>
-                <td>
-                  <button onClick={() => handleReadStory(story)}>Listen</button>
                 </td>
               </tr>
             ))}
@@ -128,9 +158,22 @@ export default function MyStories() {
         {selectedStory && (
           <div className="story-content">
             <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-              <button onClick={() => setSelectedStory(null)}>Close</button>
-              <button onClick={() => handleReadStory(selectedStory.content)}>Read Story</button>
-            </div>
+            <button onClick={() => setSelectedStory(null)} className="button button-secondary">
+              Close
+            </button>
+            <button onClick={() => handleReadStory(selectedStory.content)} className="button button-primary">
+              ▶ Read Story
+            </button>
+            <button onClick={handlePauseStory} className="button button-secondary">
+              ⏸ Pause
+            </button>
+            <button onClick={handleResumeStory} className="button button-secondary">
+              ▶ Resume
+            </button>
+            <button onClick={handleStopStory} className="button button-secondary">
+              ⏹ Stop
+            </button>
+          </div>
             <div className="story-title">
               <MoonStars size={28} style={{ color: '#4B0082', marginRight: '8px' }} />
               <strong>{selectedStory.title.replace(/\*\*/g, '')}</strong>

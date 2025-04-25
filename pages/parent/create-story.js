@@ -129,7 +129,7 @@ export default function CreateStory() {
     }
   };
 
-  const handleBack = () => router.push('/');
+  const handleBack = () => router.push('/my-stories'); // Redirect to the manage stories page
 
   return (
     <Layout>

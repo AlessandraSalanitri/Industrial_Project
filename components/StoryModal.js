@@ -3,45 +3,52 @@ import Image from "next/image";
 import { X } from "phosphor-react";
 import "../styles/story_modal.css";
 
-export default function StoryModal({ isOpen, story, onClose }) {
+export default function StoryModal({ isOpen = true, story, onClose }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [activeParagraphIndex, setActiveParagraphIndex] = useState(null);
   const utteranceRef = useRef(null);
-  const intervalRef = useRef(null);
+  const queueRef = useRef([]);
 
   const handlePlay = () => {
     if (!story?.content) return;
 
-    const utterance = new SpeechSynthesisUtterance(story.content);
-    utterance.lang = 'en-GB';
+    const paragraphs = story.content.split("\n\n");
+    queueRef.current = [...paragraphs];
+    setActiveParagraphIndex(0);
+    speakParagraph(0);
+  };
+
+  const speakParagraph = (index) => {
+    const paragraphs = queueRef.current;
+    if (index >= paragraphs.length) {
+      handleStop();
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(paragraphs[index]);
+    utterance.lang = "en-GB";
     utterance.rate = 1;
     utterance.pitch = 1;
 
     utterance.onend = () => {
-      setIsPlaying(false);
-      setProgress(100);
-      clearInterval(intervalRef.current);
+      setActiveParagraphIndex((prevIndex) => {
+        const newIndex = prevIndex + 1;
+        const progressPercent = ((newIndex + 1) / paragraphs.length) * 100;
+        setProgress(progressPercent);
+        speakParagraph(newIndex);
+        return newIndex;
+      });
     };
 
     utteranceRef.current = utterance;
     window.speechSynthesis.speak(utterance);
     setIsPlaying(true);
-
-    intervalRef.current = setInterval(() => {
-      const voices = window.speechSynthesis.getVoices();
-      if (!voices.length) return;
-
-      setProgress((prev) => {
-        if (prev >= 95) return prev;
-        return prev + 1;
-      });
-    }, 500);
   };
 
   const handlePause = () => {
     window.speechSynthesis.pause();
     setIsPlaying(false);
-    clearInterval(intervalRef.current);
   };
 
   const handleResume = () => {
@@ -53,7 +60,7 @@ export default function StoryModal({ isOpen, story, onClose }) {
     window.speechSynthesis.cancel();
     setIsPlaying(false);
     setProgress(0);
-    clearInterval(intervalRef.current);
+    setActiveParagraphIndex(null);
   };
 
   useEffect(() => {
@@ -83,29 +90,34 @@ export default function StoryModal({ isOpen, story, onClose }) {
               className="thumbnail"
             />
           </div>
-          
-          <div className="progress-container">
-              <div className="progress-bar">
-                <div className="progress" style={{ width: `${progress}%` }}></div>
-              </div>
-            </div>
 
-            <div className="controls">
-              {!isPlaying && <button onClick={handlePlay} className="button button-primary">▶ Play</button>}
-              {isPlaying && <button onClick={handlePause} className="button button-primary">⏸ Pause</button>}
-              <button onClick={handleResume} className="button button-secondary">↻ Resume</button>
-              <button onClick={handleStop} className="button button-secondary">⏹ Stop</button>
+          <div className="progress-container">
+            <div className="progress-bar">
+              <div className="progress" style={{ width: `${progress}%` }}></div>
             </div>
+          </div>
+
+          <div className="controls">
+            {!isPlaying && <button onClick={handlePlay} className="button button-primary">▶ Play</button>}
+            {isPlaying && <button onClick={handlePause} className="button button-secondary">⏸ Pause</button>}
+            <button onClick={handleResume} className="button button-secondary">↻ Resume</button>
+            <button onClick={handleStop} className="button button-secondary">⏹ Stop</button>
+          </div>
 
           <div className="modal-body">
             <div className="story-text">
-              {story.content.split("\n\n").map((p, i) => <p key={i}>{p}</p>)}
+              {story.content.split("\n\n").map((p, i) => (
+                <p
+                  key={i}
+                  className={`paragraph ${i === activeParagraphIndex ? 'active-paragraph typewriter' : ''}`}
+                >
+                  {p}
+                </p>
+              ))}
             </div>
-
-
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>
+  );
 }

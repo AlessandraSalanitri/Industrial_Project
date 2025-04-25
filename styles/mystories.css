@@ -39,8 +39,8 @@ tbody tr:hover {
 /* Action Buttons */
 .action-buttons {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
 .action-buttons button {
@@ -62,6 +62,11 @@ tbody tr:hover {
 
 .action-buttons .delete-btn {
   background: crimson;
+  color: white;
+}
+
+.action-buttons .edit-btn {
+  background: var(--secondary-color);
   color: white;
 }
 

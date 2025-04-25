@@ -19,7 +19,7 @@ export default function ParentDashboard() {
     const simulatedChildEmail = `${parentEmail}-child@simulated.com`;
   
     try {
-      // Check if the link already exists
+      // Link DB if needed
       const linkedQuery = query(
         collection(firestoreDB, "linkedAccounts"),
         where("childEmail", "==", simulatedChildEmail)
@@ -34,15 +34,25 @@ export default function ParentDashboard() {
         console.log("Simulated child link created.");
       }
   
-      // Inform UserContext this is a simulated session
-      localStorage.setItem('mode', 'child');
+      // Prepare simulated child user
+      const simulatedUser = {
+        email: simulatedChildEmail,
+        role: 'child',
+        isSimulated: true,
+        userId: `${parentId}-simulated`
+      };
   
-      // Redirect to child dashboard
+      // Store in localStorage
+      localStorage.setItem('mode', 'child');
+      localStorage.setItem('user', JSON.stringify(simulatedUser));
+  
+      // Redirect
       window.location.href = "/child/dashboard";
     } catch (error) {
       console.error("Error linking simulated child account:", error);
     }
   };
+  
   
 
   return (

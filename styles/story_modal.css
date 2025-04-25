@@ -123,6 +123,25 @@
     color: black;
 }
   
+.paragraph {
+    transition: all 0.3s ease;
+  }
+  
+.active-paragraph {
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 1.1rem;
+    background: #fff8dc;
+    border-left: 4px solid var(--secondary-color);
+    padding-left: 10px;
+}
+  
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.03); }
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
     .modal-header {

@@ -37,7 +37,6 @@ export default function ChildDashboard() {
   
     return () => unsubscribe();
   }, []);
-  
 
   useEffect(() => {
     if (user) {

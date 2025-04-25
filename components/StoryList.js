@@ -29,7 +29,13 @@ export default function StoryList() {
         collection(firestoreDB, 'linkedAccounts'),
         where('childEmail', '==', childEmail)
       );
+      console.log("Checking links for:", childEmail);
+
       const snapshot = await getDocs(linkedQuery);
+      snapshot.forEach(doc => {
+        console.log("Linked child email in DB:", doc.data().childEmail);
+      });
+
       const parentIds = snapshot.docs.map(doc => doc.data().parentId);
 
       if (parentIds.length === 0) {
