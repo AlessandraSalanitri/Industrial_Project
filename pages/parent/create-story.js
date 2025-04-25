@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { firestoreDB } from '../../firebase/firebaseConfig'; 
-import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import '../../styles/create_story.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { MoonStars } from 'phosphor-react';
-import { generateAudioFromText } from '../../firebase/tts/generateAudio'; // Import the function to generate audio
 
 export default function CreateStory() {
   const [story, setStory] = useState('');
@@ -81,7 +80,6 @@ export default function CreateStory() {
   };
   
   // CONVERT TO AUDIO
-  // This function generates audio from the story text using the selected voice from Firestore.
   const handleConvertToAudio = () => {
     if (!story.trim()) return alert("Please generate a story first!");
   
@@ -90,7 +88,7 @@ export default function CreateStory() {
     utterance.rate = 1;
     utterance.pitch = 1;
   
-    // Optional: Cancel any ongoing speech
+    // Cancel any ongoing speech
     window.speechSynthesis.cancel();
   
     // Speak it!
@@ -123,13 +121,16 @@ export default function CreateStory() {
       setStory(''); setStoryName(''); setAge(''); setGenre(''); setSetting('');
       setMoral(''); setTone(''); setLength(''); setCharacter('');
       setAudioUrl(''); setShowModal(false);
+
+      router.push('/parent/my-stories');
     } catch (error) {
       console.error("Error saving story:", error);
       alert(`Failed to save the story. Error: ${error.message}`);
     }
   };
 
-  const handleBack = () => router.push('/my-stories'); // Redirect to the manage stories page
+  const handleBack = () => router.push('/parent/my-stories');
+
 
   return (
     <Layout>
@@ -226,18 +227,23 @@ export default function CreateStory() {
         {story && (
           <div className="generated-story">
             <label htmlFor="story">Generated Story</label>
-            {story.startsWith('**') && (
+            {storyName && (
               <div className="story-title">
-                <MoonStars size={28} weight="fill" style={{ marginRight: '6px', color: '#4B0082', verticalAlign: 'middle' }} />
-                <strong>{story.split('\n')[0].replace(/\*\*/g, '')}</strong>
+                <MoonStars
+                  size={28}
+                  weight="fill"
+                  style={{ marginRight: '6px', color: '#4B0082', verticalAlign: 'middle' }}
+                />
+                <strong>{storyName}</strong>
               </div>
             )}
+
             <textarea
               id="story"
-              value={story.startsWith('**') ? story.split('\n').slice(1).join('\n') : story}
+              value={story.split('\n').slice(1).join('\n')}
               readOnly
               placeholder="Your story will appear here..."
-            ></textarea>
+            />
           </div>
         )}
 
