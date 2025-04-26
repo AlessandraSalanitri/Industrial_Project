@@ -37,8 +37,11 @@ export default function AvatarPanel({ onClose }) {
 
   const avatarSrc = user?.avatar ? `/assets/avatars/${user.avatar}.png` : null;
 
-  console.log("User email in AvatarPanel:", user?.email);
-  console.log("Is Simulated Child:", isSimulatedChild);
+  if (process.env.NODE_ENV === "development") {
+    console.log("User email in AvatarPanel:", user?.email);
+    console.log("Is Simulated Child:", isSimulatedChild);
+  }
+  
 
 
   return (
