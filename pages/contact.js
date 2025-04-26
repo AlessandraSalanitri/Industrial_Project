@@ -4,13 +4,14 @@ import { useState, useEffect } from 'react';
 import '../styles/contact.css';
 import { firestoreDB } from '../firebase/firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-// import emailjs from 'emailjs-com'; // Uncomment if you want to use EmailJS
+import emailjs from 'emailjs-com'; // Import EmailJS
 
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    title: '' 
   });
 
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -32,40 +33,48 @@ export default function Contact() {
     console.log("Form Data:", formData);
 
     try {
-      console.log("Submitting to Firestore...");
+      // Send email using EmailJS with the correct service ID, template ID, and public key
+      const result = await emailjs.send(
+        'service_xxu8e4n',  // Your EmailJS service ID
+        'template_t7azekd', // Your new EmailJS template ID
+        {
+          name: formData.name,
+          email: formData.email,
+          title: formData.title,  // Added title to email content
+          message: formData.message,  // Include the message in the email
+          to_email: 'industrialprojectsolent@gmail.com', // Admin email
+        },
+        'MNE0hJ3U3zl8h2DjQ' // Your EmailJS public key
+      );
+
+      console.log('Email sent successfully:', result);
 
       // Add document to Firestore collection 'contacts'
       const docRef = await addDoc(collection(firestoreDB, 'contacts'), {
         name: formData.name,
         email: formData.email,
         message: formData.message,
+        title: formData.title,  // Save the title in the Firestore document
         timestamp: serverTimestamp(),
       });
 
       // Log the document ID after successful write
       console.log("Document written with ID: ", docRef.id);
 
-      // Optional: Send Email via EmailJS
-      /*
-      await emailjs.send(
-        'YOUR_SERVICE_ID',
-        'YOUR_TEMPLATE_ID',
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          message: formData.message,
-          to_email: 'industrialprojectsolent@gmail.com'
-        },
-        'YOUR_PUBLIC_KEY'
-      );
-      */
-
       alert('Message sent successfully!');
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', message: '', title: '' }); // Reset the form
     } catch (error) {
-      // Log any errors that occur
-      console.error("Error writing document: ", error);
-      alert('Failed to send message. Check console for details.');
+      // Log the error with more details for debugging
+      console.error("Error sending email or writing document: ", error);
+
+      // Safely check if error.message exists before calling 'includes'
+      if (error && error.message && error.message.includes('EmailJS')) {
+        alert('Error: Failed to send email. Please check the email configuration.');
+      } else if (error && error.code === 'permission-denied') {
+        alert('Error: You don\'t have permission to save data to Firestore.');
+      } else {
+        alert('Failed to send message. Check console for details.');
+      }
     }
   };
 
@@ -125,6 +134,14 @@ export default function Contact() {
                 required
               />
             </div>
+            <input
+              type="text"
+              name="title"
+              placeholder="Title of your message"
+              value={formData.title}
+              onChange={handleChange}
+              required
+            />
             <textarea
               name="message"
               placeholder="Insert your message here..."
