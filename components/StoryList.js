@@ -1,4 +1,3 @@
-// components/StoryList.js
 import { useEffect, useState } from "react";
 import { firestoreDB } from "../firebase/firebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -8,59 +7,54 @@ import "../styles/story_list.css";
 import StoryModal from "../components/StoryModal";
 
 
-export default function StoryList({
-  stories,
-  onPlay,
-  setSelectedStory,
-  setShowImageSelector
-}) {
+export default function StoryList() {
   const { user } = useUser();
+  const [stories, setStories] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
   const [filteredStories, setFilteredStories] = useState([]);
   const [modalStory, setModalStory] = useState(null);
-
  
 
-  // useEffect(() => {
-  //   if (user?.email) {
-  //     fetchUserStories(user.email);
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (user?.email) {
+      fetchUserStories(user.email);
+    }
+  }, [user]);
   
 
-  // const fetchUserStories = async (childEmail) => {
-  //   try {
-  //     const linkedQuery = query(
-  //       collection(firestoreDB, 'linkedAccounts'),
-  //       where('childEmail', '==', childEmail)
-  //     );
-  //     console.log("Checking links for:", childEmail);
+  const fetchUserStories = async (childEmail) => {
+    try {
+      const linkedQuery = query(
+        collection(firestoreDB, 'linkedAccounts'),
+        where('childEmail', '==', childEmail)
+      );
+      console.log("Checking links for:", childEmail);
 
-  //     const snapshot = await getDocs(linkedQuery);
-  //     snapshot.forEach(doc => {
-  //       console.log("Linked child email in DB:", doc.data().childEmail);
-  //     });
+      const snapshot = await getDocs(linkedQuery);
+      snapshot.forEach(doc => {
+        console.log("Linked child email in DB:", doc.data().childEmail);
+      });
 
-  //     const parentIds = snapshot.docs.map(doc => doc.data().parentId);
+      const parentIds = snapshot.docs.map(doc => doc.data().parentId);
 
-  //     if (parentIds.length === 0) {
-  //       console.warn("Your account should be linked to a parent account to view stories.");
-  //       return;
-  //     }
+      if (parentIds.length === 0) {
+        console.warn("Your account should be linked to a parent account to view stories.");
+        return;
+      }
 
-  //     const storiesQuery = query(
-  //       collection(firestoreDB, 'stories'),
-  //       where('userId', 'in', parentIds)
-  //     );
+      const storiesQuery = query(
+        collection(firestoreDB, 'stories'),
+        where('userId', 'in', parentIds)
+      );
 
-  //     const storiesSnap = await getDocs(storiesQuery);
-  //     const storiesData = storiesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  //     setStories(storiesData);
-  //   } catch (error) {
-  //     console.error("Error fetching stories:", error);
-  //   }
-  // };
+      const storiesSnap = await getDocs(storiesQuery);
+      const storiesData = storiesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setStories(storiesData);
+    } catch (error) {
+      console.error("Error fetching stories:", error);
+    }
+  };
 
   useEffect(() => {
     let filtered = [...stories];
@@ -128,19 +122,11 @@ export default function StoryList({
 
         {modalStory && (
           <StoryModal
-            isOpen={true}
+            isOpen={true} // 
             story={modalStory}
             onClose={() => setModalStory(null)}
-            onChangeImageClick={() => {
-              setModalStory(null);
-              setSelectedStory?.(modalStory);
-              setTimeout(() => setShowImageSelector?.(true), 100);
-            }}
-            
           />
         )}
-
-
 
       </div>
     </div>

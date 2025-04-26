@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { firebaseAuth, firestoreDB } from "../../firebase/firebaseConfig";
 import Layout from '../../components/Layout';
@@ -7,42 +6,26 @@ import Link from 'next/link';
 import '../../styles/parent_dashboard.css';
 
 export default function ParentDashboard() {
-  const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme === "dark") {
-      setDarkMode(true);
-      document.body.classList.add("dark-mode");
-    }
-  }, []);
-
-  const handleThemeToggle = (mode) => {
-    const isDark = mode === "dark";
-    setDarkMode(isDark);
-    localStorage.setItem("theme", mode);
-    document.body.classList.toggle("dark-mode", isDark);
-  };
-
   const switchToChildMode = async () => {
     const currentUser = firebaseAuth.currentUser;
-
+  
     if (!currentUser) {
       console.error("No authenticated user found.");
       return;
     }
-
+  
     const parentEmail = currentUser.email;
     const parentId = currentUser.uid;
     const simulatedChildEmail = `${parentEmail}-child@simulated.com`;
-
+  
     try {
+      // Link DB if needed
       const linkedQuery = query(
         collection(firestoreDB, "linkedAccounts"),
         where("childEmail", "==", simulatedChildEmail)
       );
       const snapshot = await getDocs(linkedQuery);
-
+  
       if (snapshot.empty) {
         await addDoc(collection(firestoreDB, "linkedAccounts"), {
           childEmail: simulatedChildEmail,
@@ -50,44 +33,35 @@ export default function ParentDashboard() {
         });
         console.log("Simulated child link created.");
       }
-
+  
+      // Prepare simulated child user
       const simulatedUser = {
         email: simulatedChildEmail,
         role: 'child',
         isSimulated: true,
         userId: `${parentId}-simulated`
       };
-
+  
+      // Store in localStorage
       localStorage.setItem('mode', 'child');
       localStorage.setItem('user', JSON.stringify(simulatedUser));
-
+  
+      // Redirect
       window.location.href = "/child/dashboard";
     } catch (error) {
       console.error("Error linking simulated child account:", error);
     }
   };
+  
+  
 
   return (
     <Layout>
-      <div className="theme-toggle top-right">
-        <button
-          className={`toggle-btn ${!darkMode ? 'active' : ''}`}
-          onClick={() => handleThemeToggle("light")}
-        >
-          Light
-        </button>
-        <button
-          className={`toggle-btn ${darkMode ? 'active' : ''}`}
-          onClick={() => handleThemeToggle("dark")}
-        >
-          Dark
-        </button>
-      </div>
-
       <div className="admin-dashboard">
         <h1 className="dashboard-title">Admin Dashboard</h1>
 
         <div className="dashboard-actions">
+          {/* Create story card */}
           <div className="dashboard-card">
             <Image
               src="/assets/create_story.png"
@@ -101,6 +75,7 @@ export default function ParentDashboard() {
             </Link>
           </div>
 
+          {/* Manage story saved card */}
           <div className="dashboard-card">
             <Image
               src="/assets/saved_story.png"
@@ -114,6 +89,7 @@ export default function ParentDashboard() {
             </Link>
           </div>
 
+          {/* Redirect to child dashboard with parent account -- can exit the child account and go back to parent through exit in avatar panel*/}
           <div className="dashboard-card">
             <Image
               src="/assets/child.png"
@@ -124,7 +100,7 @@ export default function ParentDashboard() {
             />
             <button
               className="button button-primary"
-              onClick={switchToChildMode}
+              onClick={switchToChildMode} // Redirect to child dashboard
             >
               Enter Child Mode
             </button>
