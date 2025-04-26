@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useUser } from '../context/UserContext';
 import "../styles/story_list.css";
 import StoryModal from "../components/StoryModal";
+import { MoonStars } from 'phosphor-react';
 
 
 export default function StoryList() {
@@ -101,7 +102,19 @@ export default function StoryList() {
       <div className="story-grid">
         {filteredStories.map((story) => (
           <div className="story-card" key={story.id}>
-            <div className="story-title">{story.title}</div>
+            
+             <div className="story-title">
+                <MoonStars
+                  size={28}
+                  weight="fill"
+                  style={{
+                    marginRight: '6px', 
+                    color: '#4B0082', 
+                    verticalAlign: 'middle' }}
+                  />
+                  <strong>{story.title}</strong>
+                  </div>
+
             <div className="story-thumbnail">
               <Image
                 src={story.thumbnail || "/assets/story/sample_story.png"}
