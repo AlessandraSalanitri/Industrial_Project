@@ -66,24 +66,6 @@ textarea {
     margin-top: 25px;
   }
   
-  .btn {
-    background-color: var(--primary-color);
-    color: var(--white);
-    border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .btn:hover {
-    background-color: var(--primary-color);
-  }
-  
-
-
-  
 
 
 
@@ -150,12 +132,66 @@ textarea {
 
   
   .story-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #4B0082;
     display: flex;
-    justify-content: center;
     align-items: center;
-    font-size: 1.3rem;
-    font-weight: bold;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 0;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+
+  .story-title strong {
+    font-weight: 600;
+    font-size: inherit;
+    color: inherit;
+    background: none;
+    padding: 0;
+    margin: 0;
+    display: inline;
+  }
+  
+
+  .generated-story textarea {
+    background: linear-gradient(135deg, #fefefe, #eae3f0);
+    border-radius: 16px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.7;
+    width: 100%;
+    height: 400px;
+    resize: none;
+    white-space: pre-wrap;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  
+
+  .success-heading {
+    font-size: 20px;
+    color: #4B0082;
     margin-bottom: 10px;
-    color: var(--primary-color);
+    text-align: center;
+  }
+
+  
+  .error {
+    color: rgb(194, 80, 80);
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+
+  .input-error {
+    border: 1px solid #cc0000;
+    background-color: #fff5f5;
   }
   

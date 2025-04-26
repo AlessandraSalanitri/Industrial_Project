@@ -1,39 +1,33 @@
-/* styles/child_dashboard.css */
-
+/* === CHILD DASHBOARD === */
 .child-dashboard {
   padding: 100px 40px 60px;
   text-align: center;
 }
 
-
-.toggle-btn {
-  padding: 3px 12px;
-  cursor: pointer;
-  background: #eee;
-  font-weight: 500;
-  transition: background 0.3s;
-}
-  
-.toggle-btn.active {
-  background: var(--primary-color);
-  color: white;
-}
-  
+/* === BUTTON ROW (if used) === */
 .button-row {
   display: flex;
   justify-content: space-between;
   margin-top: 40px;
 }
-  
-.theme-toggle.top-right {
-  position: fixed;
-  top: 3%;
-  right: 10%;
-  z-index: 9999;
-  display: inline-flex;
-  border: 1px solid #cccccc;
-  border-radius: 20px;
-  overflow: hidden;
-  margin-bottom: 30px;
-  }
 
+/* === IMAGE SELECTOR MODAL === */
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}

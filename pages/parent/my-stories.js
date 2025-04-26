@@ -86,6 +86,12 @@ export default function MyStories() {
     window.speechSynthesis.cancel();
   }
   
+  useEffect(() => {
+    if (selectedStory) {
+      console.log("🧾 Selected story:", selectedStory);
+    }
+  }, [selectedStory]);
+  
 
   return (
     <Layout>
@@ -175,14 +181,20 @@ export default function MyStories() {
             </button>
           </div>
             <div className="story-title">
-              <MoonStars size={28} style={{ color: '#4B0082', marginRight: '8px' }} />
+              <MoonStars size={28} weight="fill" style={{ color: '#4B0082', marginRight: '8px' }} />
               <strong>{selectedStory.title.replace(/\*\*/g, '')}</strong>
             </div>
             <p><strong>Age:</strong> {selectedStory.age}</p>
             <p><strong>Genre:</strong> {selectedStory.genre}</p>
             <p><strong>Main Character:</strong> {selectedStory.character}</p>
             <div className="story-paragraphs">
-              {selectedStory.content?.split('\n\n')?.map((para, i) => <p key={i}>{para}</p>)}
+              
+            {selectedStory.source === "ai"
+              ? selectedStory.content?.split('\n\n').slice(1).map((para, i) => <p key={i}>{para}</p>) // skip 1st paragraph
+              : selectedStory.content?.split('\n\n').map((para, i) => <p key={i}>{para}</p>) // keep all paragraphs
+            }
+
+
             </div>
           </div>
         )}

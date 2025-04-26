@@ -1,9 +1,12 @@
+// components/StoryModal.js.js
+
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { X } from "phosphor-react";
 import "../styles/story_modal.css";
 
-export default function StoryModal({ isOpen = true, story, onClose }) {
+export default function StoryModal({ isOpen = true, story, onClose, onChangeImageClick }) {
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [activeParagraphIndex, setActiveParagraphIndex] = useState(null);
@@ -82,13 +85,24 @@ export default function StoryModal({ isOpen = true, story, onClose }) {
 
         <div className="modal-content-area">
           <div className="modal-image">
-            <Image
-              src={story.thumbnail || "/assets/story/sample_story.png"}
-              alt={story.title}
-              width={200}
-              height={200}
-              className="thumbnail"
-            />
+            {/* UPDATED */}
+          <Image
+            src={story.customImage || story.thumbnail || "/assets/story/sample_story.png"}
+            alt={story.title}
+            width={200}
+            height={200}
+            className="thumbnail"
+            onClick={onChangeImageClick}
+            style={{
+              cursor: "pointer",
+              borderRadius: "10px",
+              transition: "transform 0.2s",
+              boxShadow: "0 0 8px rgba(0,0,0,0.2)"
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+            onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1.0)')}
+          />
+
           </div>
 
           <div className="progress-container">
