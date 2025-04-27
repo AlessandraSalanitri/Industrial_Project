@@ -14,6 +14,7 @@ export default function MyStories() {
   const [filters, setFilters] = useState({ letter: null, genre: null, age: null });
   const [user, setUser] = useState(null);
   const [noFavouritesFound, setNoFavouritesFound] = useState(false);
+  const [viewFavourites, setViewFavourites] = useState(false);  // New state to track favourite filter
   const router = useRouter();
 
   useEffect(() => {
@@ -42,7 +43,8 @@ export default function MyStories() {
     const startsWithLetter = !filters.letter || story.title?.[0]?.toUpperCase() === filters.letter;
     const matchesGenre = !filters.genre || story.genre === filters.genre;
     const matchesAge = !filters.age || story.age === filters.age;
-    return startsWithLetter && matchesGenre && matchesAge;
+    const matchesFavourite = !viewFavourites || story.favourite;  // Apply favourite filter if viewFavourites is true
+    return startsWithLetter && matchesGenre && matchesAge && matchesFavourite;
   });
 
   const favouriteStories = stories.filter(story => story.favourite);
@@ -148,7 +150,28 @@ export default function MyStories() {
               {[...new Set(stories.map(s => s.age))].map(a => <option key={a}>{a}</option>)}
             </select>
           </label>
-          <button onClick={() => setFilters({ letter: null, genre: null, age: null })} className="reset-btn">Clear Filters</button>
+
+          {/* Clear Filters and Toggle Button */}
+          <button onClick={() => {
+            if (filters.letter || filters.genre || filters.age) {
+              setFilters({ letter: null, genre: null, age: null }); // Clear filters
+            } else {
+
+            }
+          }}
+          className={`toggle-btn ${filters.letter || filters.genre || filters.age ? 'active' : ''}`}
+        >
+          {filters.letter || filters.genre || filters.age ? 'Clear Filters' : 'Filter'}
+        </button>
+
+          <div className="view-favourites-toggle">
+            <button
+              className={`toggle-btn ${viewFavourites ? 'secondary' : 'primary'}`}
+              onClick={() => setViewFavourites(prev => !prev)}
+            >
+              {viewFavourites ? 'All Stories' : 'View Favourites'}
+            </button>
+          </div>
         </div>
 
         {/* Table */}
@@ -193,7 +216,6 @@ export default function MyStories() {
             ))}
           </tbody>
         </table>
-
 
         {selectedStory && (
           <div className="story-content">
