@@ -1,9 +1,8 @@
-// Refactored `MyStories` page
 import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { firestoreDB } from '../../firebase/firebaseConfig';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { MoonStars } from 'phosphor-react';
@@ -14,6 +13,7 @@ export default function MyStories() {
   const [selectedStory, setSelectedStory] = useState(null);
   const [filters, setFilters] = useState({ letter: null, genre: null, age: null });
   const [user, setUser] = useState(null);
+  const [noFavouritesFound, setNoFavouritesFound] = useState(false); // State for checking if no favourites are found
   const router = useRouter();
 
   useEffect(() => {
@@ -38,7 +38,6 @@ export default function MyStories() {
     fetchStories();
   }, [user]);
 
-
   const filteredStories = stories.filter(story => {
     const startsWithLetter = !filters.letter || story.title?.[0]?.toUpperCase() === filters.letter;
     const matchesGenre = !filters.genre || story.genre === filters.genre;
@@ -46,6 +45,7 @@ export default function MyStories() {
     return startsWithLetter && matchesGenre && matchesAge;
   });
 
+  const favouriteStories = stories.filter(story => story.favourite);
 
   const handleDeleteStory = async (id) => {
     try {
@@ -66,6 +66,27 @@ export default function MyStories() {
     }
   };
 
+  const handleToggleFavourite = async (storyId, currentFavouriteStatus) => {
+    try {
+      const storyRef = doc(firestoreDB, 'stories', storyId);
+      const newFavouriteStatus = !currentFavouriteStatus; // Toggle favourite status
+
+      await updateDoc(storyRef, { favourite: newFavouriteStatus });
+
+      // Optimistic UI update: Update the local state immediately
+      setStories(prevStories =>
+        prevStories.map(story =>
+          story.id === storyId ? { ...story, favourite: newFavouriteStatus } : story
+        )
+      );
+
+      console.log(`Favourite status updated for storyId: ${storyId}`);
+    } catch (error) {
+      console.error('Error updating favourite status:', error);
+      alert('Failed to update the favourite status. Please try again.');
+    }
+  };
+
   function handleReadStory(content) {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(content);
@@ -77,21 +98,22 @@ export default function MyStories() {
   function handlePauseStory() {
     window.speechSynthesis.pause();
   }
-  
+
   function handleResumeStory() {
     window.speechSynthesis.resume();
   }
-  
+
   function handleStopStory() {
     window.speechSynthesis.cancel();
   }
-  
+
   useEffect(() => {
-    if (selectedStory) {
-      console.log("🧾 Selected story:", selectedStory);
+    if (favouriteStories.length === 0) {
+      setNoFavouritesFound(true);
+    } else {
+      setNoFavouritesFound(false);
     }
-  }, [selectedStory]);
-  
+  }, [favouriteStories]);
 
   return (
     <Layout>
@@ -149,6 +171,14 @@ export default function MyStories() {
                 <td>{story.character}</td>
                 <td>
                   <div className="action-buttons">
+                    {/* Favourite Toggle */}
+                    <button
+                      className="favourite-btn"
+                      onClick={() => handleToggleFavourite(story.id, story.favourite)}
+                      title={story.favourite ? 'Remove from favourites' : 'Add to favourites'}
+                    >
+                      {story.favourite ? '❤️' : '🤍'}
+                    </button>
                     <button onClick={() => setSelectedStory(story)}>View</button>
                     <Link href={{ pathname: '/parent/edit-story', query: { id: story.id } }}>
                       <button>Edit</button>
@@ -161,25 +191,19 @@ export default function MyStories() {
           </tbody>
         </table>
 
+        {noFavouritesFound && (
+          <p className="no-favourites-message">No favourites found.</p>
+        )}
+
         {selectedStory && (
           <div className="story-content">
             <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-            <button onClick={() => setSelectedStory(null)} className="button button-secondary">
-              Close
-            </button>
-            <button onClick={() => handleReadStory(selectedStory.content)} className="button button-primary">
-              ▶ Read Story
-            </button>
-            <button onClick={handlePauseStory} className="button button-secondary">
-              ⏸ Pause
-            </button>
-            <button onClick={handleResumeStory} className="button button-secondary">
-              ▶ Resume
-            </button>
-            <button onClick={handleStopStory} className="button button-secondary">
-              ⏹ Stop
-            </button>
-          </div>
+              <button onClick={() => setSelectedStory(null)} className="button button-secondary">Close</button>
+              <button onClick={() => handleReadStory(selectedStory.content)} className="button button-primary">▶ Read Story</button>
+              <button onClick={handlePauseStory} className="button button-secondary">⏸ Pause</button>
+              <button onClick={handleResumeStory} className="button button-secondary">▶ Resume</button>
+              <button onClick={handleStopStory} className="button button-secondary">⏹ Stop</button>
+            </div>
             <div className="story-title">
               <MoonStars size={28} weight="fill" style={{ color: '#4B0082', marginRight: '8px' }} />
               <strong>{selectedStory.title.replace(/\*\*/g, '')}</strong>
@@ -188,13 +212,10 @@ export default function MyStories() {
             <p><strong>Genre:</strong> {selectedStory.genre}</p>
             <p><strong>Main Character:</strong> {selectedStory.character}</p>
             <div className="story-paragraphs">
-              
-            {selectedStory.source === "ai"
-              ? selectedStory.content?.split('\n\n').slice(1).map((para, i) => <p key={i}>{para}</p>) // skip 1st paragraph
-              : selectedStory.content?.split('\n\n').map((para, i) => <p key={i}>{para}</p>) // keep all paragraphs
-            }
-
-
+              {selectedStory.source === "ai"
+                ? selectedStory.content?.split('\n\n').slice(1).map((para, i) => <p key={i}>{para}</p>)
+                : selectedStory.content?.split('\n\n').map((para, i) => <p key={i}>{para}</p>)
+              }
             </div>
           </div>
         )}
@@ -207,4 +228,3 @@ export default function MyStories() {
     </Layout>
   );
 }
-
