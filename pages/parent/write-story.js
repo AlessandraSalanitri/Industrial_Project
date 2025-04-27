@@ -29,6 +29,31 @@ export default function WriteStory() {
   };
 
 
+// ✨ Random image picker based on genre
+const pickRandomImageForGenre = (genre) => {
+  const genrePath = `/assets/story-images/${genre}/`;
+
+  const genreImageCount = {
+    "Adventure": 5,
+    "Animal Stories": 5,
+    "Fantasy": 5,
+    "Historical Fiction": 5,
+    "Humor": 5,
+    "Mystery": 5,
+    "Science Fiction": 5,
+  };
+
+  const maxImages = genreImageCount[genre] || 5;
+  const randomNumber = Math.floor(Math.random() * maxImages) + 1;
+  
+  const fileName = `${genre.toLowerCase().replace(/\s/g, "_")}${randomNumber}.jpg`;
+
+  return `${genrePath}${fileName}`;
+};
+
+
+
+
 //   GENERATE NEXT IDEEA FOR THE STORY
     const handleGenerateNext = async () => {
         const newErrors = {};
@@ -81,7 +106,10 @@ export default function WriteStory() {
       }
       
 
-    const storyId = uuidv4();
+      const storyId = uuidv4(); // generate random story ID
+      const randomImageUrl = pickRandomImageForGenre(genre); // pick random image
+      
+
 
     try {
         await addDoc(collection(firestoreDB, "stories"), {
@@ -93,6 +121,7 @@ export default function WriteStory() {
         createdAt: new Date(),
         userId: user.uid,
         source: "manual",
+        imageUrl: randomImageUrl,
         });
 
         setShowSuccessModal(true);
@@ -167,7 +196,7 @@ export default function WriteStory() {
         <option value="Adventure">Adventure</option>
         <option value="Mystery">Mystery</option>
         <option value="Science Fiction">Science Fiction</option>
-        <option value="Historical">Historical</option>
+        <option value="Historical Fiction">Historical Fiction</option>
         <option value="Animal Stories">Animal Stories</option>
         </select>
 
