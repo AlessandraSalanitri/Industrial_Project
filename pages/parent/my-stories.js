@@ -13,7 +13,7 @@ export default function MyStories() {
   const [selectedStory, setSelectedStory] = useState(null);
   const [filters, setFilters] = useState({ letter: null, genre: null, age: null });
   const [user, setUser] = useState(null);
-  const [noFavouritesFound, setNoFavouritesFound] = useState(false); // State for checking if no favourites are found
+  const [noFavouritesFound, setNoFavouritesFound] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -49,16 +49,16 @@ export default function MyStories() {
 
   const handleDeleteStory = async (id) => {
     try {
-      await deleteDoc(doc(firestoreDB, 'stories', id));  // Delete the story from Firestore
+      await deleteDoc(doc(firestoreDB, 'stories', id)); // Delete the story from Firestore
       console.log(`Deleted story with ID: ${id}`);
-  
+
       // Re-fetch stories to ensure database and UI are fully in sync
       const snapshot = await getDocs(collection(firestoreDB, 'stories'));
       const userStories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
         .filter(story => story.userId === user.uid);
-        
-      setStories(userStories);  // Update the stories with fresh data
-  
+
+      setStories(userStories); // Update the stories with fresh data
+
       alert('Story deleted successfully!');
     } catch (error) {
       console.error('Error deleting story:', error);
@@ -128,7 +128,9 @@ export default function MyStories() {
               onClick={() => setFilters(prev => ({ ...prev, letter }))}
               disabled={!stories.some(s => s.title?.startsWith(letter))}
               className={filters.letter === letter ? 'active' : ''}
-            >{letter}</button>
+            >
+              {letter}
+            </button>
           ))}
         </div>
 
@@ -171,17 +173,18 @@ export default function MyStories() {
                 <td>{story.character}</td>
                 <td>
                   <div className="action-buttons">
-                    {/* Favourite Toggle */}
+                    {/* Heart icon toggle */}
                     <button
                       className="favourite-btn"
                       onClick={() => handleToggleFavourite(story.id, story.favourite)}
                       title={story.favourite ? 'Remove from favourites' : 'Add to favourites'}
+                      style={{ background: 'none', border: 'none' }}
                     >
                       {story.favourite ? '❤️' : '🤍'}
                     </button>
-                    <button onClick={() => setSelectedStory(story)}>View</button>
+                    <button className="button button-primary" onClick={() => setSelectedStory(story)}>View</button>
                     <Link href={{ pathname: '/parent/edit-story', query: { id: story.id } }}>
-                      <button>Edit</button>
+                      <button className="button button-primary">Edit</button>
                     </Link>
                     <button className="delete-btn" onClick={() => handleDeleteStory(story.id)}>Delete</button>
                   </div>
@@ -191,9 +194,6 @@ export default function MyStories() {
           </tbody>
         </table>
 
-        {noFavouritesFound && (
-          <p className="no-favourites-message">No favourites found.</p>
-        )}
 
         {selectedStory && (
           <div className="story-content">
@@ -223,7 +223,6 @@ export default function MyStories() {
         <button className="button button-secondary back-button" onClick={() => router.push('/')}>
           Back
         </button>
-
       </div>
     </Layout>
   );

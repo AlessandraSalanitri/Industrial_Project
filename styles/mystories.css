@@ -141,14 +141,12 @@ td button:hover {
   margin-bottom: 1rem;
 }
 
-/* 
+/* Add space below the table */
+table {
+  margin-bottom: 20px; /* Adjust this value to your preferred spacing */
+}
+
+/* Add space below the back button */
 .back-button {
-  margin-top: 30px;
-  background: var(--primary-color);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-}  */
+  margin-top: 20px; /* Adjust this value for spacing after the button */
+}
