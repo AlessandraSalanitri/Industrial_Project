@@ -21,13 +21,13 @@ const pickRandomImageForGenre = (genre) => {
   const genrePath = `/assets/story-images/${genreFolder}/`;
 
   const genreImageCount = {
-    "Adventure": 5,
-    "Animal Stories": 5,
-    "Fantasy": 5,
-    "Historical Fiction": 5,
-    "Humor": 5,
-    "Mystery": 5,
-    "Science Fiction": 5,
+    "Adventure": 34,
+    "Animal Stories": 39,
+    "Fantasy": 35,
+    "Historical Fiction": 28,
+    "Humor": 20,
+    "Mystery": 40,
+    "Science Fiction": 32,
   };
 
   const maxImages = genreImageCount[genre] || 5;
