@@ -3,15 +3,16 @@ import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { firestoreDB } from '../../firebase/firebaseConfig';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { MoonStars } from 'phosphor-react';
 import '../../styles/mystories.css';
+import StoryEditorModal from '../../components/StoryEditorModal';
 
 export default function MyStories() {
   const [stories, setStories] = useState([]);
   const [selectedStory, setSelectedStory] = useState(null);
+  const [modalMode, setModalMode] = useState("view"); 
   const [filters, setFilters] = useState({ letter: null, genre: null, age: null });
   const [user, setUser] = useState(null);
   const router = useRouter();
@@ -66,6 +67,37 @@ export default function MyStories() {
     }
   };
 
+
+  async function handleUpdateStory(updatedStory) {
+    try {
+      const storyRef = doc(firestoreDB, "stories", updatedStory.id);
+      await updateDoc(storyRef, {
+        title: updatedStory.title,
+        genre: updatedStory.genre,
+        age: updatedStory.age,
+        content: updatedStory.content,
+        // any other fields you want to allow editing
+      });
+  
+      console.log("✅ Story updated successfully!");
+  
+      // Optional: Refresh the list of stories after update
+      const snapshot = await getDocs(collection(firestoreDB, 'stories'));
+      const userStories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(story => story.userId === user.uid);
+      setStories(userStories);
+  
+      setSelectedStory(null); // ✅ Close the modal after saving
+      alert("Story updated successfully!");
+  
+    } catch (error) {
+      console.error("Error updating story:", error);
+      alert("Failed to update story. Please try again!");
+    }
+  }
+  
+
+
   function handleReadStory(content) {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(content);
@@ -93,6 +125,7 @@ export default function MyStories() {
   }, [selectedStory]);
   
 
+  
   return (
     <Layout>
       <div className="container">
@@ -148,56 +181,36 @@ export default function MyStories() {
                 <td>{story.genre}</td>
                 <td>{story.character}</td>
                 <td>
-                  <div className="action-buttons">
-                    <button onClick={() => setSelectedStory(story)}>View</button>
-                    <Link href={{ pathname: '/parent/edit-story', query: { id: story.id } }}>
-                      <button>Edit</button>
-                    </Link>
-                    <button className="delete-btn" onClick={() => handleDeleteStory(story.id)}>Delete</button>
-                  </div>
+                <div className="action-buttons">
+                  <button onClick={() => { setSelectedStory(story); setModalMode("view"); }}>
+                    View
+                  </button>
+                  <button onClick={() => { setSelectedStory(story); setModalMode("edit"); }}>
+                    Edit
+                  </button>
+                  <button className="delete-btn" onClick={() => handleDeleteStory(story.id)}>
+                    Delete
+                  </button>
+                </div>
+
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        {selectedStory && (
-          <div className="story-content">
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-            <button onClick={() => setSelectedStory(null)} className="button button-secondary">
-              Close
-            </button>
-            <button onClick={() => handleReadStory(selectedStory.content)} className="button button-primary">
-              ▶ Read Story
-            </button>
-            <button onClick={handlePauseStory} className="button button-secondary">
-              ⏸ Pause
-            </button>
-            <button onClick={handleResumeStory} className="button button-secondary">
-              ▶ Resume
-            </button>
-            <button onClick={handleStopStory} className="button button-secondary">
-              ⏹ Stop
-            </button>
-          </div>
-            <div className="story-title">
-              <MoonStars size={28} weight="fill" style={{ color: '#4B0082', marginRight: '8px' }} />
-              <strong>{selectedStory.title.replace(/\*\*/g, '')}</strong>
-            </div>
-            <p><strong>Age:</strong> {selectedStory.age}</p>
-            <p><strong>Genre:</strong> {selectedStory.genre}</p>
-            <p><strong>Main Character:</strong> {selectedStory.character}</p>
-            <div className="story-paragraphs">
-              
-            {selectedStory.source === "ai"
-              ? selectedStory.content?.split('\n\n').slice(1).map((para, i) => <p key={i}>{para}</p>) // skip 1st paragraph
-              : selectedStory.content?.split('\n\n').map((para, i) => <p key={i}>{para}</p>) // keep all paragraphs
-            }
 
-
-            </div>
-          </div>
-        )}
+        <StoryEditorModal
+          isOpen={!!selectedStory}
+          mode={modalMode}
+          story={selectedStory}
+          onClose={() => { setSelectedStory(null); handleStopStory(); }}
+          onSave={(updatedStory) => handleUpdateStory(updatedStory)}
+          onRead={handleReadStory}
+          onPause={handlePauseStory}
+          onResume={handleResumeStory}
+          onStop={handleStopStory}
+        />
 
         <button className="button button-secondary back-button" onClick={() => router.push('/')}>
           Back

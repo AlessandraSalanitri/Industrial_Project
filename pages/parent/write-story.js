@@ -231,7 +231,7 @@ const pickRandomImageForGenre = (genre) => {
 
 
             <button onClick={handleBack} className="button button-secondary">
-                ← Back
+                ↩ Back
             </button>
             </div>
 
