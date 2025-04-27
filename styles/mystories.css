@@ -135,22 +135,13 @@ td button:hover {
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.story-title {
-  display: flex;
-  align-items: center;
-  font-size: 24px; /* Heading 2 style */
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #4B0082;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
 
 
 .story-paragraphs p {
   margin-bottom: 1rem;
 }
 
-/* Back Button */
+/* 
 .back-button {
   margin-top: 30px;
   background: var(--primary-color);
@@ -160,4 +151,4 @@ td button:hover {
   border: none;
   font-size: 14px;
   cursor: pointer;
-}
+}  */

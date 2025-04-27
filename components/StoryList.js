@@ -18,7 +18,7 @@ export default function StoryList() {
   const [filteredStories, setFilteredStories] = useState([]);
   const [modalStory, setModalStory] = useState(null);
  
-
+ 
   useEffect(() => {
     if (user?.email) {
       fetchUserStories(user.email);
@@ -105,7 +105,7 @@ export default function StoryList() {
         {filteredStories.map((story) => (
           <div className="story-card" key={story.id}>
             
-             <div className="story-title">
+             <div className="dashboard-story-title">
                 <MoonStars
                   size={28}
                   weight="fill"

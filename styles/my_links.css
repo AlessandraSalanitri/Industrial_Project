@@ -43,7 +43,8 @@
   margin-top: 20px;
 }
 
-/* General Button Styling */
+
+/* 
 .button {
   display: flex;
   align-items: center;
@@ -57,15 +58,19 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Primary Button (Link Another Account & Back to Dashboard) */
+
 .button-primary {
   background-color: var(--primary-color);
   color: white;
 }
 
+
 .button-primary:hover {
-  background-color: #3e8e41; /* Darker green for hover */
+  background-color: #3e8e41; 
 }
+ */
+
+
 
 /* Danger Button (Delete Button) */
 .button-danger {

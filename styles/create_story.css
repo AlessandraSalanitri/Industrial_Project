@@ -131,7 +131,7 @@ textarea {
   }
 
   
-  .story-title {
+  /* .story-title {
     font-size: 24px;
     font-weight: 600;
     color: #fbfbfb;
@@ -155,7 +155,7 @@ textarea {
     margin: 0;
     display: inline;
   }
-  
+   */
 
   .generated-story textarea {
     background: linear-gradient(135deg, #fefefe, #eae3f0);

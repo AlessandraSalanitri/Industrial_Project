@@ -199,7 +199,10 @@ export default function MyStories() {
           </div>
         )}
 
-        <button className="back-button" onClick={() => router.push('/')}>Back</button>
+        <button className="button button-secondary back-button" onClick={() => router.push('/')}>
+          Back
+        </button>
+
       </div>
     </Layout>
   );

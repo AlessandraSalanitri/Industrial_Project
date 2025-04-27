@@ -169,16 +169,18 @@ const pickRandomImageForGenre = (genre) => {
         <h1>Write Your Own Story</h1>
 
         <input
-            type="text"
-            value={title}
-            onChange={(e) => {
-                setTitle(e.target.value);
-                if (errors.title) {
-                setErrors((prev) => ({ ...prev, title: null }));
-                }
-            }}
-            className={errors.title ? "input-error" : ""}
+          type="text"
+          placeholder="Enter your story title..."
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+            if (errors.title) {
+              setErrors((prev) => ({ ...prev, title: null }));
+            }
+          }}
+          className={errors.title ? "input-error" : ""}
         />
+
 
 
         <select
