@@ -216,7 +216,7 @@ textarea {
 .button-secondary {
   background-color: var(--white);
   color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+  border: 2px solid var(--gray);
   padding: 12px 24px;
   font-size: 16px;
   font-weight: 600;
@@ -287,34 +287,6 @@ textarea {
 }
 
 
-/* === DARK MODE OVERRIDES === */
-body.dark-mode {
-  background-color: #1c1c1c;
-  color: #f5f5f5;
-}
-
-body.dark-mode .dashboard-title,
-body.dark-mode h1,
-body.dark-mode h2,
-body.dark-mode h3 {
-  color: #f5f5f5;
-}
-
-body.dark-mode .dashboard-card {
-  background: #2b2b2b;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .button,
-body.dark-mode .toggle-btn {
-  background-color: #333;
-  color: #fff;
-}
-
-body.dark-mode .toggle-btn.active {
-  background: #fff;
-  color: #4b0082;
-}
 
 /* === Global Story Title (for Create, Write, My Stories) === */
   .story-title {
