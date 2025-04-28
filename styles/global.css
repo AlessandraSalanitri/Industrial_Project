@@ -216,11 +216,7 @@ textarea {
 .button-secondary {
   background-color: var(--white);
   color: var(--primary-color);
-<<<<<<< HEAD
-  border: 2px solid var(--dark-gray);
-=======
   border: 2px solid var(--gray);
->>>>>>> a3f7829b04044697971883448435a1797d87419b
   padding: 12px 24px;
   font-size: 16px;
   font-weight: 600;

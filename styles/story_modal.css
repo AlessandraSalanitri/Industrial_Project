@@ -9,42 +9,44 @@
     z-index: 9999;
 }
   
-.story-modal {
+.story-modal-wrapper {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+  
+.story-modal {
+    position: relative;
     background: white;
     border-radius: 20px;
-    width: 160%;
-    max-width: 1000px;
-    max-height: 80vh;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
     overflow-y: auto;
     padding: 30px;
-    z-index: 1000;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
 }
   
-.story-modal.dark-mode {
-    background: #1e1e1e;
-    color: white;
-}
-  
-.story-modal .modal-close {
+.modal-close {
     position: absolute;
     top: 20px;
     right: 20px;
     background: transparent;
     border: none;
     cursor: pointer;
-    color: #333;
+    color: var(--primary-color);
     font-size: 1.2rem;
+    z-index: 2;
 }
   
-.story-modal.dark-mode .modal-close {
-    color: #fff;
-}
-  
+
 .modal-header {
     display: flex;
     align-items: center;
@@ -52,17 +54,35 @@
     margin-bottom: 20px;
 }
   
-.modal-header img {
-    border-radius: 10px;
-    width: 180px;
-    height: auto;
-    margin-bottom: 10px;
+.modal-content-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
   
-.modal-title {
-    font-size: 1.5rem;
-    font-weight: bold;
+.modal-image {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+  
+.thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.story-title-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--primary-color);
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
 }
   
 .story-modal.dark-mode .modal-title {
@@ -79,61 +99,59 @@
     font-size: 1rem;
 }
   
+.progress-container {
+    width: 100%;
+    padding: 0 10px;
+}
+  
 .progress-bar {
     width: 100%;
     height: 8px;
     background: #e0e0e0;
     border-radius: 10px;
-    margin: 20px 20px;
     overflow: hidden;
 }
   
-.progress-bar .progress {
+.progress {
     height: 100%;
     background: var(--primary-color);
     transition: width 0.3s;
 }
   
 .controls {
-    gap: 20px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 20px 20px;
-    padding: 0 20px;
-}
-.playback-buttons {
-    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 10px;
-    justify-content: flex-end;
+    margin: 20px 0;
 }
   
-.playback-buttons button {
-    padding: 8px 16px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.9rem;
+.controls button {
+    flex: 1;
+    min-width: 120px;
 }
   
-.playback-buttons button:hover {
-    background-color: var(--secondary-color);
-    color: black;
+.modal-body {
+    width: 100%;
+    padding: 20px;
 }
-  
+
+.story-text p {
+    margin-bottom: 1em;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
 .paragraph {
     transition: all 0.3s ease;
-  }
+}
   
 .active-paragraph {
     color: var(--primary-color);
-    font-weight: bold;
-    font-size: 1.1rem;
     background: #fff8dc;
     border-left: 4px solid var(--secondary-color);
     padding-left: 10px;
+    font-weight: bold;
 }
   
 @keyframes pulse {
@@ -142,24 +160,32 @@
 }
 
 
-/* Responsive */
-@media (max-width: 768px) {
-    .modal-header {
-      flex-direction: column;
-      align-items: center;
+/* Responsive Mobile */
+@media (max-width: 600px) {
+    .story-modal {
+      width: 95%;
+      padding: 20px;
     }
   
-    .modal-header img {
-      width: 100%;
-      max-width: 200px;
+    .story-title-modal {
+      font-size: 1.5rem;
     }
   
-    .playback-buttons {
-      flex-direction: column;
-      align-items: center;
+    .modal-content-area {
+      gap: 10px;
     }
   
-    .playback-buttons button {
-      width: 100%;
-}
+    .modal-image {
+      width: 150px;
+      height: 150px;
+    }
+  
+    .controls button {
+      font-size: 0.9rem;
+      padding: 8px 10px;
+    }
+  
+    .story-text p {
+      font-size: 0.9rem;
+    }
 }

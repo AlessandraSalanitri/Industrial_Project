@@ -1,8 +1,6 @@
-// components/StoryModal.js.js
-
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { X } from "phosphor-react";
+import { X, MoonStars } from "phosphor-react";
 import "../styles/story_modal.css";
 
 export default function StoryModal({ isOpen = true, story, onClose, onChangeImageClick }) {
@@ -81,11 +79,13 @@ export default function StoryModal({ isOpen = true, story, onClose, onChangeImag
           <X size={24} />
         </button>
 
-        <h2 className="story-title-modal">{story.title.replace(/\\/g, '')}</h2>
+        <h2 className="story-title-modal">
+          <MoonStars size={28} weight="fill" style={{ marginRight: '8px', color: '#4B0082', verticalAlign: 'middle' }} />
+          {story.title.replace(/\\/g, '')}
+        </h2>
 
         <div className="modal-content-area">
           <div className="modal-image">
-            {/* UPDATED */}
             <Image
               src={story.imageUrl || story.customImage || story.thumbnail || "/assets/story/sample_story.png"}
               alt={story.title}

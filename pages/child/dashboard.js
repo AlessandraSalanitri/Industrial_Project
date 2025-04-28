@@ -1,5 +1,3 @@
-//pages/child/dashoard.js
-
 import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import StoryList from '../../components/StoryList';
@@ -104,9 +102,15 @@ export default function ChildDashboard() {
   }
 
   return (
-    <Layout>
-      <div className="child-dashboard">
-        <div className="theme-toggle top-right" style={{ marginBottom: '1rem' }}>
+<Layout>
+  <div className="child-dashboard">
+
+    {/* --- New Dashboard Header --- */}
+    <div className="dashboard-header">
+      <h1 className="dashboard-title">Your Stories</h1>
+
+      <div className="dashboard-controls">
+        <div className="theme-toggle">
           <button className={`toggle-btn ${!darkMode ? 'active' : ''}`} onClick={() => handleThemeToggle('light')}>
             Light
           </button>
@@ -114,34 +118,24 @@ export default function ChildDashboard() {
             Dark
           </button>
         </div>
-
-        <StoryList stories={stories} onPlay={handlePlayStory} />
-
-        {selectedStory && (
-          <div className="story-content-view" style={{ marginTop: '30px', backgroundColor: '#f4f4f4', padding: '20px', borderRadius: '8px' }}>
-            <h2>{selectedStory.title}</h2>
-            <p><strong>Age:</strong> {selectedStory.age}</p>
-            <p><strong>Genre:</strong> {selectedStory.genre}</p>
-            <p><strong>Main Character:</strong> {selectedStory.character}</p>
-            <p><strong>Story:</strong></p>
-            <p>{selectedStory.content}</p>
-            <button
-              style={{
-                marginTop: '15px',
-                backgroundColor: '#4b0082',
-                color: 'white',
-                padding: '8px 14px',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
-              onClick={() => setSelectedStory(null)}
-            >
-              Close Story
-            </button>
-          </div>
-        )}
       </div>
-    </Layout>
+    </div>
+
+    {/* --- Search and Filters are already inside StoryList --- */}
+    <StoryList stories={stories} onPlay={handlePlayStory} />
+
+    {selectedStory && (
+      <div className="story-content-view">
+        <h2>{selectedStory.title}</h2>
+        <p><strong>Age:</strong> {selectedStory.age}</p>
+        <p><strong>Genre:</strong> {selectedStory.genre}</p>
+        <p><strong>Main Character:</strong> {selectedStory.character}</p>
+        <p><strong>Story:</strong></p>
+        <p>{selectedStory.content}</p>
+        <button onClick={() => setSelectedStory(null)}>Close Story</button>
+      </div>
+    )}
+  </div>
+</Layout>
   );
 }

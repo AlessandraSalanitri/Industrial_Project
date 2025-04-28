@@ -41,20 +41,62 @@
     font-weight: bold;
 }
   
-.story-card {
+
+.carousel-wrapper {
     position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+    margin: 30px 0;
+}
+  
+.story-carousel {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 20px;
+    padding: 20px;
+}
+
+.story-carousel::-webkit-scrollbar {
+    display: none;
+}
+  
+.story-card {
+    flex: 0 0 auto; /* VERY important - prevent story cards from shrinking */
     width: 220px;
     height: 320px;
     background: white;
     border-radius: 20px;
     padding: 10px 10px 20px;
     display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
     flex-direction: column;
+    justify-content: space-evenly;
     align-items: center;
     border: 1px solid var(--dark-gray);
     box-shadow: 0 4px 10px rgba(0,0,0,0.50);
+}  
+
+.arrow {
+    background-color: var(--primary-color);
+    border: none;
+    color: white;
+    font-size: 32px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    z-index: 10;
+    margin: 0 10px;
+    transition: background-color 0.3s;
+}
+  
+.arrow:hover {
+    background-color: #5e00a8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(75, 0, 130, 0.25);
 }
 
 .story-thumbnail {
@@ -174,11 +216,38 @@
   
   
 /* Responsive */
+
+/* Adjust number of visible cards based on screen */
+@media (min-width: 1000px) {
+    .story-carousel {
+      grid-template-columns: repeat(5, 1fr); /* ⛔ WRONG: grid + flex conflict */
+    }
+}
+
 @media (min-width: 800px) and (max-width: 1000px) {
     .story-grid {
     gap: 10px;
 
 } 
+}
+
+@media (max-width: 999px) and (min-width: 700px) {
+    .story-carousel {
+      grid-template-columns: repeat(6, 1fr); /* 3 per row * 2 rows */
+    }
+  }
+  
+  @media (max-width: 699px) {
+    .story-carousel {
+      grid-template-columns: repeat(4, 1fr); /* 2 per row * 2 rows */
+    }
+}
+
+/* Hide Arrows for Small Screens */
+@media (max-width: 600px) {
+    .arrow {
+      display: none;
+    }
 }
 
 @media (max-width: 500px) {

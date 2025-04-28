@@ -1,6 +1,4 @@
-// /components/StoryList.js
-
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { firestoreDB } from "../firebase/firebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import Image from "next/image";
@@ -18,6 +16,9 @@ export default function StoryList() {
   const [filteredStories, setFilteredStories] = useState([]);
   const [modalStory, setModalStory] = useState(null);
  
+  const carouselRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
  
   useEffect(() => {
     if (user?.email) {
@@ -69,8 +70,40 @@ export default function StoryList() {
     setFilteredStories(filtered);
   }, [searchText, selectedGenre, stories]);
 
+  const checkScrollPosition = () => {
+    const container = carouselRef.current;
+    if (!container) return;
 
-  return (
+    setCanScrollLeft(container.scrollLeft > 0);
+    setCanScrollRight(container.scrollLeft + container.clientWidth < container.scrollWidth);
+  };
+
+  const scrollCarousel = (direction) => {
+    const container = carouselRef.current;
+    if (!container) return;
+
+    const scrollAmount = container.offsetWidth * 0.7; // Scroll by 70% of visible width
+    container.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    const container = carouselRef.current;
+    if (!container) return;
+
+    const handleScroll = () => checkScrollPosition();
+
+    container.addEventListener('scroll', handleScroll);
+    checkScrollPosition(); // Initial check
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+    };
+  }, [filteredStories]);
+
+
+
+
+ return (
     <div className="story-list-container">
       <h1>Story List</h1>
 
@@ -101,49 +134,47 @@ export default function StoryList() {
         </button>
       </div>
 
-      <div className="story-grid">
-        {filteredStories.map((story) => (
-          <div className="story-card" key={story.id}>
-            
-             <div className="dashboard-story-title">
-                <MoonStars
-                  size={28}
-                  weight="fill"
-                  style={{
-                    marginRight: '6px', 
-                    color: '#4B0082', 
-                    verticalAlign: 'middle' }}
-                  />
-                  <strong>{story.title}</strong>
-                  </div>
-
-            <div className="story-thumbnail">
-            <Image
-              src={story.imageUrl || "/assets/story/sample_story.png"}
-              alt={story.title}
-              width={140}
-              height={140}
-              style={{ borderRadius: "50%" }}
-            />
-              <button className="play-button" onClick={() => setModalStory(story)}>
-                ▶
-              </button>
-            </div>
-            <button className="play-action" onClick={() => setModalStory(story)}>
-              Play Story
-            </button>
-          </div>
-        ))}
-
-        {modalStory && (
-          <StoryModal
-            isOpen={true} // 
-            story={modalStory}
-            onClose={() => setModalStory(null)}
-          />
+      <div className="carousel-wrapper">
+        {canScrollLeft && (
+          <button className="arrow left" onClick={() => scrollCarousel('left')}>←</button>
         )}
 
+        <div className="story-carousel" ref={carouselRef} id="storyCarousel">
+          {filteredStories.map((story) => (
+            <div className="story-card" key={story.id}>
+              <div className="dashboard-story-title">
+                <MoonStars size={28} weight="fill" style={{ marginRight: '6px', color: '#4B0082' }} />
+                <strong>{story.title}</strong>
+              </div>
+
+              <div className="story-thumbnail">
+                <Image
+                  src={story.imageUrl || "/assets/story/sample_story.png"}
+                  alt={story.title}
+                  width={140}
+                  height={140}
+                  style={{ borderRadius: "50%" }}
+                />
+                <button className="play-button" onClick={() => setModalStory(story)}>▶</button>
+              </div>
+
+              <button className="play-action" onClick={() => setModalStory(story)}>Play Story</button>
+            </div>
+          ))}
+        </div>
+
+        {canScrollRight && (
+          <button className="arrow right" onClick={() => scrollCarousel('right')}>→</button>
+        )}
       </div>
+
+      {modalStory && (
+        <StoryModal
+          isOpen={true}
+          story={modalStory}
+          onClose={() => setModalStory(null)}
+        />
+      )}
     </div>
   );
 }
