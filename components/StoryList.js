@@ -1,3 +1,5 @@
+// /components/StoryList.js
+
 import { useEffect, useState } from "react";
 import { firestoreDB } from "../firebase/firebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -16,7 +18,7 @@ export default function StoryList() {
   const [filteredStories, setFilteredStories] = useState([]);
   const [modalStory, setModalStory] = useState(null);
  
-
+ 
   useEffect(() => {
     if (user?.email) {
       fetchUserStories(user.email);
@@ -103,7 +105,7 @@ export default function StoryList() {
         {filteredStories.map((story) => (
           <div className="story-card" key={story.id}>
             
-             <div className="story-title">
+             <div className="dashboard-story-title">
                 <MoonStars
                   size={28}
                   weight="fill"
@@ -116,13 +118,13 @@ export default function StoryList() {
                   </div>
 
             <div className="story-thumbnail">
-              <Image
-                src={story.thumbnail || "/assets/story/sample_story.png"}
-                alt={story.title}
-                width={140}
-                height={140}
-                style={{ borderRadius: "50%" }}
-              />
+            <Image
+              src={story.imageUrl || "/assets/story/sample_story.png"}
+              alt={story.title}
+              width={140}
+              height={140}
+              style={{ borderRadius: "50%" }}
+            />
               <button className="play-button" onClick={() => setModalStory(story)}>
                 ▶
               </button>

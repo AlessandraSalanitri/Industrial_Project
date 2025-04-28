@@ -1,3 +1,5 @@
+//pages/parent/create-story.js
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
@@ -7,6 +9,36 @@ import { v4 as uuidv4 } from 'uuid';
 import '../../styles/create_story.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { MoonStars } from 'phosphor-react';
+
+
+// ✨ Random image picker based on genre
+const pickRandomImageForGenre = (genre) => {
+  if (!genre) {
+    return '/assets/story/sample_story.png';  // fallback if genre missing
+  }
+
+  const genreFolder = genre.toLowerCase().replace(/\s/g, "_");
+  const genrePath = `/assets/story-images/${genreFolder}/`;
+
+  const genreImageCount = {
+    "Adventure": 34,
+    "Animal Stories": 39,
+    "Fantasy": 35,
+    "Historical Fiction": 28,
+    "Humor": 20,
+    "Mystery": 40,
+    "Science Fiction": 32,
+  };
+
+  const maxImages = genreImageCount[genre] || 5;
+  const randomNumber = Math.floor(Math.random() * maxImages) + 1;
+
+  const fileName = `${genreFolder}${randomNumber}.jpg`;
+
+  return `${genrePath}${fileName}`;
+};
+
+
 
 export default function CreateStory() {
   const [story, setStory] = useState('');
@@ -148,6 +180,8 @@ export default function CreateStory() {
     if (!storyName.trim()) return alert("Please enter a title for your story.");
   
     const storyId = uuidv4();
+    const randomImageUrl = pickRandomImageForGenre(genre); // ✨ Pick random image for this genre
+
     try {
       await addDoc(collection(firestoreDB, "stories"), {
         id: storyId,
@@ -158,6 +192,8 @@ export default function CreateStory() {
         userId: user.uid,
         audioUrl,
         source: "ai",
+        imageUrl: randomImageUrl,
+        read: false, 
       });
   
       // Show success message inside modal

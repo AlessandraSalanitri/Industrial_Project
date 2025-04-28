@@ -1,34 +1,112 @@
+<<<<<<< HEAD
 import { useState } from 'react';
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+=======
+import { useEffect, useState } from 'react';
+import { Bell } from 'phosphor-react';
+import { doc, updateDoc, collection, query, where, onSnapshot, addDoc, getDocs, getDoc } from "firebase/firestore"; // Added getDoc here
+>>>>>>> a3f7829b04044697971883448435a1797d87419b
 import { firebaseAuth, firestoreDB } from "../../firebase/firebaseConfig";
 import Layout from '../../components/Layout';
 import Image from 'next/image';
 import Link from 'next/link';
 import '../../styles/parent_dashboard.css';
+<<<<<<< HEAD
 import '../../styles/darkMode.css';
 
 export default function ParentDashboard() {
    const [darkMode, setDarkMode] = useState(false);
+=======
+import '../../styles/notification_bell.css'; // Separate new CSS for the bell
+
+export default function ParentDashboard() {
+  const [notifications, setNotifications] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true); // new state
+
+  useEffect(() => {
+    const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
+          // Fetch user's notification setting
+          const userDocRef = doc(firestoreDB, "users", user.uid);
+          const userDocSnap = await getDoc(userDocRef);
+
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            if (userData.notificationsEnabled !== undefined) {
+              setNotificationsEnabled(userData.notificationsEnabled);
+            }
+          }
+
+          // Setup real-time notifications listener
+          const q = query(
+            collection(firestoreDB, "stories"),
+            where("userId", "==", user.uid) // Your adjusted field
+          );
+
+          const unsubscribeSnapshot = onSnapshot(q, (querySnapshot) => {
+            const newNotifications = querySnapshot.docs.map((doc) => ({
+              id: doc.id,
+              title: doc.data().title || 'Untitled Story',
+              createdAt: doc.data().createdAt?.toDate().toLocaleString() || 'Unknown time',
+              read: doc.data().read || false, // from Firestore
+            }));
+            setNotifications(newNotifications);
+          }, (error) => {
+            console.error("Error with real-time notifications:", error);
+          });
+
+          return unsubscribeSnapshot;
+        } catch (error) {
+          console.error("Error fetching user settings or notifications:", error);
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const toggleDropdown = async () => {
+    setDropdownOpen(prev => {
+      const newState = !prev;
+
+      if (newState) {
+        notifications.forEach(async (notification) => {
+          if (!notification.read) {
+            const notificationRef = doc(firestoreDB, "stories", notification.id);
+            await updateDoc(notificationRef, { read: true });
+          }
+        });
+      }
+
+      return newState;
+    });
+  };
+
+  // Count unread notifications
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+>>>>>>> a3f7829b04044697971883448435a1797d87419b
   const switchToChildMode = async () => {
     const currentUser = firebaseAuth.currentUser;
-  
+
     if (!currentUser) {
       console.error("No authenticated user found.");
       return;
     }
-  
+
     const parentEmail = currentUser.email;
     const parentId = currentUser.uid;
     const simulatedChildEmail = `${parentEmail}-child@simulated.com`;
-  
+
     try {
-      // Link DB if needed
       const linkedQuery = query(
         collection(firestoreDB, "linkedAccounts"),
         where("childEmail", "==", simulatedChildEmail)
       );
       const snapshot = await getDocs(linkedQuery);
-  
+
       if (snapshot.empty) {
         await addDoc(collection(firestoreDB, "linkedAccounts"), {
           childEmail: simulatedChildEmail,
@@ -36,25 +114,23 @@ export default function ParentDashboard() {
         });
         console.log("Simulated child link created.");
       }
-  
-      // Prepare simulated child user
+
       const simulatedUser = {
         email: simulatedChildEmail,
         role: 'child',
         isSimulated: true,
         userId: `${parentId}-simulated`
       };
-  
-      // Store in localStorage
+
       localStorage.setItem('mode', 'child');
       localStorage.setItem('user', JSON.stringify(simulatedUser));
-  
-      // Redirect
+
       window.location.href = "/child/dashboard";
     } catch (error) {
       console.error("Error linking simulated child account:", error);
     }
   };
+<<<<<<< HEAD
   
   const handleThemeToggle = (mode) => {
     const isDark = mode === 'dark';
@@ -63,9 +139,36 @@ export default function ParentDashboard() {
     document.body.classList.toggle('dark-mode', isDark);
   };
   
+=======
+>>>>>>> a3f7829b04044697971883448435a1797d87419b
 
   return (
     <Layout>
+      {/* Notification Bell - only show if notifications are enabled */}
+      {notificationsEnabled && (
+        <div className="notification-container">
+          <Bell size={32} onClick={toggleDropdown} className="notification-bell-icon" />
+          {unreadCount > 0 && (
+            <span className="notification-badge">{unreadCount}</span>
+          )}
+          {dropdownOpen && (
+            <div className="notification-dropdown">
+              {notifications.length === 0 ? (
+                <p className="notification-empty">No notifications</p>
+              ) : (
+                notifications.map((notification) => (
+                  <div key={notification.id} className="notification-item">
+                    <strong>{notification.title}</strong>
+                    <p>{notification.createdAt}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Your existing dashboard layout untouched */}
       <div className="admin-dashboard">
       <div className="theme-toggle top-right" style={{ marginBottom: '1rem' }}>
           <button className={`toggle-btn ${!darkMode ? 'active' : ''}`} onClick={() => handleThemeToggle('light')}>
@@ -79,7 +182,6 @@ export default function ParentDashboard() {
         <h1 className="dashboard-title">Admin Dashboard</h1>
 
         <div className="dashboard-actions">
-          {/* Create story card */}
           <div className="dashboard-card">
             <Image
               src="/assets/create_story.png"
@@ -93,7 +195,6 @@ export default function ParentDashboard() {
             </Link>
           </div>
 
-          {/* Manage story saved card */}
           <div className="dashboard-card">
             <Image
               src="/assets/saved_story.png"
@@ -107,7 +208,6 @@ export default function ParentDashboard() {
             </Link>
           </div>
 
-          {/* Redirect to child dashboard with parent account -- can exit the child account and go back to parent through exit in avatar panel*/}
           <div className="dashboard-card">
             <Image
               src="/assets/child.png"
@@ -118,7 +218,7 @@ export default function ParentDashboard() {
             />
             <button
               className="button button-primary"
-              onClick={switchToChildMode} // Redirect to child dashboard
+              onClick={switchToChildMode}
             >
               Enter Child Mode
             </button>

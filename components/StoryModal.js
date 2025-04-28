@@ -86,23 +86,22 @@ export default function StoryModal({ isOpen = true, story, onClose, onChangeImag
         <div className="modal-content-area">
           <div className="modal-image">
             {/* UPDATED */}
-          <Image
-            src={story.customImage || story.thumbnail || "/assets/story/sample_story.png"}
-            alt={story.title}
-            width={200}
-            height={200}
-            className="thumbnail"
-            onClick={onChangeImageClick}
-            style={{
-              cursor: "pointer",
-              borderRadius: "10px",
-              transition: "transform 0.2s",
-              boxShadow: "0 0 8px rgba(0,0,0,0.2)"
-            }}
-            onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-            onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1.0)')}
-          />
-
+            <Image
+              src={story.imageUrl || story.customImage || story.thumbnail || "/assets/story/sample_story.png"}
+              alt={story.title}
+              width={200}
+              height={200}
+              className="thumbnail"
+              onClick={onChangeImageClick}
+              style={{
+                cursor: "pointer",
+                borderRadius: "10px",
+                transition: "transform 0.2s",
+                boxShadow: "0 0 8px rgba(0,0,0,0.2)"
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+              onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1.0)')}
+            />
           </div>
 
           <div className="progress-container">

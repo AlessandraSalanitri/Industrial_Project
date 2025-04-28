@@ -1,3 +1,5 @@
+//Customized pictures for eacg player and story
+
 import fs from "fs";
 import path from "path";
 

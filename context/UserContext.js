@@ -1,3 +1,4 @@
+// /context/UserContext
 import { createContext, useContext, useEffect, useState } from 'react';
 
 const UserContext = createContext();
@@ -54,6 +55,27 @@ export const UserProvider = ({ children }) => {
     setUser(null);
   };
 
+  // ✅ Exit child mode safely
+  const exitChildMode = () => {
+    try {
+      localStorage.removeItem('mode');
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        const updatedUser = {
+          ...parsedUser,
+          role: 'parent',
+          isSimulated: false
+        };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser);
+      }
+    } catch (error) {
+      console.error("[UserContext] Failed to exit child mode:", error);
+    }
+  };
+
+
   return (
     <UserContext.Provider
       value={{
@@ -61,6 +83,7 @@ export const UserProvider = ({ children }) => {
         setUser,
         login,
         logout,
+        exitChildMode,
         loading,
       }}
     >

@@ -1,3 +1,5 @@
+//pages/child/dashoard.js
+
 import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import StoryList from '../../components/StoryList';

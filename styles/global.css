@@ -1,6 +1,81 @@
 /* Global Styles */
 /* To maintain a consistent design system */
 
+
+/* Import Google Fonts early to avoid font flashing during page transitions */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+
+@media (max-width: 600px) {
+  .logo-left{  /*studioo logo - slightly bigger than decorative lines*/
+    width: 150px;
+  }
+    
+  .logo-right{  /* decorative lines*/
+    width: 100px;
+  }
+
+}
+@media (max-width: 480px) {
+  .container {
+    padding: 20px 20px;
+  }
+
+  .logo-left{  /*studioo logo - slightly bigger than decorative lines*/
+    width: 120px;
+  }
+    
+  .logo-right{  /* decorative lines*/
+    width: 80px;
+  }
+  
+  h1 {
+    font-size: 28px;
+  }
+  
+  h2 {
+    font-size: 24px;
+  }
+  
+  h3 {
+    font-size: 18px;
+  }
+  
+  p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 25px 40px;
+  }
+  
+  h1 {
+    font-size: 36px;
+  }
+  
+  h2 {
+    font-size: 28px;
+  }
+  
+  h3 {
+    font-size: 22px;
+  }
+  
+  p {
+    font-size: 15px;
+  }
+}
+  
+@media (max-width: 480px) {
+  .hero-heading {
+    white-space: normal; /* allow wrapping when screen is tiny */
+    font-size: 1.8rem; /* slightly smaller title on phones */
+  }
+}
+
+
 /* Colors */
 :root {
   --primary-color: #4B0082;  /* Indigo */
@@ -58,7 +133,56 @@ h1, h2, h3, p {
   line-height: 1.6;
 }
   
+
+
+
+
+  /* Title from the index page */
+  .hero-heading {
+    font-size: clamp(2rem, 5vw, 3rem); /* smaller clamp range */
+    font-weight: 800;
+    color: var(--primary-color);
+    text-align: center;
+    white-space: nowrap; /* force one line!! */
+    word-break: break-word;
+    margin-bottom: 1rem;
+  }
   
+  .tagline {
+    font-size: 1.2rem; /* keep it clean */
+    white-space: nowrap; /* 🪄 THIS forces it to stay on one line */
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #555;
+  }
+  
+    /* Closing line from the index page */
+  .closing {
+    font-size: 1.1rem;
+    text-align: center;
+    white-space: nowrap; /* 🌟 keep it in one line */
+    color: #555;
+    margin-top: 2rem;
+  }
+
+
+/* Globally clean inputs, selects, textareas */
+input, select, textarea {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: var(--black);
+  background: var(--white);
+  padding: 12px 16px; /* ⭐ this makes the inputs consistent everywhere */
+  border-radius: 15px; /* ⭐ beautiful rounded edges */
+  border: 1px solid var(--gray); /* ⭐ consistent subtle border */
+  min-width: 250px; /* ⭐ good width for smaller screens */
+  box-sizing: border-box; /* ⭐ important so padding doesn't overflow */
+}
+
+textarea {
+  resize: none; /* ⭐ no ugly resizable corners */
+}
+
 
 /* Buttons */
 .button {
@@ -79,7 +203,6 @@ h1, h2, h3, p {
   border-radius: 30px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  border-radius: 30px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(75, 0, 130, 0.25); /* cute soft glow */
 }
@@ -93,7 +216,11 @@ h1, h2, h3, p {
 .button-secondary {
   background-color: var(--white);
   color: var(--primary-color);
+<<<<<<< HEAD
   border: 2px solid var(--dark-gray);
+=======
+  border: 2px solid var(--gray);
+>>>>>>> a3f7829b04044697971883448435a1797d87419b
   padding: 12px 24px;
   font-size: 16px;
   font-weight: 600;
@@ -126,70 +253,6 @@ h1, h2, h3, p {
   max-width: 1200px;
   margin: 0 auto;
   }
-
-
-@media (max-width: 768px) {
-  .container {
-    padding: 25px 40px;
-  }
-  
-  h1 {
-    font-size: 36px;
-  }
-  
-  h2 {
-    font-size: 28px;
-  }
-  
-  h3 {
-    font-size: 22px;
-  }
-  
-  p {
-    font-size: 15px;
-  }
-}
-  
-@media (max-width: 600px) {
-  .logo-left{  /*studioo logo - slightly bigger than decorative lines*/
-    width: 150px;
-  }
-    
-  .logo-right{  /* decorative lines*/
-    width: 100px;
-  }
-
-}
-@media (max-width: 480px) {
-  .container {
-    padding: 20px 20px;
-  }
-
-  .logo-left{  /*studioo logo - slightly bigger than decorative lines*/
-    width: 120px;
-  }
-    
-  .logo-right{  /* decorative lines*/
-    width: 80px;
-  }
-  
-  h1 {
-    font-size: 28px;
-  }
-  
-  h2 {
-    font-size: 24px;
-  }
-  
-  h3 {
-    font-size: 18px;
-  }
-  
-  p {
-    font-size: 14px;
-  }
-}
-
 
 
 
@@ -228,31 +291,31 @@ h1, h2, h3, p {
 }
 
 
-/* === DARK MODE OVERRIDES === */
-body.dark-mode {
-  background-color: #1c1c1c;
-  color: #f5f5f5;
-}
 
-body.dark-mode .dashboard-title,
-body.dark-mode h1,
-body.dark-mode h2,
-body.dark-mode h3 {
-  color: #f5f5f5;
-}
+/* === Global Story Title (for Create, Write, My Stories) === */
+  .story-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #4b0082;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 0;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+  }
 
-body.dark-mode .dashboard-card {
-  background: #2b2b2b;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
-}
 
-body.dark-mode .button,
-body.dark-mode .toggle-btn {
-  background-color: #333;
-  color: #fff;
-}
+  .story-title strong {
+    font-weight: 600;
+    font-size: inherit;
+    color: inherit;
+    background: none;
+    padding: 0;
+    margin: 0;
+    display: inline;
+  }
+  
 
-body.dark-mode .toggle-btn.active {
-  background: #fff;
-  color: #4b0082;
-}

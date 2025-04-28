@@ -1,9 +1,13 @@
+/* Page Title */
 .page-title {
   color: var(--primary-color);
   margin-bottom: 30px;
   text-align: center;
+  font-size: 28px;
+  font-weight: bold;
 }
 
+/* Links Table */
 .links-table {
   width: 100%;
   border-collapse: collapse;
@@ -28,9 +32,63 @@
   text-align: center;
   color: var(--dark-gray);
   margin-bottom: 20px;
+  font-size: 18px;
 }
 
+/* Link Actions Container */
 .link-actions {
   display: flex;
   justify-content: center;
+  gap: 10px; /* space out buttons */
+  margin-top: 20px;
+}
+
+
+/* 
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.button-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+
+.button-primary:hover {
+  background-color: #3e8e41; 
+}
+ */
+
+
+
+/* Danger Button (Delete Button) */
+.button-danger {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.button-danger:hover {
+  background-color: #c0392b;
+}
+
+/* Adding icons to buttons */
+.button i {
+  margin-right: 8px;
+}
+
+/* Hover effect for the buttons */
+.button:hover {
+  transform: translateY(-2px); /* Small lift effect */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
 }

@@ -1,3 +1,4 @@
+// /components/AvatarPanel
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -8,8 +9,8 @@ import { firebaseAuth } from '../firebase/firebaseConfig';
 import '../styles/avatar_panel.css';
 
 export default function AvatarPanel({ onClose }) {
+  const { user, logout, exitChildMode } = useUser();
   const router = useRouter();
-  const { user, logout } = useUser();
   const [showPasswordInput, setShowPasswordInput] = useState(false);
   const [parentPassword, setParentPassword] = useState('');
 
@@ -26,43 +27,47 @@ export default function AvatarPanel({ onClose }) {
       const credential = EmailAuthProvider.credential(currentUser.email, parentPassword);
       await reauthenticateWithCredential(currentUser, credential);
 
-      localStorage.removeItem('mode');
-      router.push('/parent/dashboard');
+      exitChildMode(); //  safely update context
 
-    } catch (error) {
+      setTimeout(() => {
+        router.replace('/parent/dashboard'); //  clean replace
+        setTimeout(() => {
+          window.location.reload(); //  clean reload after
+        }, 300);
+      }, 300);
 
-      alert('Wrong password. Please try again.');
+      } catch (error) {
+        console.error("Error exiting to parent:", error);
+        alert('Wrong password. Please try again.');
+      }
+    };
+
+    const avatarSrc = user?.avatar ? `/assets/avatars/${user.avatar}.png` : null;
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("User email in AvatarPanel:", user?.email);
+      console.log("Is Simulated Child:", isSimulatedChild);
     }
-  };
-
-  const avatarSrc = user?.avatar ? `/assets/avatars/${user.avatar}.png` : null;
-
-  if (process.env.NODE_ENV === "development") {
-    console.log("User email in AvatarPanel:", user?.email);
-    console.log("Is Simulated Child:", isSimulatedChild);
-  }
   
+    return (
+      <motion.div
+        className="avatar-panel"
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '100%' }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="avatar-header">
+          <button onClick={onClose}>X</button>
+        </div>
 
-
-  return (
-    <motion.div
-      className="avatar-panel"
-      initial={{ x: '100%' }}
-      animate={{ x: 0 }}
-      exit={{ x: '100%' }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="avatar-header">
-        <button onClick={onClose}>X</button>
-      </div>
-
-      <div className="avatar-content">
-        <button
-          className="button button-secondary"
-          onClick={() => router.push("/child/create_avatar")}
-        >
-          Create Avatar
-        </button>
+        <div className="avatar-content">
+          <button
+            className="button button-secondary"
+            onClick={() => router.push("/child/create_avatar")}
+          >
+            Create Avatar
+          </button>
 
         <Image
           src={avatarSrc}
