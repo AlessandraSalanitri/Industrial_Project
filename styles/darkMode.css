@@ -416,3 +416,18 @@ body.dark-mode .avatar-icon {
 }
   
   
+/* ======== PARENT DASHBOARD======== */
+
+.dark-mode .dashboard-card {
+    background-color:  var(--dark-background-color);
+    box-shadow: 0 2px 6px rgba(255,255,255,0.1); /* softer white-ish shadow */
+}
+
+.dark-mode .toggle-btn {
+    transition: background 0.3s ease;
+}
+  
+.dark-mode .toggle-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}

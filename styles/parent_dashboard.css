@@ -18,22 +18,32 @@
 }
   
 .dashboard-card {
+    background-color: var(--transparent); 
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
+    transition: background-color 0.3s ease;
 }
 
 
 .dashboard-card:hover .dashboard-image {
     transform: scale(1.1);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    object-fit: fill;
 }
   
 .dashboard-image {
     border-radius: 50%;
     border: 8px solid var(--primary-color);
+    overflow: hidden;
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    background-color: var(--background-color);
+}
+
+.dashboard-image img {
+    border-radius: 50%;
+    object-fit: fill;
 }
   
 .button {

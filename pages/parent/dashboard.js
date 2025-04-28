@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { firebaseAuth, firestoreDB } from "../../firebase/firebaseConfig";
 import Layout from '../../components/Layout';
 import Image from 'next/image';
 import Link from 'next/link';
 import '../../styles/parent_dashboard.css';
+import '../../styles/darkMode.css';
 
 export default function ParentDashboard() {
+   const [darkMode, setDarkMode] = useState(false);
   const switchToChildMode = async () => {
     const currentUser = firebaseAuth.currentUser;
   
@@ -53,11 +56,26 @@ export default function ParentDashboard() {
     }
   };
   
+  const handleThemeToggle = (mode) => {
+    const isDark = mode === 'dark';
+    setDarkMode(isDark);
+    localStorage.setItem('theme', mode);
+    document.body.classList.toggle('dark-mode', isDark);
+  };
   
 
   return (
     <Layout>
       <div className="admin-dashboard">
+      <div className="theme-toggle top-right" style={{ marginBottom: '1rem' }}>
+          <button className={`toggle-btn ${!darkMode ? 'active' : ''}`} onClick={() => handleThemeToggle('light')}>
+            Light
+          </button>
+          <button className={`toggle-btn ${darkMode ? 'active' : ''}`} onClick={() => handleThemeToggle('dark')}>
+            Dark
+          </button>
+        </div>
+        
         <h1 className="dashboard-title">Admin Dashboard</h1>
 
         <div className="dashboard-actions">
