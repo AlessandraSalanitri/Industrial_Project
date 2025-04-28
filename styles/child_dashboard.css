@@ -124,3 +124,10 @@
     margin-top: 10px;
   }
 }
+
+
+@media (max-width: 460px) {
+  .child-dashboard {
+    padding: 25% 5% 5%;
+  }
+}

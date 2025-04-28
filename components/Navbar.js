@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import AvatarPanel from './AvatarPanel';
-import AdminPanel from './AdminPanel'; 
+import AdminPanel from './AdminPanel';
 import { useUser } from '../context/UserContext';
 import { AnimatePresence } from "framer-motion";
 import '../styles/nav.css';
@@ -12,12 +12,16 @@ export default function Navbar() {
   const router = useRouter();
   const { user } = useUser();
   const [showAvatarPanel, setShowAvatarPanel] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // 👈 New state
 
-  // Check if current route is child mode
   const isChildMode = router.pathname.startsWith('/child');
 
   const handleAvatarClick = () => {
     setShowAvatarPanel(true);
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(prev => !prev);
   };
 
   const avatarSrc = user?.avatar ? `/assets/avatars/${user.avatar}.png` : null;
@@ -35,7 +39,14 @@ export default function Navbar() {
             className="logo-left"
           />
 
-          <nav className="main-nav">
+          {/* Mobile Hamburger */}
+          <div className="hamburger" onClick={toggleMobileMenu}>
+            <div className={`bar ${mobileMenuOpen ? "open" : ""}`}></div>
+            <div className={`bar ${mobileMenuOpen ? "open" : ""}`}></div>
+            <div className={`bar ${mobileMenuOpen ? "open" : ""}`}></div>
+          </div>
+
+          <nav className={`main-nav ${mobileMenuOpen ? "show" : ""}`}>
             <ul>
               <li>
                 <Link href="/" className={router.pathname === '/' ? 'active' : ''}>

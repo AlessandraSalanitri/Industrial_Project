@@ -91,6 +91,14 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
+nav.main-nav {
+  overflow-x: hidden;
+}
+
 /*Logos*/
 .logo-left{  /*studioo logo - slightly bigger than decorative lines*/
   width: 200px;
