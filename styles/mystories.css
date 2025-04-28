@@ -334,5 +334,39 @@ tbody tr:hover {
   color: var(--primary-color);
 }
 
+.alphabet-btn {
+  background-color: var(--gray);
+  color: var(--primary-color);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin: 0 4px;
+}
+.alphabet-btn.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+.alphabet-btn.disabled {
+  opacity: 0.4;
+}
+.alphabet-btn {
+  background-color: var(--gray);
+  color: var(--primary-color);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin: 0 4px;
+}
+
+.alphabet-btn.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
 
 
