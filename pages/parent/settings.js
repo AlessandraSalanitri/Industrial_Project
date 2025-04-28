@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { firebaseAuth, firestoreDB } from '../../firebase/firebaseConfig'; // Import firestoreDB
-import { doc, updateDoc, collection, addDoc } from 'firebase/firestore'; // Import Firestore functions
+import { doc, updateDoc, collection, addDoc, getDoc } from 'firebase/firestore'; // Import Firestore functions
 import Image from 'next/image';
 import '../../styles/settings.css';
 
@@ -26,17 +26,34 @@ export default function Settings() {
   const [user, setUser] = useState(null); // State to hold the current user data
   const [previewingVoice, setPreviewingVoice] = useState(''); // Avatar Voice when voice preview is playing
   const router = useRouter();
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
   useEffect(() => {
-    // Check if the user is authenticated and set the user state
-    const currentUser = firebaseAuth.currentUser;
-    if (currentUser) {
-      setUser(currentUser); // Set user if logged in
-    } else {
-      router.push('/login'); // Redirect to login if no user is found
-    }
+    const fetchUserSettings = async () => {
+      const currentUser = firebaseAuth.currentUser;
+      if (currentUser) {
+        setUser(currentUser);
+  
+        try {
+          const userDocRef = doc(firestoreDB, "users", currentUser.uid);
+          const userDocSnap = await getDoc(userDocRef);
+  
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            if (userData.notificationsEnabled !== undefined) {
+              setNotificationsEnabled(userData.notificationsEnabled);
+            }
+          }
+        } catch (error) {
+          console.error("Failed to fetch user settings:", error);
+        }
+      } else {
+        router.push('/login');
+      }
+    };
+  
+    fetchUserSettings();
   }, []);
-
   useEffect(() => {
     document.body.classList.toggle('dark-mode', darkMode);
   }, [darkMode]);
@@ -117,6 +134,22 @@ export default function Settings() {
       alert("Failed to save voice.");
     }
   };
+  const handleNotificationToggle = async (enabled) => {
+    setNotificationsEnabled(enabled);
+  
+    try {
+      if (user) {
+        const userDocRef = doc(firestoreDB, "users", user.uid);
+        await updateDoc(userDocRef, {
+          notificationsEnabled: enabled,
+          userId: user.uid, // re-send userId
+        });
+      }
+    } catch (error) {
+      console.error("Failed to update notification setting:", error);
+      alert("Failed to update notification setting.");
+    }
+  };
   
 
   const handleChildLink = async () => {
@@ -164,6 +197,23 @@ export default function Settings() {
             <button className={`toggle-btn ${darkMode ? 'active' : ''}`} onClick={() => setDarkMode(true)}>Dark</button>
           </div>
         </div>
+        <div className="setting-row">
+  <span className="setting-label">Notifications</span>
+  <div className="toggle-group">
+    <button
+      className={`toggle-btn ${notificationsEnabled ? 'active' : ''}`}
+      onClick={() => handleNotificationToggle(true)}
+    >
+      On
+    </button>
+    <button
+      className={`toggle-btn ${!notificationsEnabled ? 'active' : ''}`}
+      onClick={() => handleNotificationToggle(false)}
+    >
+      Off
+    </button>
+  </div>
+</div>
 
         {/* Voice Selection */}
         <div className="setting-section">
