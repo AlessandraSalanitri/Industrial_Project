@@ -47,37 +47,44 @@ export default function Navbar() {
           </div>
 
           <nav className={`main-nav ${mobileMenuOpen ? "show" : ""}`}>
-            <ul>
-              <li>
-                <Link href="/" className={router.pathname === '/' ? 'active' : ''}>
-                  HOME
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className={router.pathname === '/about' ? 'active' : ''}>
-                  ABOUT
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className={router.pathname === '/contact' ? 'active' : ''}>
-                  CONTACT
-                </Link>
-              </li>
-            </ul>
+          <ul>
+            <li>
+              <Link href="/" className={router.pathname === '/' ? 'active' : ''}>
+                HOME
+              </Link>
+            </li>
 
-            {user && (
-              <div className="account-icon">
-                <Image
-                  src={isChildMode && avatarSrc ? avatarSrc : "/assets/account.png"}
-                  alt="Profile"
-                  width={50}
-                  height={50}
-                  className="avatar-icon"
-                  onClick={handleAvatarClick}
-                />
-              </div>
+            {/* Show About and Contact ONLY for parent */}
+            {user?.role !== 'child' && !user?.isSimulated && (
+              <>
+                <li>
+                  <Link href="/about" className={router.pathname === '/about' ? 'active' : ''}>
+                    ABOUT
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className={router.pathname === '/contact' ? 'active' : ''}>
+                    CONTACT
+                  </Link>
+                </li>
+              </>
             )}
-          </nav>
+          </ul>
+
+          {user && (
+            <div className="account-icon">
+              <Image
+                src={isChildMode && avatarSrc ? avatarSrc : "/assets/account.png"}
+                alt="Profile"
+                width={50}
+                height={50}
+                className="avatar-icon"
+                onClick={handleAvatarClick}
+              />
+            </div>
+          )}
+        </nav>
+
 
           <Image
             src="/assets/side_logo.png"

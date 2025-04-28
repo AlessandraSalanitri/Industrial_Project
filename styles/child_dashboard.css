@@ -125,9 +125,68 @@
   }
 }
 
+@media (max-width: 750px) {
 
+  .dashboard-controls {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 10px;
+  }
+
+  .dashboard-controls input,
+  .dashboard-controls select,
+  .dashboard-controls button {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px 15px;
+    border-radius: 20px;
+  }
+
+  .theme-toggle {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    max-width: 300px;
+    padding: 5px;
+  }
+
+  .toggle-btn {
+    flex: 1;
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .story-content-view {
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+/* Even smaller tweaks for 460px and below */
 @media (max-width: 460px) {
   .child-dashboard {
     padding: 25% 5% 5%;
   }
+  
+  .dashboard-controls {
+    max-width: 90%;
+    gap: 8px;
+  }
+
+  .theme-toggle {
+    max-width: 250px;
+  }
+
+  .toggle-btn {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+  input:focus, select:focus, button:focus {
+    box-shadow: 0 0 5px rgba(75, 0, 130, 0.4);
+  }
+  
 }

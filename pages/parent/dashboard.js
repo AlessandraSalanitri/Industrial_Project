@@ -1,25 +1,17 @@
-<<<<<<< HEAD
-import { useState } from 'react';
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
-=======
+
 import { useEffect, useState } from 'react';
 import { Bell } from 'phosphor-react';
 import { doc, updateDoc, collection, query, where, onSnapshot, addDoc, getDocs, getDoc } from "firebase/firestore"; // Added getDoc here
->>>>>>> a3f7829b04044697971883448435a1797d87419b
 import { firebaseAuth, firestoreDB } from "../../firebase/firebaseConfig";
 import Layout from '../../components/Layout';
 import Image from 'next/image';
 import Link from 'next/link';
 import '../../styles/parent_dashboard.css';
-<<<<<<< HEAD
 import '../../styles/darkMode.css';
-
-export default function ParentDashboard() {
-   const [darkMode, setDarkMode] = useState(false);
-=======
 import '../../styles/notification_bell.css'; // Separate new CSS for the bell
 
 export default function ParentDashboard() {
+  const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true); // new state
@@ -87,7 +79,6 @@ export default function ParentDashboard() {
   // Count unread notifications
   const unreadCount = notifications.filter(n => !n.read).length;
 
->>>>>>> a3f7829b04044697971883448435a1797d87419b
   const switchToChildMode = async () => {
     const currentUser = firebaseAuth.currentUser;
 
@@ -129,9 +120,8 @@ export default function ParentDashboard() {
     } catch (error) {
       console.error("Error linking simulated child account:", error);
     }
-  };
-<<<<<<< HEAD
-  
+  };  
+
   const handleThemeToggle = (mode) => {
     const isDark = mode === 'dark';
     setDarkMode(isDark);
@@ -139,8 +129,6 @@ export default function ParentDashboard() {
     document.body.classList.toggle('dark-mode', isDark);
   };
   
-=======
->>>>>>> a3f7829b04044697971883448435a1797d87419b
 
   return (
     <Layout>
