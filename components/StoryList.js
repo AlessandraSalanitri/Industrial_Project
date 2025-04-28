@@ -8,19 +8,6 @@ import StoryModal from "../components/StoryModal";
 import { MoonStars } from 'phosphor-react';
 
 export default function StoryList() {
-  // const { user } = useUser();
-  // const [stories, setStories] = useState([]);
-  // const [searchText, setSearchText] = useState('');
-  // const [selectedGenre, setSelectedGenre] = useState('');
-  // const [filteredStories, setFilteredStories] = useState([]);
-  // const [modalStory, setModalStory] = useState(null);
-  // const [favorites, setFavorites] = useState([]);
-  // const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  // const carouselRef = useRef();
-  // const [canScrollLeft, setCanScrollLeft] = useState(false);
-  // const [canScrollRight, setCanScrollRight] = useState(false);
-
-
   const { user } = useUser();
   const [stories, setStories] = useState([]);
   const [searchText, setSearchText] = useState('');
@@ -29,6 +16,8 @@ export default function StoryList() {
   const [modalStory, setModalStory] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
 
   const carouselRef = useRef(null);
 
@@ -58,14 +47,6 @@ export default function StoryList() {
       console.error("Error fetching stories:", error);
     }
   };
-
-  useEffect(() => {
-    let filtered = [...stories];
-    if (selectedGenre) filtered = filtered.filter((s) => s.genre === selectedGenre);
-    if (searchText.trim()) filtered = filtered.filter((s) => s.title.toLowerCase().includes(searchText.toLowerCase()));
-    if (showFavoritesOnly) filtered = filtered.filter((s) => favorites.includes(s.id));
-    setFilteredStories(filtered);
-  }, [searchText, selectedGenre, stories, showFavoritesOnly, favorites]);
 
 
   const toggleFavorite = (storyId) => {
@@ -112,9 +93,11 @@ export default function StoryList() {
   };
 
   const handleScroll = () => {
-    // Force re-render to show/hide arrows when scrolling
-    setTimeout(() => {}, 0);
+    if (carouselRef.current) {
+      setScrollPosition(carouselRef.current.scrollLeft);
+    }
   };
+  
 
   return (
     <div className="story-list-container">
@@ -200,7 +183,7 @@ export default function StoryList() {
         {showLeftArrow() && (
           <button className="arrow left" onClick={() => scrollCarousel('left')}>←</button>
         )}
-        
+
         {showRightArrow() && (
           <button className="arrow right" onClick={() => scrollCarousel('right')}>→</button>
         )}

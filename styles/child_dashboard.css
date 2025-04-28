@@ -79,6 +79,15 @@
 
 /* Responsive Styles */
 @media (min-width: 768px) {
+  .child-dashboard {
+    padding: 15% 5% 5%;
+  }
+
+  .dashboard-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+
   .dashboard-header {
     flex-direction: row;
     justify-content: space-between;
@@ -92,10 +101,23 @@
 }
 
 @media (max-width: 767px) {
+  .child-dashboard {
+    padding: 20% 5% 5%;
+  }
+
+  .dashboard-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
   .dashboard-header {
     flex-direction: column;
     align-items: center;
     gap: 10px;
+  }
+
+  .toggle-btn {
+    font-weight: 400;
   }
   
   .theme-toggle {

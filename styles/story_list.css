@@ -195,6 +195,7 @@
 }
   
 @media (max-width: 768px) {
+
     .story-card {
       flex: 0 0 150px;
       height: 240px;
@@ -210,15 +211,19 @@
     .carousel-wrapper {
       flex-direction: column;
     }
-    .arrow {
-      margin: 10px 0;
-      width: 40px;
-      height: 40px;
-      font-size: 24px;
+    .arrow.left {
+        margin-right: 15px; 
     }
+    
+    .arrow.right {
+        margin-left: 15px; 
+    }
+    
+
 }
   
 @media (max-width: 500px) {
+    
     .story-card {
       flex: 0 0 140px;
       height: 220px;
@@ -228,4 +233,13 @@
       width: 80px;
       height: 80px;
     }
+
+    .arrow.left {
+        margin-right: 10px; 
+    }
+    
+    .arrow.right {
+        margin-left: 10px;
+    }
+    
 }

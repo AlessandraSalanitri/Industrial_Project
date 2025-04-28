@@ -88,3 +88,21 @@
     margin-bottom: 10px;
 }
   
+@media (max-width: 767px) {
+    .avatar-panel {
+        width: 45vw;
+    }
+}
+
+   
+@media (max-width: 400px) {
+    .avatar-panel {
+        width: 55vw;
+    }
+}
+
+@media (max-width: 300px) {
+    .avatar-panel {
+        width: 65vw;
+    }
+}
