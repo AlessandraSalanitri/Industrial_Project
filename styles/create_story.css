@@ -195,3 +195,13 @@ textarea {
     background-color: #fff5f5;
   }
   
+  button.active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }

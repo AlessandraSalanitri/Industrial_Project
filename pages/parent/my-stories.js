@@ -1,4 +1,3 @@
-// Final cleaned up `my-stories.js` ✅
 import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -16,6 +15,7 @@ export default function MyStories() {
   const [filters, setFilters] = useState({ letter: null, genre: null, age: null });
   const [user, setUser] = useState(null);
   const [viewFavourites, setViewFavourites] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(''); // To handle and show errors
   const router = useRouter();
 
   useEffect(() => {
@@ -32,10 +32,15 @@ export default function MyStories() {
   useEffect(() => {
     if (!user) return;
     const fetchStories = async () => {
-      const snapshot = await getDocs(collection(firestoreDB, 'stories'));
-      const userStories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(story => story.userId === user.uid);
-      setStories(userStories);
+      try {
+        const snapshot = await getDocs(collection(firestoreDB, 'stories'));
+        const userStories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter(story => story.userId === user.uid);
+        setStories(userStories);
+      } catch (error) {
+        console.error("Error fetching stories:", error);
+        setErrorMessage("Failed to load your stories. Please try again later.");
+      }
     };
     fetchStories();
   }, [user]);
@@ -50,15 +55,16 @@ export default function MyStories() {
 
   const handleDeleteStory = async (id) => {
     try {
+      // Delete story from Firestore
       await deleteDoc(doc(firestoreDB, 'stories', id));
-      const snapshot = await getDocs(collection(firestoreDB, 'stories'));
-      const userStories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(story => story.userId === user.uid);
-      setStories(userStories);
+
+      // Update local state to remove the deleted story
+      setStories(prevStories => prevStories.filter(story => story.id !== id));
+
       alert('Story deleted successfully!');
     } catch (error) {
       console.error('Error deleting story:', error);
-      alert('Failed to delete the story. Please try again.');
+      setErrorMessage('Failed to delete the story. Please try again.');
     }
   };
 
@@ -75,11 +81,11 @@ export default function MyStories() {
       );
     } catch (error) {
       console.error('Error updating favourite status:', error);
-      alert('Failed to update the favourite status. Please try again.');
+      setErrorMessage('Story could not be added to favourites. Please try again.');
     }
   };
 
-  async function handleUpdateStory(updatedStory) {
+  const handleUpdateStory = async (updatedStory) => {
     try {
       const storyRef = doc(firestoreDB, 'stories', updatedStory.id);
       await updateDoc(storyRef, {
@@ -98,34 +104,37 @@ export default function MyStories() {
       alert("Story updated successfully!");
     } catch (error) {
       console.error("Error updating story:", error);
-      alert("Failed to update story. Please try again!");
+      setErrorMessage("Failed to update the story. Please try again!");
     }
-  }
+  };
 
-  function handleReadStory(content) {
+  const handleReadStory = (content) => {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(content);
     utterance.lang = 'en-GB';
     utterance.rate = 1;
     window.speechSynthesis.speak(utterance);
-  }
+  };
 
-  function handlePauseStory() {
+  const handlePauseStory = () => {
     window.speechSynthesis.pause();
-  }
+  };
 
-  function handleResumeStory() {
+  const handleResumeStory = () => {
     window.speechSynthesis.resume();
-  }
+  };
 
-  function handleStopStory() {
+  const handleStopStory = () => {
     window.speechSynthesis.cancel();
-  }
+  };
 
   return (
     <Layout>
       <div className="container">
         <h1>My Stories</h1>
+
+        {/* Display error message if there's an error */}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
 
         {/* Filters */}
         <div className="alphabet-filter">
@@ -178,30 +187,33 @@ export default function MyStories() {
             </tr>
           </thead>
           <tbody>
-            {filteredStories.map((story, i) => (
-              <tr key={story.id}>
-                <td>{i + 1}</td>
-                <td>{story.title}</td>
-                <td>{story.age}</td>
-                <td>{story.genre}</td>
-                <td>{story.character}</td>
-                <td>
-                  <div className="action-buttons">
-                    <button onClick={() => { setSelectedStory(story); setModalMode('view'); }}>View</button>
-                    <button onClick={() => { setSelectedStory(story); setModalMode('edit'); }}>Edit</button>
-                    <button className="delete-btn" onClick={() => handleDeleteStory(story.id)}>Delete</button>
-                    <button
-                      className="favourite-btn"
-                      onClick={() => handleToggleFavourite(story.id, story.favourite)}
-                      title={story.favourite ? 'Remove from favourites' : 'Add to favourites'}
-                      style={{ background: 'none', border: 'none' }}
-                    >
-                      {story.favourite ? '❤️' : '🤍'}
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+            {filteredStories.length === 0 ? (
+              <tr><td colSpan="6">No stories found. Try changing your filters or viewing all stories.</td></tr>
+            ) : (
+              filteredStories.map((story, i) => (
+                <tr key={story.id}>
+                  <td>{i + 1}</td>
+                  <td>{story.title}</td>
+                  <td>{story.age}</td>
+                  <td>{story.genre}</td>
+                  <td>{story.character}</td>
+                  <td>
+                    <div className="action-buttons">
+                      <button className="edit-btn" onClick={() => { setSelectedStory(story); setModalMode('view'); }}>View</button>
+                      <button className="edit-btn" onClick={() => { setSelectedStory(story); setModalMode('edit'); }}>Edit</button>
+                      <button className="delete-btn" onClick={() => handleDeleteStory(story.id)}>Delete</button>
+                      <button
+                        className="favourite-btn"
+                        onClick={() => handleToggleFavourite(story.id, story.favourite)}
+                        title={story.favourite ? 'Remove from favourites' : 'Add to favourites'}
+                      >
+                        {story.favourite ? '❤️' : '🤍'}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
 
