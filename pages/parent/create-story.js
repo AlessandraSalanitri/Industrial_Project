@@ -192,7 +192,8 @@ export default function CreateStory() {
         userId: user.uid,
         audioUrl,
         source: "ai",
-        imageUrl: randomImageUrl, 
+        imageUrl: randomImageUrl,
+        read: false, 
       });
   
       // Show success message inside modal

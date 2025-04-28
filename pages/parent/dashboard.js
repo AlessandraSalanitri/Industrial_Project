@@ -1,11 +1,65 @@
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { useEffect, useState } from 'react';
+import { Bell } from 'phosphor-react';
+import { doc, updateDoc, collection, query, where, onSnapshot, addDoc, getDocs } from "firebase/firestore";
 import { firebaseAuth, firestoreDB } from "../../firebase/firebaseConfig";
 import Layout from '../../components/Layout';
 import Image from 'next/image';
 import Link from 'next/link';
 import '../../styles/parent_dashboard.css';
+import '../../styles/notification_bell.css'; // <-- Separate new CSS for the bell
 
 export default function ParentDashboard() {
+  const [notifications, setNotifications] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
+      if (user) {
+        const q = query(
+          collection(firestoreDB, "stories"),
+          where("userId", "==", user.uid) // <- Your adjusted field
+        );
+
+        const unsubscribeSnapshot = onSnapshot(q, (querySnapshot) => {
+          const newNotifications = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            title: doc.data().title || 'Untitled Story',
+            createdAt: doc.data().createdAt?.toDate().toLocaleString() || 'Unknown time',
+            read: doc.data().read || false, // <-- from Firestore
+          }));
+          setNotifications(newNotifications);
+        }, (error) => {
+          console.error("Error with real-time notifications:", error);
+        });
+
+        return unsubscribeSnapshot;
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const toggleDropdown = async () => {
+    setDropdownOpen(prev => {
+      const newState = !prev;
+  
+      if (newState) {
+        notifications.forEach(async (notification) => {
+          if (!notification.read) {
+            const notificationRef = doc(firestoreDB, "stories", notification.id);
+            await updateDoc(notificationRef, { read: true });
+          }
+        });
+      }
+      
+      return newState;
+    });
+  };
+
+  // Count unread notifications
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+
   const switchToChildMode = async () => {
     const currentUser = firebaseAuth.currentUser;
   
@@ -19,7 +73,6 @@ export default function ParentDashboard() {
     const simulatedChildEmail = `${parentEmail}-child@simulated.com`;
   
     try {
-      // Link DB if needed
       const linkedQuery = query(
         collection(firestoreDB, "linkedAccounts"),
         where("childEmail", "==", simulatedChildEmail)
@@ -34,7 +87,6 @@ export default function ParentDashboard() {
         console.log("Simulated child link created.");
       }
   
-      // Prepare simulated child user
       const simulatedUser = {
         email: simulatedChildEmail,
         role: 'child',
@@ -42,26 +94,44 @@ export default function ParentDashboard() {
         userId: `${parentId}-simulated`
       };
   
-      // Store in localStorage
       localStorage.setItem('mode', 'child');
       localStorage.setItem('user', JSON.stringify(simulatedUser));
   
-      // Redirect
       window.location.href = "/child/dashboard";
     } catch (error) {
       console.error("Error linking simulated child account:", error);
     }
   };
-  
-  
 
   return (
     <Layout>
+      {/* Notification Bell */}
+      <div className="notification-container">
+  <Bell size={32} onClick={toggleDropdown} className="notification-bell-icon" />
+  {unreadCount > 0 && (
+    <span className="notification-badge">{unreadCount}</span> // Now shows only unread!
+  )}
+  {dropdownOpen && (
+    <div className="notification-dropdown">
+      {notifications.length === 0 ? (
+        <p className="notification-empty">No notifications</p>
+      ) : (
+        notifications.map((notification) => (
+          <div key={notification.id} className="notification-item">
+            <strong>{notification.title}</strong>
+            <p>{notification.createdAt}</p>
+          </div>
+        ))
+      )}
+    </div>
+  )}
+</div>
+
+      {/* Your existing dashboard layout untouched */}
       <div className="admin-dashboard">
         <h1 className="dashboard-title">Admin Dashboard</h1>
 
         <div className="dashboard-actions">
-          {/* Create story card */}
           <div className="dashboard-card">
             <Image
               src="/assets/create_story.png"
@@ -75,7 +145,6 @@ export default function ParentDashboard() {
             </Link>
           </div>
 
-          {/* Manage story saved card */}
           <div className="dashboard-card">
             <Image
               src="/assets/saved_story.png"
@@ -89,7 +158,6 @@ export default function ParentDashboard() {
             </Link>
           </div>
 
-          {/* Redirect to child dashboard with parent account -- can exit the child account and go back to parent through exit in avatar panel*/}
           <div className="dashboard-card">
             <Image
               src="/assets/child.png"
@@ -100,7 +168,7 @@ export default function ParentDashboard() {
             />
             <button
               className="button button-primary"
-              onClick={switchToChildMode} // Redirect to child dashboard
+              onClick={switchToChildMode}
             >
               Enter Child Mode
             </button>
