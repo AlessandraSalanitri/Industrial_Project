@@ -44,11 +44,10 @@
   
 /* === CAROUSEL WRAPPER === */
 .carousel-wrapper {
-    position: relative;
     display: flex;
     align-items: center;
     width: 100%;
-    overflow: hidden;
+    overflow-x: auto; 
 }
   
 .story-carousel {
@@ -208,9 +207,7 @@
       flex-direction: column;
       gap: 8px;
     }
-    .carousel-wrapper {
-      flex-direction: column;
-    }
+
     .arrow.left {
         margin-right: 15px; 
     }
