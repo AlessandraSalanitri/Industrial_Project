@@ -58,7 +58,6 @@
 }
 
 
-
 .admin-btn {
     background: transparent;
     border: none;
@@ -81,3 +80,21 @@
     color: crimson;
 }
   
+@media (max-width: 767px) {
+    .admin-panel {
+        width: 45vw;
+    }
+}
+
+   
+@media (max-width: 400px) {
+    .admin-panel {
+        width: 55vw;
+    }
+}
+
+@media (max-width: 300px) {
+    .admin-panel {
+        width: 65vw;
+    }
+}

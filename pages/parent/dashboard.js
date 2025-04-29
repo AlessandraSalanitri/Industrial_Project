@@ -108,6 +108,7 @@ export default function ParentDashboard() {
 
       const simulatedUser = {
         email: simulatedChildEmail,
+        realEmail: parentEmail,
         role: 'child',
         isSimulated: true,
         userId: `${parentId}-simulated`

@@ -42,9 +42,9 @@ export default function AvatarPanel({ onClose }) {
       const credential = EmailAuthProvider.credential(currentUser.email, parentPassword);
       await reauthenticateWithCredential(currentUser, credential);
   
-      // Successful reauth: Exit simulated mode
+      // Successful reauth--> Exit simulated mode
       exitChildMode();
-      setTriesLeft(5); // Reset tries
+      setTriesLeft(5); // reset tries
       setTimeout(() => {
         router.replace('/parent/dashboard');
         setTimeout(() => window.location.reload(), 300);
@@ -53,7 +53,7 @@ export default function AvatarPanel({ onClose }) {
     } catch (error) {
       console.error("Error exiting to parent:", error.message || error);
       setTriesLeft((prev) => prev - 1);
-      setErrorModalVisible(true); // Show feedback
+      setErrorModalVisible(true); // show popup with error message
     }
   };
   

@@ -65,11 +65,14 @@ export const UserProvider = ({ children }) => {
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
+
         const updatedUser = {
           ...parsedUser,
+          email: parsedUser.realEmail || parsedUser.email.split('-child@simulated.com')[0], 
           role: 'parent',
           isSimulated: false
         };
+
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
       }

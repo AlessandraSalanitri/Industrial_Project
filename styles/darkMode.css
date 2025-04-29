@@ -71,6 +71,10 @@ body.dark-mode {
 .dark-mode .hamburger .bar{
     color: var(--alt);
 }
+
+nav.main-nav {
+    background-color: var(--background-color);
+  }
   
 
 

@@ -4,9 +4,13 @@
 }
   
 .dashboard-title {
-    font-size: 36px;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--primary-color);
+    text-stroke: 1.5px var(--primary-color); /* fallback for other browsers */
     font-weight: bold;
-    color: var(--primary-color);
+    text-align: center;
+    background-color: var(--white);
+    text-shadow: 0 5 20px rgb(224, 178, 235);
     margin-bottom: 50px;
 }
   
