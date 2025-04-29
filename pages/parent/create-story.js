@@ -208,7 +208,7 @@ const confirmSave = async () => {
     await updateDoc(storyDocRef, { id: storyDocRef.id });
 
     alert("Story saved successfully!");
-    handleBack = "" ;
+    handleBack() ;
   } catch (error) {
     console.error("Error saving story:", error);
     alert("Failed to save story.");

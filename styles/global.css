@@ -335,7 +335,7 @@ button.active {
 
 
 
-/* Parent dashboard global style to keep mode toggle and notif icon in place */
+/* Parent dashboard global style to keep mode toggle and notif icon in place
 .top-controls-inner {
   flex-direction: column;
   align-items: center;
@@ -353,5 +353,5 @@ button.active {
   
 .notification-bell-icon {
   font-size: 26px;
-}
+} */
   
