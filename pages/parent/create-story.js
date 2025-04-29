@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { firestoreDB } from '../../firebase/firebaseConfig'; 
-import { collection, addDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import '../../styles/create_story.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -190,8 +190,8 @@ const confirmSave = async () => {
   const randomImageUrl = pickRandomImageForGenre(genre); // ✨ Pick random image for this genre
 
   try {
-    await addDoc(collection(firestoreDB, "stories"), {
-      id: storyId,
+    await setDoc(doc(firestoreDB, "stories", storyId), {
+      id: storyId, // saved inside the document
       title: storyName,
       content: story,
       age, genre, setting, moral, tone, length, character,
@@ -201,7 +201,7 @@ const confirmSave = async () => {
       source: "ai",
       imageUrl: randomImageUrl,
       read: false,
-      favorite: false, 
+      favorite: false,
     });
 
     // Show success message inside modal
