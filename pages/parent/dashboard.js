@@ -132,87 +132,96 @@ export default function ParentDashboard() {
 
   return (
     <Layout>
-      {/* Notification Bell - only show if notifications are enabled */}
-      {notificationsEnabled && (
-        <div className="notification-container">
-          <Bell size={32} onClick={toggleDropdown} className="notification-bell-icon" />
-          {unreadCount > 0 && (
-            <span className="notification-badge">{unreadCount}</span>
-          )}
-          {dropdownOpen && (
-            <div className="notification-dropdown">
-              {notifications.length === 0 ? (
-                <p className="notification-empty">No notifications</p>
-              ) : (
-                notifications.map((notification) => (
-                  <div key={notification.id} className="notification-item">
-                    <strong>{notification.title}</strong>
-                    <p>{notification.createdAt}</p>
-                  </div>
-                ))
+    {/* === TOP CONTROLS === */}
+    {(notificationsEnabled || true) && (
+      <div className="top-controls">
+        <div className="top-controls-inner">
+  
+          {/* === Notification Icon === */}
+          {notificationsEnabled && (
+            <div className={`notification-container shake-on-new ${unreadCount > 0 ? 'has-unread' : ''}`}>
+              <Bell size={32} onClick={toggleDropdown} className="notification-bell-icon" />
+              {unreadCount > 0 && (
+                <span className="notification-badge">{unreadCount}</span>
+              )}
+              {dropdownOpen && (
+                <div className="notification-dropdown">
+                  {notifications.length === 0 ? (
+                    <p className="notification-empty">No notifications</p>
+                  ) : (
+                    notifications.map((notification) => (
+                      <div key={notification.id} className="notification-item">
+                        <strong>{notification.title}</strong>
+                        <p>{notification.createdAt}</p>
+                      </div>
+                    ))
+                  )}
+                </div>
               )}
             </div>
           )}
-        </div>
-      )}
-
-      {/* Your existing dashboard layout untouched */}
-      <div className="admin-dashboard">
-      <div className="theme-toggle top-right" style={{ marginBottom: '1rem' }}>
-          <button className={`toggle-btn ${!darkMode ? 'active' : ''}`} onClick={() => handleThemeToggle('light')}>
-            Light
-          </button>
-          <button className={`toggle-btn ${darkMode ? 'active' : ''}`} onClick={() => handleThemeToggle('dark')}>
-            Dark
-          </button>
-        </div>
-        
-        <h1 className="dashboard-title">Admin Dashboard</h1>
-
-        <div className="dashboard-actions">
-          <div className="dashboard-card">
-            <Image
-              src="/assets/create_story.png"
-              alt="Create New Story"
-              width={280}
-              height={320}
-              className="dashboard-image"
-            />
-            <Link href="/parent/create-story" className="button button-primary">
-              Create new story
-            </Link>
-          </div>
-
-          <div className="dashboard-card">
-            <Image
-              src="/assets/saved_story.png"
-              alt="Manage Saved Story"
-              width={280}
-              height={320}
-              className="dashboard-image"
-            />
-            <Link href="/parent/my-stories" className="button button-primary">
-              Manage saved story
-            </Link>
-          </div>
-
-          <div className="dashboard-card">
-            <Image
-              src="/assets/child.png"
-              alt="Child Mode"
-              width={280}
-              height={320}
-              className="dashboard-image"
-            />
-            <button
-              className="button button-primary"
-              onClick={switchToChildMode}
-            >
-              Enter Child Mode
+  
+          {/* === Theme Toggle === */}
+          <div className="theme-toggle">
+            <button className={`toggle-btn ${!darkMode ? 'active' : ''}`} onClick={() => handleThemeToggle('light')}>
+              Light
+            </button>
+            <button className={`toggle-btn ${darkMode ? 'active' : ''}`} onClick={() => handleThemeToggle('dark')}>
+              Dark
             </button>
           </div>
         </div>
       </div>
-    </Layout>
+    )}
+  
+    {/* === Main Dashboard === */}
+    <div className="admin-dashboard">
+      <h1 className="dashboard-title">Admin Dashboard</h1>
+  
+      <div className="dashboard-actions">
+        <div className="dashboard-card">
+          <Image
+            src="/assets/create_story.png"
+            alt="Create New Story"
+            width={280}
+            height={320}
+            className="dashboard-image"
+          />
+          <Link href="/parent/create-story" className="button button-primary">
+            Create new story
+          </Link>
+        </div>
+  
+        <div className="dashboard-card">
+          <Image
+            src="/assets/saved_story.png"
+            alt="Manage Saved Story"
+            width={280}
+            height={320}
+            className="dashboard-image"
+          />
+          <Link href="/parent/my-stories" className="button button-primary">
+            Manage saved story
+          </Link>
+        </div>
+  
+        <div className="dashboard-card">
+          <Image
+            src="/assets/child.png"
+            alt="Child Mode"
+            width={280}
+            height={320}
+            className="dashboard-image"
+          />
+          <button
+            className="button button-primary"
+            onClick={switchToChildMode}
+          >
+            Enter Child Mode
+          </button>
+        </div>
+      </div>
+    </div>
+  </Layout>  
   );
 }

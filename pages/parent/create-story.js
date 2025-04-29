@@ -173,6 +173,8 @@ export default function CreateStory() {
   };
   
 
+  
+const handleBack = () => router.push('/parent/my-stories');
 
 
 // CREATE STORY
@@ -198,7 +200,7 @@ const confirmSave = async () => {
       source: "ai",
       imageUrl: randomImageUrl,
       read: false,
-      favorite: false,
+      favourite: false,
       // No 'id' field yet
     });
 
@@ -206,13 +208,13 @@ const confirmSave = async () => {
     await updateDoc(storyDocRef, { id: storyDocRef.id });
 
     alert("Story saved successfully!");
+    handleBack = "" ;
   } catch (error) {
     console.error("Error saving story:", error);
     alert("Failed to save story.");
   }
 };
 
-  const handleBack = () => router.push('/parent/my-stories');
 
 
   return (
