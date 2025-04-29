@@ -55,7 +55,7 @@ export const UserProvider = ({ children }) => {
     setUser(null);
   };
 
-  // ✅ Exit child mode safely
+  // Exit child mode safely
   const exitChildMode = () => {
     try {
       localStorage.removeItem('mode');

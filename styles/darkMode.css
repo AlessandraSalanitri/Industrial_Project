@@ -42,20 +42,21 @@ body.dark-mode {
 
 
 /* ======== NAVBAR DARK MODE ======== */
-body.dark-mode header {
+.dark-mode header {
     background-color: var(--background-color);
 }
   
-body.dark-mode nav {
+.dark-mode nav {
     background-color: transparent;
+    color: var(--white);
 }
    
-body.dark-mode nav ul li a:hover,
-body.dark-mode nav ul li .active {
+.dark-mode nav ul li a:hover,
+.dark-mode nav ul li .active {
     color: var(--alt);
 }
   
-body.dark-mode .avatar-icon {
+.dark-mode .avatar-icon {
     border: 2px solid var(--secondary-color);
 }
 
@@ -65,6 +66,10 @@ body.dark-mode .avatar-icon {
     margin-top: 130px;
     max-width: 1200px;
     margin: 0 auto;
+}
+
+.dark-mode .hamburger .bar{
+    color: var(--alt);
 }
   
 
@@ -309,6 +314,16 @@ body.dark-mode .avatar-icon {
 }
 
 /* ======== STORY LIST DARK MODE ======== */
+
+.dark-mode .dashboard-title {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--alt);
+  text-stroke: 1.5px var(--alt); /* fallback for other browsers */
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--background-color);
+  text-shadow: 0 5 20px rgb(240, 240, 137);
+}
 
 
 .dark-mode .play-button {
