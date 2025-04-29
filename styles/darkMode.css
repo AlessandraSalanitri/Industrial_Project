@@ -469,3 +469,6 @@ nav.main-nav {
     color: white;
 }
 
+.dark-mode .top-controls {
+    background-color: var(--background-color);
+}

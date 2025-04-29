@@ -136,48 +136,50 @@ export default function ParentDashboard() {
       {/* === TOP CONTROLS === */}
       {(notificationsEnabled || true) && (
         <div className="top-controls">
-          <div className="top-controls-inner">
-            <div className="controls-group">
-              {/* === Theme Toggle === */}
-              <div className="theme-toggle">
-                <button
-                  className={`toggle-btn ${!darkMode ? 'active' : ''}`}
-                  onClick={() => handleThemeToggle('light')}
-                >
-                  Light
-                </button>
-                <button
-                  className={`toggle-btn ${darkMode ? 'active' : ''}`}
-                  onClick={() => handleThemeToggle('dark')}
-                >
-                  Dark
-                </button>
-              </div>
-  
-              {/* === Notification Icon === */}
-              <div className={`notification-container shake-on-new ${unreadCount > 0 ? 'has-unread' : ''}`}>
-                <Bell size={32} onClick={toggleDropdown} className="notification-bell-icon" />
-                {unreadCount > 0 && (
-                  <span className="notification-badge">{unreadCount}</span>
-                )}
-                {dropdownOpen && (
-                  <div className="notification-dropdown">
-                    {notifications.length === 0 ? (
-                      <p className="notification-empty">No notifications</p>
-                    ) : (
-                      notifications.map((notification) => (
-                        <div key={notification.id} className="notification-item">
-                          <strong>{notification.title}</strong>
-                          <p>{notification.createdAt}</p>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
+        <div className="top-controls-inner">
+      
+          {/* LEFT: THEME TOGGLE */}
+          <div className="theme-toggle">
+            <button
+              className={`toggle-btn ${!darkMode ? 'active' : ''}`}
+              onClick={() => handleThemeToggle('light')}
+            >
+              Light
+            </button>
+            <button
+              className={`toggle-btn ${darkMode ? 'active' : ''}`}
+              onClick={() => handleThemeToggle('dark')}
+            >
+              Dark
+            </button>
           </div>
+      
+          {/* RIGHT: NOTIFICATION BELL */}
+          <div className={`notification-container shake-on-new ${unreadCount > 0 ? 'has-unread' : ''}`}>
+            <Bell size={32} onClick={toggleDropdown} className="notification-bell-icon" />
+            {unreadCount > 0 && (
+              <span className="notification-badge">{unreadCount}</span>
+            )}
+            {dropdownOpen && (
+              <div className="notification-dropdown">
+                {notifications.length === 0 ? (
+                  <p className="notification-empty">No notifications</p>
+                ) : (
+                  notifications.map((notification) => (
+                    <div key={notification.id} className="notification-item">
+                      <strong>{notification.title}</strong>
+                      <p>{notification.createdAt}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+      
         </div>
+      </div>
+      
+      // </div>
       )}
   
       {/* === Main Dashboard === */}
@@ -216,7 +218,7 @@ export default function ParentDashboard() {
               src="/assets/child.png"
               alt="Child Mode"
               width={280}
-              height={320}
+              height={325}
               className="dashboard-image"
             />
             <button
