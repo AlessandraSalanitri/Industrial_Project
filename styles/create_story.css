@@ -205,3 +205,20 @@ textarea {
     font-size: 14px;
     margin-top: 10px;
   }
+
+
+
+/* FRIENDLY ERROR MESSAGE IF USER DON'T SELECT ANY MANDATORY FIELD IN GENERATE STORY */
+.friendly-error-message {
+  color: #cc0000;
+  font-size: 16px;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 500;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}

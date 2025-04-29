@@ -55,6 +55,7 @@ export default function CreateStory() {
   const [audioUrl, setAudioUrl] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [errors, setErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState('');
   const [isReading, setIsReading] = useState(false);
 
   const router = useRouter();
@@ -82,25 +83,32 @@ export default function CreateStory() {
   }, [router.events]);
 
 
-  // GENERATE STORY AI
+  // GENERATE STORY AI+ handle missing mandatry imput
   const handleGenerateAI = async () => {
     const newErrors = {};
   
-    if (!character.trim()) newErrors.character = "Please enter the main character or theme!";
-    if (!age) newErrors.age = "Please select an age range.";
-    if (!genre) newErrors.genre = "Please select a genre.";
-    if (!setting) newErrors.setting = "Please select a setting.";
-    if (!moral) newErrors.moral = "Please select a moral.";
-    if (!tone) newErrors.tone = "Please select a tone.";
-    if (!length) newErrors.length = "Please select a reading length.";
+    if (!age) {
+      setErrorMessage("Tell us your age so we can make the story just right!");
+      newErrors.age = "Please select an age range.";
+    } else if (!genre) {
+      setErrorMessage("We can't wait to create your story! Please select a genre.");
+      newErrors.genre = "Please select a genre.";
+    } else if (!length) {
+      setErrorMessage("Big adventures or tiny tales? Pick a reading length!");
+      newErrors.length = "Please select a reading length.";
+    }
+    
   
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-  
+    
     setErrors({});
+    setErrorMessage(''); // ✅ Clear the message if everything is filled
     setLoading(true);
+    
+
     try {
       const response = await fetch("/api/ai", {
         method: "POST",
@@ -127,7 +135,7 @@ export default function CreateStory() {
   };
   
   
-  // CONVERT TO AUDIO
+  // CONVERT TO AUDIO- 
   const handleConvertToAudio = () => {
     if (!story.trim()) return alert("Please generate a story first!");
   
@@ -161,7 +169,6 @@ export default function CreateStory() {
       window.speechSynthesis.resume();
     }
   };
-  
   const handleStopAudio = () => {
     window.speechSynthesis.cancel();
   };
@@ -224,7 +231,7 @@ export default function CreateStory() {
           }}
           className={errors.age ? "input-error" : ""}
         >
-          <option value="">Age</option>
+          <option value="">* Age</option>
           <option value="Under 3">Under 3</option>
           <option value="3-5">3-5</option>
           <option value="6-8">6-8</option>
@@ -242,7 +249,7 @@ export default function CreateStory() {
           }}
           className={errors.genre ? "input-error" : ""}
         >
-          <option value="">Genre</option>
+          <option value="">* Genre</option>
           <option value="Fantasy">Fantasy</option>
           <option value="Adventure">Adventure</option>
           <option value="Science Fiction">Science Fiction</option>
@@ -339,7 +346,7 @@ export default function CreateStory() {
             }}
             className={errors.length ? "input-error" : ""}
           >
-          <option value="">Reading Length</option>
+          <option value="">* Reading Length</option>
           <option value="Short (2 minutes)">Short (2 minutes)</option>
           <option value="Medium (5 minutes)">Medium (5 minutes)</option>
           <option value="Long (7 minutes)">Long (7 minutes)</option></select>
@@ -456,6 +463,10 @@ export default function CreateStory() {
               )}
             </div>
           </div>
+        )}
+
+        {errorMessage && (
+          <p className="friendly-error-message">{errorMessage}</p>
         )}
 
 

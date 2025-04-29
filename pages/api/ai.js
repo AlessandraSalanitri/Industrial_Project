@@ -59,27 +59,83 @@ export default async function handler(req, res) {
   }
 
   // 2. NORMAL "CREATE STORY" mode ✨
-  if (!character || !age || !genre) {
-    return res.status(400).json({ error: "Required fields are missing." });
-  }
-
-  const lengthToTokens = {
-    "Short (2 minutes)": 700,
-    "Medium (5 minutes)": 1500,
-    "Long (7 minutes)": 2200,
-  };
-
-  const maxTokens = lengthToTokens[length] || 700;
+    if (!age || !genre || !length) {
+      return res.status(400).json({ error: "Required fields are missing." });
+    }
+  
+    const genreFallbacks = {
+      "Fantasy": {
+        settings: ["Fantasy", "Urban Fantasy", "Magical Realism"],
+        morals: ["Courage and Bravery", "Kindness and Empathy", "Friendship and Teamwork", "Creativity and Imagination"],
+        tones: ["Fantasy and Magical", "Heroic and Noble", "Lighthearted and Fun", "Adventurous and Exciting"],
+        characters: ["Brave Young Hero", "Wise Wizard", "Kind Fairy", "Friendly Dragon", "Lost Prince or Princess", "Mischievous Elf", "Magical Animal Friend", "Evil Sorcerer (mildly spooky)"]
+      },
+      "Adventure": {
+        settings: ["Adventure", "Survival", "Modern-Day"],
+        morals: ["Courage and Bravery", "Perseverance and Hard Work", "Friendship and Teamwork", "Responsibility and Accountability"],
+        tones: ["Adventurous and Exciting", "Optimistic and Hopeful", "Lighthearted and Fun"],
+        characters: ["Fearless Explorer Kid", "Loyal Best Friend", "Clever Treasure Hunter", "Mysterious Guide", "Talking Map or Compass", "Animal Sidekick", "Brave Village Kid", "Tricky Rival Adventurer"]
+      },
+      "Science Fiction": {
+        settings: ["Science Fiction", "Urban", "Modern-Day"],
+        morals: ["Responsibility and Accountability", "Creativity and Imagination", "Environmental Awareness", "Courage and Bravery"],
+        tones: ["Adventurous and Exciting", "Serious and Reflective", "Educational and Informative", "Optimistic and Hopeful"],
+        characters: ["Space Kid Captain", "Helpful Robot Buddy", "Friendly Alien", "Inventive Scientist Kid", "Time Traveler", "AI Pet", "Brave Galactic Messenger", "Mischievous Alien Creature"]
+      },
+      "Mystery": {
+        settings: ["Mystery", "Urban", "Modern-Day"],
+        morals: ["Honesty and Integrity", "Patience and Temperance", "Friendship and Teamwork"],
+        tones: ["Mysterious and Suspenseful", "Serious and Reflective", "Lighthearted and Fun"],
+        characters: ["Junior Detective", "Curious Young Sleuth", "Helpful Librarian", "Secretive Witness Kid", "Mysterious Pet", "Shy Neighbor", "Funny Police Officer", "Sly Trickster"]
+      },
+      "Humor": {
+        settings: ["Modern-Day", "Urban", "Animal-Based"],
+        morals: ["Friendship and Teamwork", "Kindness and Empathy", "Self-Respect and Confidence"],
+        tones: ["Funny and Humorous", "Lighthearted and Fun", "Optimistic and Hopeful"],
+        characters: ["Everyday School Kid", "Sports Star Kid", "Helpful Teacher", "Creative Artist Kid", "Tech-Savvy Kid", "Caring Parent or Sibling", "Neighborhood Friend"]
+      },
+      "Historical Fiction": {
+        settings: ["Historical", "Survival"],
+        morals: ["Responsibility and Accountability", "Fairness and Justice", "Honesty and Integrity", "Perseverance and Hard Work"],
+        tones: ["Serious and Reflective", "Educational and Informative", "Heroic and Noble"],
+        characters: ["Young Knight or Squire", "Princess or Prince", "Inventive Blacksmith's Child", "Curious Explorer", "Village Storyteller", "Young Farmer", "Brave Messenger", "Friendly Noble"]
+      },
+      "Animal Stories": {
+        settings: ["Animal-Based", "Survival", "Magical Realism"],
+        morals: ["Kindness and Empathy", "Friendship and Teamwork", "Environmental Awareness", "Gratitude and Contentment"],
+        tones: ["Lighthearted and Fun", "Optimistic and Hopeful", "Funny and Humorous", "Fantasy and Magical"],
+        characters: ["Brave Lion Cub", "Curious Fox Kit", "Playful Puppy", "Wise Old Owl", "Shy Deer", "Bold Bunny Explorer", "Loyal Herd Leader", "Friendly Dolphin"]
+      }
+    };
+  
+    function pickRandom(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+  
+    const fallback = genreFallbacks[genre] || {};
+  
+    // FINAL values to use
+    const finalSetting = setting || (fallback.settings ? pickRandom(fallback.settings) : "a magical world");
+    const finalMoral = moral || (fallback.morals ? pickRandom(fallback.morals) : "kindness and bravery");
+    const finalTone = tone || (fallback.tones ? pickRandom(fallback.tones) : "fun and warm");
+    const finalCharacter = character || (fallback.characters ? pickRandom(fallback.characters) : "a brave child");
+  
+    const lengthToTokens = {
+      "Short (2 minutes)": 700,
+      "Medium (5 minutes)": 1500,
+      "Long (7 minutes)": 2200,
+    };
+    const maxTokens = lengthToTokens[length] || 700;
 
   const prompt = `
   A magical bedtime story for a ${age}-year-old child.
   Genre: ${genre}.
-  Setting: ${setting || "a magical world"}.
-  Moral of the story: ${moral || "kindness and bravery"}.
-  Tone: ${tone || "fun and warm"}.
+  Setting: ${finalSetting || "a magical world"}.
+  Moral of the story: ${finalMoral || "kindness and bravery"}.
+  Tone: ${finalTone || "fun and warm"}.
   Estimated reading time: ${length || "short (2–3 minutes)"}.
-  Main character or theme: ${character}.
-
+  Main character or theme: ${finalCharacter}.
+ 
   The story should:
   - Be friendly, imaginative, and age-appropriate.
   - Begin the story with something to engage and capture the reader's attention and set the proper tone in accordance to the genre.
