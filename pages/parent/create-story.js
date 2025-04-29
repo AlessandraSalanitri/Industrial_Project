@@ -8,6 +8,8 @@ import { addDoc, collection,updateDoc, } from 'firebase/firestore';
 import '../../styles/create_story.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { MoonStars } from 'phosphor-react';
+import StoryPageTour from '../../components/StoryPageTour';
+
 
 
 // ✨ Random image picker based on genre
@@ -219,8 +221,9 @@ const confirmSave = async () => {
 
   return (
     <Layout>
+      <StoryPageTour />  {/* Tutorial when the user enter for the first time on this page */}
       <div className="container">
-        <h1>Create Story</h1>
+        <h1 className="title">Create Your Story</h1>
 
         <select 
           value={age} 
@@ -230,7 +233,7 @@ const confirmSave = async () => {
               setErrors((prev) => ({ ...prev, age: null }));
             }
           }}
-          className={errors.age ? "input-error" : ""}
+          className={`age-input ${errors.age ? 'input-error' : ""}`}
         >
           <option value="">* Age</option>
           <option value="Under 3">Under 3</option>
@@ -248,7 +251,7 @@ const confirmSave = async () => {
               setErrors((prev) => ({ ...prev, genre: null }));
             }
           }}
-          className={errors.genre ? "input-error" : ""}
+          className={`genre-input ${errors.genre ? "input-error" : ""}`}
         >
           <option value="">* Genre</option>
           <option value="Fantasy">Fantasy</option>
@@ -269,7 +272,7 @@ const confirmSave = async () => {
               setErrors((prev) => ({ ...prev, setting: null }));
             }
           }}
-          className={errors.setting ? "input-error" : ""}
+          className={`optional-fields ${errors.setting ? "input-error" : ""}`}
         >
           <option value="">Setting</option>
           <option value="Fantasy">Fantasy</option>
@@ -345,7 +348,7 @@ const confirmSave = async () => {
                 setErrors((prev) => ({ ...prev, length: null }));
               }
             }}
-            className={errors.length ? "input-error" : ""}
+            className={`reading-lenght-input ${errors.length ? "input-error" : ""}`}
           >
           <option value="">* Reading Length</option>
           <option value="Short (2 minutes)">Short (2 minutes)</option>
@@ -371,11 +374,11 @@ const confirmSave = async () => {
         <div className="actions">
         {!story && (
             <>
-              <button onClick={handleGenerateAI} className="button button-primary" disabled={loading}>
+              <button onClick={handleGenerateAI} className="button button-primary generate-button" disabled={loading}>
                 {loading ? 'Generating...' : '🎔 Generate Story'}
               </button>
 
-              <button onClick={() => router.push('/parent/write-story')} className="button button-primary">
+              <button onClick={() => router.push('/parent/write-story')} className="button button-primary write-own-button">
                𓂃🖊 Create Your Own Story
               </button>
 

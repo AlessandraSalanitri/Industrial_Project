@@ -1,15 +1,20 @@
 /* styles/create_story.css */
 
 .container {
-  padding: 40px;
+  padding: 10% 5% 5%;
   max-width: 800px;
   margin: auto;
 }
   
 h1 {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--primary-color);
+  text-stroke: 1.5px var(--primary-color); /* fallback for other browsers */
+  font-weight: bold;
   text-align: center;
-  color: var(--primary-color);
-  margin-bottom: 30px;
+  background-color: var(--white);
+  text-shadow: 0 5 20px rgb(224, 178, 235);
+  margin-bottom: 15px;
 }
   
 select,
