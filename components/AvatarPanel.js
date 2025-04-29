@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -6,6 +5,7 @@ import { useUser } from '../context/UserContext';
 import { useState } from 'react';
 import { EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { firebaseAuth } from '../firebase/firebaseConfig';
+import ErrorModal from './ErrorModal';
 import '../styles/avatar_panel.css';
 
 export default function AvatarPanel({ onClose }) {
@@ -13,61 +13,70 @@ export default function AvatarPanel({ onClose }) {
   const router = useRouter();
   const [showPasswordInput, setShowPasswordInput] = useState(false);
   const [parentPassword, setParentPassword] = useState('');
+  const [triesLeft, setTriesLeft] = useState(5);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [lockout, setLockout] = useState(false);
 
   const isSimulatedChild = user?.isSimulated;
+  const avatarSrc = user?.avatar ? `/assets/avatars/${user.avatar}.png` : null;
 
   const handleLogout = () => {
     logout();
     router.push('/login');
   };
 
+  // If user enter wrong password, show error modal and decrement tries left but don't authenticate yet
+  // if password field is empty show modal but don't authenticate yet
+  // if password is correct, authenticate and exit child mode
+  // if tries left is 0, show lockout message and don't authenticate
   const handleExitToParent = async () => {
-    try {
-      const currentUser = firebaseAuth.currentUser;
-      const credential = EmailAuthProvider.credential(currentUser.email, parentPassword);
-      await reauthenticateWithCredential(currentUser, credential);
-
-      exitChildMode(); //  safely update context
-
-      setTimeout(() => {
-        router.replace('/parent/dashboard'); //  clean replace
-        setTimeout(() => {
-          window.location.reload(); //  clean reload after
-        }, 300);
-      }, 300);
-
-      } catch (error) {
-        console.error("Error exiting to parent:", error);
-        alert('Wrong password. Please try again.');
-      }
-    };
-
-    const avatarSrc = user?.avatar ? `/assets/avatars/${user.avatar}.png` : null;
-
-    if (process.env.NODE_ENV === "development") {
-      console.log("User email in AvatarPanel:", user?.email);
-      console.log("Is Simulated Child:", isSimulatedChild);
+    if (triesLeft <= 0) {
+      setLockout(true);
+      return;
     }
   
-    return (
-      <motion.div
-        className="avatar-panel"
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="avatar-header">
-          <button onClick={onClose}>X</button>
-        </div>
+    try {
+      const currentUser = firebaseAuth.currentUser;
+      if (!currentUser || !parentPassword) throw new Error("Missing user or password");
+  
+      const credential = EmailAuthProvider.credential(currentUser.email, parentPassword);
+      await reauthenticateWithCredential(currentUser, credential);
+  
+      // Successful reauth: Exit simulated mode
+      exitChildMode();
+      setTriesLeft(5); // Reset tries
+      setTimeout(() => {
+        router.replace('/parent/dashboard');
+        setTimeout(() => window.location.reload(), 300);
+      }, 300);
+  
+    } catch (error) {
+      console.error("Error exiting to parent:", error.message || error);
+      setTriesLeft((prev) => prev - 1);
+      setErrorModalVisible(true); // Show feedback
+    }
+  };
+  
 
-        <div className="avatar-content">
-          <button
-            className="button button-secondary"
-            onClick={() => router.push("/child/create_avatar")}
-          >
-            Create Avatar
-          </button>
+  return (
+    <motion.div
+      className="avatar-panel"
+      initial={{ x: '100%' }}
+      animate={{ x: 0 }}
+      exit={{ x: '100%' }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="avatar-header">
+        <button onClick={onClose}>X</button>
+      </div>
+
+      <div className="avatar-content">
+        <button
+          className="button button-secondary"
+          onClick={() => router.push("/child/create_avatar")}
+        >
+          Create Avatar
+        </button>
 
         <Image
           src={avatarSrc}
@@ -84,7 +93,6 @@ export default function AvatarPanel({ onClose }) {
             <span className="icon">↵</span> Logout
           </button>
 
-          {/* Only show exit for simulated child access */}
           {isSimulatedChild && (
             <>
               <button
@@ -121,6 +129,21 @@ export default function AvatarPanel({ onClose }) {
           )}
         </div>
       </div>
+
+      {/* Error Modal */}
+      {errorModalVisible && (
+        <ErrorModal
+          triesLeft={triesLeft}
+          onClose={() => setErrorModalVisible(false)}
+        />
+      )}
+
+      {/* Lockout Message */}
+      {lockout && (
+        <div className="lockout-message">
+          <p>You are temporarily locked out due to too many failed attempts.</p>
+        </div>
+      )}
     </motion.div>
   );
 }

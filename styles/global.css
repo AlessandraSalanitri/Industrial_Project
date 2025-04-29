@@ -241,6 +241,12 @@ textarea {
   transform: translateY(-2px); /* lift effect */
 }
 
+.small-button {
+  font-size: 12px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  line-height: 1.2;
+}
   
 /* Disabled Button */
 .button-disabled {
@@ -256,8 +262,7 @@ textarea {
   margin-top: 130px; 
   max-width: 1200px;
   margin: 0 auto;
-  }
-
+}
 
 
 /* === GLOBAL LIGHT/DARK TOGGLE STYLES === */

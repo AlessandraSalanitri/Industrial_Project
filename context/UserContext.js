@@ -6,6 +6,9 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [exitTries, setExitTries] = useState(0);
+  const maxTries = 5; // Maximum tries to exit child mode
+
 
   // Load user from localStorage on first render
   useEffect(() => {
@@ -55,7 +58,7 @@ export const UserProvider = ({ children }) => {
     setUser(null);
   };
 
-  // Exit child mode safely
+  // Exit child mode safely - handle error if psswd is wrong, and limit tries
   const exitChildMode = () => {
     try {
       localStorage.removeItem('mode');
