@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { firestoreDB } from '../../firebase/firebaseConfig'; 
-import { doc, setDoc } from 'firebase/firestore';
-import { v4 as uuidv4 } from 'uuid';
+import { addDoc, collection,updateDoc, } from 'firebase/firestore';
 import '../../styles/create_story.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { MoonStars } from 'phosphor-react';
@@ -186,12 +185,10 @@ const confirmSave = async () => {
   if (!user) return alert("You need to be logged in to save stories.");
   if (!storyName.trim()) return alert("Please enter a title for your story.");
 
-  const storyId = uuidv4();
-  const randomImageUrl = pickRandomImageForGenre(genre); // ✨ Pick random image for this genre
+  const randomImageUrl = pickRandomImageForGenre(genre);
 
   try {
-    await setDoc(doc(firestoreDB, "stories", storyId), {
-      id: storyId, // saved inside the document
+    const storyDocRef = await addDoc(collection(firestoreDB, "stories"), {
       title: storyName,
       content: story,
       age, genre, setting, moral, tone, length, character,
@@ -202,14 +199,16 @@ const confirmSave = async () => {
       imageUrl: randomImageUrl,
       read: false,
       favorite: false,
+      // No 'id' field yet
     });
 
-    // Show success message inside modal
-    setSaveSuccess(true);
+    // Optionally update the story to include its own Firestore ID
+    await updateDoc(storyDocRef, { id: storyDocRef.id });
 
+    alert("Story saved successfully!");
   } catch (error) {
     console.error("Error saving story:", error);
-    alert(`Failed to save the story. Error: ${error.message}`);
+    alert("Failed to save story.");
   }
 };
 
