@@ -13,6 +13,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { firestoreDB } from '../../firebase/firebaseConfig';
 import '../../styles/mystories.css';
 import StoryEditorModal from '../../components/StoryEditorModal';
+import { FaHeart, FaRegHeart } from 'react-icons/fa'; // Import heart icons from React Icons
 
 export default function MyStories() {
   const [stories, setStories] = useState([]);
@@ -38,7 +39,7 @@ export default function MyStories() {
         const snap = await getDocs(collection(firestoreDB, 'stories'));
         const userStories = snap.docs
           .map(d => ({ id: d.id, ...d.data() }))
-          .filter(s => s.userId === user.uid);
+          .filter(s => s.userId === user.uid); // Filtering based on userId
         setStories(userStories);
       } catch (e) {
         console.error('Error fetching stories:', e);
@@ -52,15 +53,16 @@ export default function MyStories() {
     const startsWith = !filters.letter || story.title?.[0]?.toUpperCase() === filters.letter;
     const matchesGenre = !filters.genre || story.genre === filters.genre;
     const matchesAge = !filters.age || story.age === filters.age;
-    const matchesFav = !viewFavourites || story.favourite;
+    const matchesFav = !viewFavourites || story.favourite; // Only show favourites if viewFavourites is true
     return startsWith && matchesGenre && matchesAge && matchesFav;
   });
 
   // Delete handler
   const handleDeleteStory = async id => {
     try {
-      await deleteDoc(doc(firestoreDB, 'stories', id));
-      setStories(prev => prev.filter(s => s.id !== id));
+      const storyRef = doc(firestoreDB, 'stories', id);
+      await deleteDoc(storyRef);
+      setStories(prev => prev.filter(s => s.id !== id)); // Update UI immediately
       alert('Story deleted successfully!');
     } catch (e) {
       console.error('Error deleting story:', e);
@@ -73,14 +75,21 @@ export default function MyStories() {
     try {
       const storyRef = doc(firestoreDB, 'stories', storyId);
       const snap = await getDoc(storyRef);
+
       if (!snap.exists()) {
         setErrorMessage('Story not found; please refresh.');
         return;
       }
+
+      // Update the favourite status in Firestore
       await updateDoc(storyRef, { favourite: !currentStatus });
-      setStories(prev =>
-        prev.map(s => (s.id === storyId ? { ...s, favourite: !currentStatus } : s))
-      );
+
+      // Update the UI state to reflect the change immediately
+      setStories(prev => prev.map(s => 
+        s.id === storyId ? { ...s, favourite: !currentStatus } : s
+      ));
+
+      alert(`Story ${!currentStatus ? 'added to' : 'removed from'} favourites`);
     } catch (e) {
       console.error('Error toggling favourite:', e);
       setErrorMessage('Could not update favourite. Please try again.');
@@ -97,7 +106,8 @@ export default function MyStories() {
         age: updated.age,
         content: updated.content
       });
-      // re-fetch
+
+      // Re-fetch the stories after the update
       const snap = await getDocs(collection(firestoreDB, 'stories'));
       const userStories = snap.docs
         .map(d => ({ id: d.id, ...d.data() }))
@@ -132,7 +142,6 @@ export default function MyStories() {
         {/* Alphabet Filter */}
         <div className="alphabet-filter">
           {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(letter => {
-            // If any story starts with this letter, style primary
             const hasAny = stories.some(s => s.title?.[0]?.toUpperCase() === letter);
             return (
               <button
@@ -201,11 +210,15 @@ export default function MyStories() {
                   <button className="delete-btn" onClick={() => handleDeleteStory(story.id)}>Delete</button>
                   <button
                     type="button"
-                    className="favourite-btn"
+                    className={`favourite-btn ${story.favourite ? 'favourite-active' : ''}`}
                     onClick={() => handleToggleFavourite(story.id, story.favourite)}
                     aria-label={story.favourite ? 'Remove from favourites' : 'Add to favourites'}
                   >
-                    {story.favourite ? <span role="img" aria-hidden="true">❤️</span> : <span role="img" aria-hidden="true">🤍</span>}
+                    {story.favourite ? (
+                      <FaHeart size={24} color="red" /> // Red heart when favourite
+                    ) : (
+                      <FaRegHeart size={24} color="gray" /> // Empty heart when not favourite
+                    )}
                   </button>
                 </td>
               </tr>

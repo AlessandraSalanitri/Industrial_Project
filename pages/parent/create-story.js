@@ -177,41 +177,41 @@ export default function CreateStory() {
 
 
 // CREATE STORY
-  const handleSaveStory = () => {
-    if (!story.trim()) return alert("Please generate a story first!");
-    setShowModal(true);
-  };
+const handleSaveStory = () => {
+  if (!story.trim()) return alert("Please generate a story first!");
+  setShowModal(true);
+};
 
-  const confirmSave = async () => {
-    if (!user) return alert("You need to be logged in to save stories.");
-    if (!storyName.trim()) return alert("Please enter a title for your story.");
-  
-    const storyId = uuidv4();
-    const randomImageUrl = pickRandomImageForGenre(genre); // ✨ Pick random image for this genre
+const confirmSave = async () => {
+  if (!user) return alert("You need to be logged in to save stories.");
+  if (!storyName.trim()) return alert("Please enter a title for your story.");
 
-    try {
-      await addDoc(collection(firestoreDB, "stories"), {
-        id: storyId,
-        title: storyName,
-        content: story,
-        age, genre, setting, moral, tone, length, character,
-        createdAt: new Date(),
-        userId: user.uid,
-        audioUrl,
-        source: "ai",
-        imageUrl: randomImageUrl,
-        read: false, 
-      });
-  
-      // Show success message inside modal
-      setSaveSuccess(true);
-  
-    } catch (error) {
-      console.error("Error saving story:", error);
-      alert(`Failed to save the story. Error: ${error.message}`);
-    }
-  };
-  
+  const storyId = uuidv4();
+  const randomImageUrl = pickRandomImageForGenre(genre); // ✨ Pick random image for this genre
+
+  try {
+    await addDoc(collection(firestoreDB, "stories"), {
+      id: storyId,
+      title: storyName,
+      content: story,
+      age, genre, setting, moral, tone, length, character,
+      createdAt: new Date(),
+      userId: user.uid,
+      audioUrl,
+      source: "ai",
+      imageUrl: randomImageUrl,
+      read: false,
+      favorite: false, 
+    });
+
+    // Show success message inside modal
+    setSaveSuccess(true);
+
+  } catch (error) {
+    console.error("Error saving story:", error);
+    alert(`Failed to save the story. Error: ${error.message}`);
+  }
+};
 
   const handleBack = () => router.push('/parent/my-stories');
 
