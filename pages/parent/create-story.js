@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { firestoreDB } from '../../firebase/firebaseConfig'; 
-import { addDoc, collection,updateDoc, } from 'firebase/firestore';
+import { addDoc, collection, updateDoc, doc, getDoc } from 'firebase/firestore';
 import '../../styles/create_story.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { MoonStars } from 'phosphor-react';
@@ -135,35 +135,87 @@ export default function CreateStory() {
     setLoading(false);
   };
   
+  // Fetch user-selected voice from Firestore
+  const fetchUserSelectedVoice = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
   
-  // CONVERT TO AUDIO- 
-  const handleConvertToAudio = () => {
+    if (!user) {
+      console.error('No user is currently signed in.');
+      return null;
+    }
+  
+    try {
+      const userDocRef = doc(firestoreDB, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+  
+      if (userDocSnap.exists()) {
+        return userDocSnap.data().selectedVoice; // { name: 'Voice Name', lang: 'en-GB' }
+      } else {
+        console.error('User document does not exist.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching user voice preference:', error);
+      return null;
+    }
+  };
+
+  const speakStory = async (storyText) => {
+    const selectedVoice = await fetchUserSelectedVoice();
+  
+    if (!selectedVoice) {
+      console.error('No voice selected. Using default voice.');
+      return;
+    }
+  
+    const synth = window.speechSynthesis;
+  
+    // Ensure voices are loaded
+    const loadVoices = () =>
+      new Promise((resolve) => {
+        let voices = synth.getVoices();
+        if (voices.length) {
+          resolve(voices);
+        } else {
+          synth.onvoiceschanged = () => {
+            voices = synth.getVoices();
+            resolve(voices);
+          };
+        }
+      });
+  
+    const voices = await loadVoices();
+    const voice = voices.find((v) => v.name === selectedVoice.name && v.lang === selectedVoice.lang);
+  
+    if (!voice) {
+      console.error('Selected voice not found. Using default voice.');
+    }
+  
+    const utterance = new SpeechSynthesisUtterance(storyText);
+    utterance.voice = voice || null; // Use default if not found
+    utterance.lang = selectedVoice.lang || 'en-GB';
+    utterance.rate = 1;
+    utterance.pitch = 1;
+  
+    synth.speak(utterance);
+  };
+
+  const handleConvertToAudio = async () => {
     if (!story.trim()) return alert("Please generate a story first!");
   
     const cleanedStory = story
-    .replace(/\*\*/g, '')   // remove all ** characters
-    .trim();
-  
+      .replace(/\*\*/g, '')
+      .trim();
   
     if (!isReading) {
-      // Start reading
-      const utterance = new SpeechSynthesisUtterance(cleanedStory);
-      utterance.lang = "en-GB";
-      utterance.rate = 1;
-      utterance.pitch = 1;
-  
-      utterance.onend = () => setIsReading(false);
-  
-      window.speechSynthesis.speak(utterance);
+      await speakStory(cleanedStory);
       setIsReading(true);
     } else {
-      // Stop reading
       window.speechSynthesis.cancel();
       setIsReading(false);
     }
   };
-  
-
   
   const handleResumeAudio = () => {
     if (window.speechSynthesis.paused) {
@@ -209,8 +261,8 @@ const confirmSave = async () => {
     // Optionally update the story to include its own Firestore ID
     await updateDoc(storyDocRef, { id: storyDocRef.id });
 
-    alert("Story saved successfully!");
-    handleBack() ;
+    setSaveSuccess(true); // <-- show the pretty success modal
+    
   } catch (error) {
     console.error("Error saving story:", error);
     alert("Failed to save story.");
@@ -429,7 +481,7 @@ const confirmSave = async () => {
             <div className="modal-content">
               {!saveSuccess ? (
                 <>
-                  <h2>Name Your Story</h2>
+                  <h2 className="success-heading">💜 Name Your Story</h2>
                   <input
                     type="text"
                     placeholder="Whiskers in Wonderwood..."
@@ -463,6 +515,8 @@ const confirmSave = async () => {
                       OK
                     </button>
                   </div>
+
+
                 </>
               )}
             </div>

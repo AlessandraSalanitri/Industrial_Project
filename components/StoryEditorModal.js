@@ -6,6 +6,7 @@ import '../styles/StoryEditorModal.css';
 
 export default function StoryEditorModal({ isOpen, mode = "view", story, onClose, onSave, onRead, onPause, onResume, onStop }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [editStory, setEditStory] = useState(null);
 
   useEffect(() => {
@@ -34,25 +35,32 @@ export default function StoryEditorModal({ isOpen, mode = "view", story, onClose
   const handlePlay = () => {
     onRead(story.content);
     setIsPlaying(true);
+    setIsPaused(false);
   };
   
   const handlePause = () => {
     onPause();
-    setIsPlaying(false);
+    setIsPaused(true);
+  };
+  
+  const handleResume = () => {
+    onResume();
+    setIsPaused(false);
   };
   
   const handleStop = () => {
     onStop();
     setIsPlaying(false);
+    setIsPaused(false);
   };
-  
-  const handleRegenerate = () => {
-    onStop();
-    setTimeout(() => {
-      onRead(story.content);
-      setIsPlaying(true);
-    }, 300); // small delay after stop, then play again
+
+  const handleClose = () => {
+    window.speechSynthesis.cancel(); 
+    setIsPlaying(false);              
+    setIsPaused(false);               
+    onClose();                       
   };
+
   
 
   return (
@@ -67,7 +75,7 @@ export default function StoryEditorModal({ isOpen, mode = "view", story, onClose
           {/* Left Side */}
           <div className="left-buttons">
             <button 
-              onClick={onClose} 
+              onClick={handleClose} 
               className="button button-back same-size-button"
             >
               ← Back
@@ -76,36 +84,40 @@ export default function StoryEditorModal({ isOpen, mode = "view", story, onClose
 
           {/* Right Side */}
           <div className="right-buttons">
-            {!isPlaying ? (
-              <button 
-                onClick={handlePlay} 
-                className="button button-primary same-size-button"
-              >
-                ▶ Play
-              </button>
-            ) : (
-              <button 
-                onClick={handlePause} 
-                className="button button-secondary same-size-button"
-              >
-                ⏸ Pause
-              </button>
-            )}
-
+          {!isPlaying && !isPaused && (
             <button 
-              onClick={handleStop} 
+              onClick={handlePlay} 
               className="button button-primary same-size-button"
             >
-              ⏹ Stop
+              ▶ Play
             </button>
+          )}
 
+          {isPlaying && !isPaused && (
             <button 
-              onClick={handleRegenerate} 
+              onClick={handlePause} 
+              className="button button-secondary same-size-button"
+            >
+              ⏸ Pause
+            </button>
+          )}
+
+          {isPaused && (
+            <button 
+              onClick={handleResume} 
               className="button button-primary same-size-button"
             >
-              ↻ Regenerate
+              ↻ Resume
             </button>
-          </div>
+          )}
+
+          <button 
+            onClick={handleStop} 
+            className="button button-primary same-size-button"
+          >
+            ⏹ Stop
+          </button>
+        </div>
         </div>
 
 
