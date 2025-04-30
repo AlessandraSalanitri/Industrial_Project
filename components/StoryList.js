@@ -14,17 +14,14 @@ export default function StoryList() {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [filteredStories, setFilteredStories] = useState([]);
   const [modalStory, setModalStory] = useState(null);
-  const [favorites, setFavorites] = useState([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
 
-
   const carouselRef = useRef(null);
-
 
   useEffect(() => {
     if (user?.email) fetchUserStories(user.email);
-  }, [user]);
+  }, [user, showFavoritesOnly]); // refetch when toggling showFavoritesOnly
 
   const fetchUserStories = async (childEmail) => {
     try {
@@ -36,31 +33,24 @@ export default function StoryList() {
       const parentIds = snapshot.docs.map(doc => doc.data().parentId);
       if (parentIds.length === 0) return;
 
-      const storiesQuery = query(
+      let storiesQuery = query(
         collection(firestoreDB, 'stories'),
         where('userId', 'in', parentIds)
       );
+
+      if (showFavoritesOnly) {
+        storiesQuery = query(
+          collection(firestoreDB, 'stories'),
+          where('userId', 'in', parentIds),
+          where('favourite', '==', true)
+        );
+      }
+
       const storiesSnap = await getDocs(storiesQuery);
       const storiesData = storiesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setStories(storiesData);
     } catch (error) {
       console.error("Error fetching stories:", error);
-    }
-  };
-
-
-  const toggleFavorite = (storyId) => {
-    setFavorites((prevFavorites) =>
-      prevFavorites.includes(storyId)
-        ? prevFavorites.filter(id => id !== storyId)
-        : [...prevFavorites, storyId]
-    );
-  };
-
-  const toggleFavoritesOnly = () => {
-    setShowFavoritesOnly(prev => !prev);
-    if (carouselRef.current) {
-      carouselRef.current.scrollLeft = 0; // Reset scroll
     }
   };
 
@@ -70,10 +60,8 @@ export default function StoryList() {
     if (searchText.trim()) filtered = filtered.filter((s) =>
       s.title.toLowerCase().includes(searchText.toLowerCase())
     );
-    if (showFavoritesOnly) filtered = filtered.filter((s) => favorites.includes(s.id));
-
     setFilteredStories(filtered);
-  }, [searchText, selectedGenre, stories, showFavoritesOnly, favorites]);
+  }, [searchText, selectedGenre, stories]);
 
   const scrollCarousel = (direction) => {
     if (!carouselRef.current) return;
@@ -97,11 +85,9 @@ export default function StoryList() {
       setScrollPosition(carouselRef.current.scrollLeft);
     }
   };
-  
 
   return (
     <div className="story-list-container">
-
       <div className="dashboard-controls">
         <input
           type="text"
@@ -127,24 +113,20 @@ export default function StoryList() {
 
         <button onClick={() => { setSearchText(""); setSelectedGenre(""); }}>Reset Filters</button>
 
-        <button className="favorites-toggle" onClick={toggleFavoritesOnly}>
+        <button className="favorites-toggle" onClick={() => setShowFavoritesOnly(prev => !prev)}>
           ❤️ {showFavoritesOnly ? "Show All" : "Your Favourite Stories"}
         </button>
       </div>
 
       <div className="carousel-wrapper">
-
-
-         <div
+        <div
           className="story-carousel"
           id="storyCarousel"
           ref={carouselRef}
           onScroll={handleScroll}
         >
-
           {filteredStories.map((story) => (
             <div className="story-card" key={story.id}>
-
               <div className="dashboard-story-title">
                 <MoonStars size={24} weight="fill" style={{ marginRight: '6px', color: '#4B0082' }} />
                 <strong>{story.title}</strong>
@@ -161,8 +143,9 @@ export default function StoryList() {
                 <button className="play-button" onClick={() => setModalStory(story)}>▶</button>
               </div>
 
-              <div className="favorite-icon" onClick={() => toggleFavorite(story.id)}>
-                {favorites.includes(story.id) ? "❤️" : "🤍"}
+              {/* Updated favourite icon logic */}
+              <div className="favorite-icon">
+                {story.favourite ? "❤️" : "🤍"}
               </div>
 
               <button className="play-action" onClick={() => setModalStory(story)}>Play Story</button>
@@ -171,23 +154,20 @@ export default function StoryList() {
         </div>
 
         {modalStory && (
-            <StoryModal
-              isOpen={true}
-              story={modalStory}
-              onClose={() => setModalStory(null)}
-            />
-          )}
-        </div>
-
-
-        {showLeftArrow() && (
-          <button className="arrow left" onClick={() => scrollCarousel('left')}>←</button>
-        )}
-
-        {showRightArrow() && (
-          <button className="arrow right" onClick={() => scrollCarousel('right')}>→</button>
+          <StoryModal
+            isOpen={true}
+            story={modalStory}
+            onClose={() => setModalStory(null)}
+          />
         )}
       </div>
 
+      {showLeftArrow() && (
+        <button className="arrow left" onClick={() => scrollCarousel('left')}>←</button>
+      )}
+      {showRightArrow() && (
+        <button className="arrow right" onClick={() => scrollCarousel('right')}>→</button>
+      )}
+    </div>
   );
 }
