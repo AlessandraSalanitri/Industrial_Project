@@ -57,7 +57,7 @@ export default function WriteStory() {
 
 // ✨ Random image picker based on genre
 const pickRandomImageForGenre = (genre) => {
-  const genrePath = `/assets/story-images/${genre}/`;
+  const genrePath = `/assets/story-images/${genre}/`;  // keep original folder name
 
   const genreImageCount = {
     "Adventure": 34,
@@ -71,8 +71,8 @@ const pickRandomImageForGenre = (genre) => {
 
   const maxImages = genreImageCount[genre] || 5;
   const randomNumber = Math.floor(Math.random() * maxImages) + 1;
-  
-  const fileName = `${genre.toLowerCase().replace(/\s/g, "_")}${randomNumber}.jpg`;
+
+  const fileName = `${genre.replace(/\s/g, "_").toLowerCase()}${randomNumber}.jpg`;
 
   return `${genrePath}${fileName}`;
 };

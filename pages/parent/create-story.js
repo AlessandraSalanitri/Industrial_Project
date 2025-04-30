@@ -18,9 +18,8 @@ const pickRandomImageForGenre = (genre) => {
     return '/assets/story/sample_story.png';  // fallback if genre missing
   }
 
-  const genreFolder = genre.toLowerCase().replace(/\s/g, "_");
-  const genrePath = `/assets/story-images/${genreFolder}/`;
-
+  const genrePath = `/assets/story-images/${genre}/`; // Use raw genre (with spaces & case)
+  
   const genreImageCount = {
     "Adventure": 34,
     "Animal Stories": 39,
@@ -34,7 +33,7 @@ const pickRandomImageForGenre = (genre) => {
   const maxImages = genreImageCount[genre] || 5;
   const randomNumber = Math.floor(Math.random() * maxImages) + 1;
 
-  const fileName = `${genreFolder}${randomNumber}.jpg`;
+  const fileName = `${genre.replace(/\s/g, "_").toLowerCase()}${randomNumber}.jpg`; // keep this logic for filename
 
   return `${genrePath}${fileName}`;
 };
