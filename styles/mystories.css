@@ -1,10 +1,22 @@
 /* Container */
-.container h1 {
-  color: var(--primary-color);
+.container{
+  margin-bottom: 20px;
+  padding: 10%;
+}
+
+.title {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--primary-color);
+  text-stroke: 1.5px var(--primary-color); /* fallback for other browsers */
+  font-weight: bold;
+  text-align: center;
+  font-size: 48px;
+  background-color: var(--white);
+  text-shadow: 0 5 20px rgb(224, 178, 235);
   margin-bottom: 20px;
 }
 
-/* Table */
+
 table {
   width: 100%;
   border-collapse: separate;
@@ -14,6 +26,7 @@ table {
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 thead {
@@ -91,8 +104,17 @@ td button:hover {
   margin: 20px 0;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   gap: 10px;
   align-items: center;
+}
+
+/* Ensuring dropdown width consistency */
+.additional-filters select {
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
 .alphabet-filter button {
@@ -135,22 +157,11 @@ td button:hover {
   margin-bottom: 1rem;
 }
 
-table {
-  margin-bottom: 20px; /* Adjust this value to your preferred spacing */
-}
 
 .back-button {
   margin-top: 20px; /* Adjust this value for spacing after the button */
 }
 
-.toggle-btn {
-  padding: 8px 16px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
 
 .toggle-btn.active {
   background-color: #4B0082;
@@ -163,12 +174,6 @@ table {
   margin-top: 10px;
 }
 
-.additional-filters {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-}
 
 .view-favourites-toggle {
   display: flex;
@@ -185,6 +190,7 @@ table {
   font-size: 14px;
   display: inline-block;
 }
+
 
 .toggle-btn.primary {
   background-color: #4B0082;
@@ -209,36 +215,7 @@ table {
 }
 
 /* Additional spacing for the filters */
-.additional-filters {
-  display: flex;
-  gap: 20px; /* Ensures space between the filters */
-  align-items: center;
-}
 
-/* Additional spacing for the filters */
-.additional-filters {
-  display: flex;
-  gap: 20px; /* Ensures space between the filters */
-  align-items: center;
-}
-
-/* Space after Genre label */
-.additional-filters label:first-of-type {
-  margin-right: 10px; /* Adds space after the Genre label */
-}
-
-/* Space between Age label and dropdown */
-.additional-filters label:last-of-type {
-  margin-left: 10px; /* Adds a small gap between Age label and the dropdown */
-}
-
-/* Ensuring dropdown width consistency */
-.additional-filters select {
-  padding: 5px;
-  font-size: 14px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
 
 button.active {
   background-color: #007bff;
@@ -250,43 +227,7 @@ button.active {
   font-size: 14px;
   margin-top: 10px;
 }
-/* Container */
-.container h1 {
-  color: var(--primary-color);
-  margin-bottom: 20px;
-}
 
-/* Table */
-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin-top: 30px;
-  background: var(--white);
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-thead {
-  background: var(--primary-color);
-  color: white;
-}
-
-th,
-td {
-  padding: 14px 16px;
-  text-align: left;
-  font-size: 15px;
-}
-
-tbody tr:nth-child(even) {
-  background: var(--gray);
-}
-
-tbody tr:hover {
-  background-color: #f0eaff;
-}
 
 /* Action Buttons */
 .action-buttons {

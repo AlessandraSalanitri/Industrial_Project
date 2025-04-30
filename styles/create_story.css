@@ -150,6 +150,19 @@ textarea {
     white-space: pre-wrap;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   }
+
+.generated-story label{
+  padding-top: 30px;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--primary-color);
+  text-stroke: 1.5px var(--primary-color); 
+  font-weight: bold;
+  text-align: center;
+  font-size: 30px;
+  background-color: var(--white);
+  text-shadow: 0 5 20px rgb(224, 178, 235);
+  margin-bottom: 20px;
+}
   
   
 
