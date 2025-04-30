@@ -8,7 +8,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid'; 
 import '../../styles/create_story.css';  // reusing style
-
+import '../../styles/alertmodal.css';
 
 
 export default function WriteStory() {
@@ -21,6 +21,8 @@ export default function WriteStory() {
   const [errors, setErrors] = useState({ title: null, genre: null });
   const [isReading, setIsReading] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showAudioErrorModal, setShowAudioErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const router = useRouter();
 
@@ -55,15 +57,25 @@ const pickRandomImageForGenre = (genre) => {
 
 
 //   GENERATE NEXT IDEEA FOR THE STORY
-    const handleGenerateNext = async () => {
-        const newErrors = {};
-        if (!title.trim()) newErrors.title = 'Title is required';
-        if (!genre.trim()) newErrors.genre = 'Genre is required';
-        if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
-        return;
-        }
-  
+  const handleGenerateNext = async () => {
+    const newErrors = {};
+
+    if (!title.trim()) {
+      newErrors.title = 'Title is required';
+      setErrorMessage("✨ A magical story needs a title to begin!");
+    } else if (!genre.trim()) {
+      newErrors.genre = 'Genre is required';
+      setErrorMessage("📚 Pick a genre so we know what kind of adventure to tell!");
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
+    setErrorMessage('');
+
     setLoading(true);
     try {
       const response = await fetch("/api/ai", {
@@ -136,30 +148,28 @@ const pickRandomImageForGenre = (genre) => {
   
 // CONVERT TO AUDIO
     const handleConvert = () => {
-        if (!storyText.trim()) {
-        alert("Please write or generate some story text first!");
+      if (!storyText.trim()) {
+        setShowAudioErrorModal(true); // ✅ show modal
         return;
-        }
-    
-        if (!isReading) {
-        const cleanedStory = storyText
-            .replace(/\*\*/g, '') // remove ** if somehow present
-            .trim();
-    
+      }
+
+      const cleanedStory = storyText.replace(/\*\*/g, '').trim();
+
+      if (!isReading) {
         const utterance = new SpeechSynthesisUtterance(cleanedStory);
         utterance.lang = "en-GB";
         utterance.rate = 1;
         utterance.pitch = 1;
-    
         utterance.onend = () => setIsReading(false);
-    
+
         window.speechSynthesis.speak(utterance);
         setIsReading(true);
-        } else {
+      } else {
         window.speechSynthesis.cancel();
         setIsReading(false);
-        }
+      }
     };
+
   
 
     //COMPLETING FIELD 
@@ -168,6 +178,10 @@ const pickRandomImageForGenre = (genre) => {
       <div className="container">
         <h1>Write Your Own Story</h1>
 
+        {errorMessage && (
+              <p className="friendly-error-message">{errorMessage}</p>
+            )}
+            
         <input
           type="text"
           placeholder="Enter your story title..."
@@ -235,6 +249,9 @@ const pickRandomImageForGenre = (genre) => {
             </button>
             </div>
 
+
+
+
             {/* SAVE STORY MESSAGE */}
             {showSuccessModal && (
             <div className="modal-backdrop">
@@ -276,6 +293,23 @@ const pickRandomImageForGenre = (genre) => {
             </div>
             )}
 
+            {/* ERROR MESSAGE AUDIO IF NO TEXT */}
+            {showAudioErrorModal && (
+              <div className="modal-backdrop">
+                <div className="modal-content">
+                  <h2 className="error-heading">🚨 Incomplete Story</h2>
+                  <p>Please write or generate some story text before using <strong>Read Aloud</strong>.</p>
+                  <div className="modal-actions">
+                    <button
+                      className="button button-primary"
+                      onClick={() => setShowAudioErrorModal(false)}
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
       </div>
     </Layout>
