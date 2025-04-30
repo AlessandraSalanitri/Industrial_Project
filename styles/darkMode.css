@@ -309,9 +309,23 @@ nav.main-nav {
 
 
 /* ======== SETTINGS DARK MODE ======== */
+.dark-mode .settings-container {
+    padding-top: 10%;
+}
+
+.dark-mode .settings-title {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--alt);
+    text-stroke: 1.5px var(--alt); /* fallback for other browsers */
+    font-weight: bold;
+    font-size: 48px;
+    text-align: center;
+    background-color: var(--background-color);
+    text-shadow: 0 5 20px rgb(240, 240, 137);
+}
 
 .dark-mode .link-child-container input {
-    background-color: #333;
+    background-color: #454343;
     color: var(--white);
     border-color: var(--primary-color);
 }
@@ -322,7 +336,7 @@ nav.main-nav {
 }
 
 .dark-mode .info-box {
-    background-color: #1f1f1f;
+    background-color: #454343;
     border-left-color: var(--alt);
     color: var(--white);
 }

@@ -121,14 +121,67 @@ export default function MyStories() {
     }
   };
 
-  // Text-to-speech handlers
-  const handleReadStory = content => {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(content);
-    u.lang = 'en-GB';
-    u.rate = 1;
-    window.speechSynthesis.speak(u);
+
+  // TEXT TO SPEECH FUNCTIONALITY
+  const fetchUserSelectedVoice = async () => {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+  
+    if (!currentUser) {
+      console.error('No user is currently signed in.');
+      return null;
+    }
+  
+    try {
+      const userDocRef = doc(firestoreDB, 'users', currentUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
+  
+      if (userDocSnap.exists()) {
+        return userDocSnap.data().selectedVoice; 
+      } else {
+        console.error('User document does not exist.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching user voice preference:', error);
+      return null;
+    }
   };
+
+  const loadVoices = () =>
+    new Promise((resolve) => {
+      const synt = window.speechSynthesis;
+      let voices = synt.getVoices();
+      if (voices.length) {
+        resolve(voices);
+      } else {
+        synt.onvoiceschanged = () => {
+          voices = synt.getVoices();
+          resolve(voices);
+        };
+      }
+    });
+
+  // READ THE STORY WITH SPEECH SYNTHESIS
+  const handleReadStory = async (content) => {
+    window.speechSynthesis.cancel(); // stop speech
+  
+    const selectedVoice = await fetchUserSelectedVoice();
+    const voices = await loadVoices();
+  
+    const voice = voices.find(
+      (v) => v.name === selectedVoice?.name && v.lang === selectedVoice?.lang
+    );
+  
+    const utterance = new SpeechSynthesisUtterance(content);
+    utterance.voice = voice || null; // use default voice if not preferred found is found on db user
+    utterance.lang = selectedVoice?.lang || 'en-GB';
+    utterance.rate = 1;
+    utterance.pitch = 1;
+  
+    window.speechSynthesis.speak(utterance);
+  };
+
   const handlePauseStory = () => window.speechSynthesis.pause();
   const handleResumeStory = () => window.speechSynthesis.resume();
   const handleStopStory = () => window.speechSynthesis.cancel();
@@ -136,7 +189,7 @@ export default function MyStories() {
   return (
     <Layout>
       <div className="container">
-        <h1>My Stories</h1>
+        <h1 className='title'>My Stories</h1>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
 
         {/* Alphabet Filter */}
@@ -235,7 +288,10 @@ export default function MyStories() {
           isOpen={!!selectedStory}
           mode={modalMode}
           story={selectedStory}
-          onClose={() => { setSelectedStory(null); handleStopStory(); }}
+          onClose={() => {
+            setSelectedStory(null);
+            handleStopStory();
+          }}
           onSave={handleUpdateStory}
           onRead={handleReadStory}
           onPause={handlePauseStory}

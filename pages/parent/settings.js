@@ -1,47 +1,36 @@
 import { useState, useEffect } from 'react';
+import VoiceSelector from '../../components/VoiceSelector';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
-import { firebaseAuth, firestoreDB } from '../../firebase/firebaseConfig'; // Import firestoreDB
-import { doc, updateDoc, collection, addDoc, getDoc } from 'firebase/firestore'; // Import Firestore functions
-import Image from 'next/image';
+import { firebaseAuth, firestoreDB } from '../../firebase/firebaseConfig';
+import { doc, updateDoc, collection, addDoc, getDoc } from 'firebase/firestore';
 import '../../styles/settings.css';
-
-const voicesList = [
-  { name: "Rachel", id: "21m00Tcm4TlvDq8ikWAM", avatar: 'rachel.png' },
-  { name: "Domi", id: "AZnzlk1XvdvUeBnXmlld", avatar: 'domi.png' },
-  { name: "Sarah", id: "EXAVITQu4vr4xnSDxMaL", avatar: 'sarah.png' },
-  { name: "Elli", id: "MF3mGyEYCl7XYWbV9V6O", avatar: 'elli.png' },
-  { name: "Alice", id: "Xb7hH8MSUJpSbSDYk0k2", avatar: 'alice.png' },
-  { name: "Patrick", id: "ODq5zmih8GrVes37Dizd", avatar: 'patrick.png' },
-  { name: "Harry", id: "SOYHLrjzK2X1ezoPC6cr", avatar: 'harry.png' },
-  { name: "Josh", id: "TxGEqnHWrfWFTfGW9XjX", avatar: 'josh.png' },
-  { name: "Jeremy", id: "bVMeCyTHy58xNoL34h3p", avatar: 'jeremy.png' },
-];
-
 
 export default function Settings() {
   const [darkMode, setDarkMode] = useState(false);
-  const [selectedVoice, setSelectedVoice] = useState('');
   const [childEmail, setChildEmail] = useState('');
-  const [user, setUser] = useState(null); // State to hold the current user data
-  const [previewingVoice, setPreviewingVoice] = useState(''); // Avatar Voice when voice preview is playing
-  const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [selectedVoice, setSelectedVoice] = useState(null);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserSettings = async () => {
       const currentUser = firebaseAuth.currentUser;
       if (currentUser) {
         setUser(currentUser);
-  
+
         try {
           const userDocRef = doc(firestoreDB, "users", currentUser.uid);
           const userDocSnap = await getDoc(userDocRef);
-  
+
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
             if (userData.notificationsEnabled !== undefined) {
               setNotificationsEnabled(userData.notificationsEnabled);
+            }
+            if (userData.selectedVoice) {
+              setSelectedVoice(userData.selectedVoice);
             }
           }
         } catch (error) {
@@ -51,98 +40,42 @@ export default function Settings() {
         router.push('/login');
       }
     };
-  
+
     fetchUserSettings();
   }, []);
+
   useEffect(() => {
     document.body.classList.toggle('dark-mode', darkMode);
   }, [darkMode]);
 
-  const handleVoicePreview = async (voiceName) => {
+  const handleVoiceSelect = async (voice) => {
+    setSelectedVoice(voice);
 
     try {
-      setPreviewingVoice(voiceName);  // Set the previewing voice to trigger animation
-
-      const voiceIdMap = {
-        "Rachel": "21m00Tcm4TlvDq8ikWAM",
-        "Domi": "AZnzlk1XvdvUeBnXmlld",
-        "Sarah": "EXAVITQu4vr4xnSDxMaL",
-        "Elli": "MF3mGyEYCl7XYWbV9V6O",
-        "Alice": "Xb7hH8MSUJpSbSDYk0k2",
-
-        "Patrick": "ODq5zmih8GrVes37Dizd",
-        "Harry": "SOYHLrjzK2X1ezoPC6cr",
-        "Josh": "TxGEqnHWrfWFTfGW9XjX",
-        "Jeremy": "bVMeCyTHy58xNoL34h3p",
-      };
-  
-      const voiceId = voiceIdMap[voiceName];
-      const apiKey = process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY;
-  
-      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "xi-api-key": apiKey,
-        },
-        body: JSON.stringify({
-          text: "Hi there! I'm your bedtime narrator!",
-          model_id: "eleven_monolingual_v1",
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-          },
-        }),
-      });
-  
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-
-      audio.play();
-
-      audio.onended = () => {
-        setPreviewingVoice(''); // Reset previewing voice when audio ends
-      }
-      
-      // Fallback timeout in case `onended` doesn't fire
-      setTimeout(() => setPreviewingVoice(''), 20000);
-
-    } catch (err) {
-      console.error("Failed to preview voice:", err);
-      alert("Failed to preview the voice. Please try again.");
-    }
-  };
-
-  const handleVoiceSelect = async (voiceName) => {
-    setSelectedVoice(voiceName);
-    const selected = voicesList.find((v) => v.name === voiceName); // 
-  
-    try {
-      if (user && selected) {
+      if (user && voice) {
         const userDocRef = doc(firestoreDB, "users", user.uid);
         await updateDoc(userDocRef, {
           selectedVoice: {
-            name: selected.name,
-            id: selected.id,
+            name: voice.name,
+            lang: voice.lang,
           },
         });
-        alert(`Your choice has been saved! "${selected.name}" will read your stories now.`);
+        alert(`Your choice has been saved! "${voice.name}" will read your stories now.`);
       }
     } catch (error) {
       console.error("Failed to save selected voice:", error);
       alert("Failed to save voice.");
     }
   };
+
   const handleNotificationToggle = async (enabled) => {
     setNotificationsEnabled(enabled);
-  
+
     try {
       if (user) {
         const userDocRef = doc(firestoreDB, "users", user.uid);
         await updateDoc(userDocRef, {
           notificationsEnabled: enabled,
-          userId: user.uid, // re-send userId
         });
       }
     } catch (error) {
@@ -150,7 +83,6 @@ export default function Settings() {
       alert("Failed to update notification setting.");
     }
   };
-  
 
   const handleChildLink = async () => {
     if (!childEmail) {
@@ -164,23 +96,17 @@ export default function Settings() {
     }
 
     try {
-      // Reference to the Firestore collection where linked accounts are stored
       const linkedAccountsRef = collection(firestoreDB, 'linkedAccounts');
-      
-      // Add a new document with the user's ID and the child's email
       await addDoc(linkedAccountsRef, {
         parentId: user.uid,
         childEmail: childEmail,
       });
 
-      // Provide feedback to the user
       alert(`Child account linked with: ${childEmail}`);
-
-      // Clear the input after linking
       setChildEmail('');
     } catch (error) {
-      console.error('Error linking child account:', error);
-      alert('There was an error linking the account. Please try again.');
+      console.error("Failed to link child account:", error);
+      alert("Failed to link child account.");
     }
   };
 
@@ -197,58 +123,28 @@ export default function Settings() {
             <button className={`toggle-btn ${darkMode ? 'active' : ''}`} onClick={() => setDarkMode(true)}>Dark</button>
           </div>
         </div>
+
+        {/* Notifications Toggle */}
         <div className="setting-row">
-  <span className="setting-label">Notifications</span>
-  <div className="toggle-group">
-    <button
-      className={`toggle-btn ${notificationsEnabled ? 'active' : ''}`}
-      onClick={() => handleNotificationToggle(true)}
-    >
-      On
-    </button>
-    <button
-      className={`toggle-btn ${!notificationsEnabled ? 'active' : ''}`}
-      onClick={() => handleNotificationToggle(false)}
-    >
-      Off
-    </button>
-  </div>
-</div>
-
-        {/* Voice Selection */}
-        <div className="setting-section">
-          <h3>Speech Settings</h3>
-          <div className="voice-grid">
-            {voicesList.map((voice) => (
-
-            <div key={voice.name} className={`voice-card ${selectedVoice === voice.name ? 'selected' : ''}`}>
-              <p>{voice.name}</p>
-
-            {/* Avatar Image */}
-            {previewingVoice === voice.name && (
-               <div className={`voice-avatar ${previewingVoice === voice.name ? 'animated' : ''}`}>
-                <Image
-                  src={`/assets/voicesPersona/${voice.avatar}`} // Path to the image                  
-                  alt={`${voice.name} Avatar`} 
-                  width={180} 
-                  height={100} 
-                  priority={true} // prioritize loading for LCP
-                />
-              </div>
-
-              
-            )}
-
-                <button className="button button-secondary" onClick={() => handleVoicePreview(voice.name)}>
-                  Hear Voice
-                </button>
-                <button className="button button-primary" onClick={() => handleVoiceSelect(voice.name)}>
-                  Select Voice
-                </button>
-              </div>
-          ))}
+          <span className="setting-label">Notifications</span>
+          <div className="toggle-group">
+            <button
+              className={`toggle-btn ${notificationsEnabled ? 'active' : ''}`}
+              onClick={() => handleNotificationToggle(true)}
+            >
+              On
+            </button>
+            <button
+              className={`toggle-btn ${!notificationsEnabled ? 'active' : ''}`}
+              onClick={() => handleNotificationToggle(false)}
+            >
+              Off
+            </button>
           </div>
         </div>
+
+        {/* Voice Selector */}
+        <VoiceSelector user={user} />
 
         {/* Parental Control */}
         <div className="setting-section">

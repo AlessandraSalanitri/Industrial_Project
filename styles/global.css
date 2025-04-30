@@ -81,7 +81,7 @@
   --primary-color: #4B0082;  /* Indigo */
   --secondary-color: #FFD700; /* Golden Yellow */
   --white: #FFFFFF;
-  --gray: #E2E8F0; /* Light Gray */
+  --gray: #e0e3e8; /* Light Gray */
   --dark-gray: #6d6d6d; /* Darker Gray for disabled buttons */
   --black: black;
 }
@@ -231,7 +231,7 @@ textarea {
   letter-spacing: 0.5px;
   border-radius: 30px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(75, 0, 130, 0.15); /* softer glow */
+  box-shadow: 0 4px 12px rgba(75, 0, 130, 0.25); 
 }
 
 .button-secondary:hover {
