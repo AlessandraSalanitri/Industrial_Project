@@ -178,9 +178,13 @@ export default function MyStories() {
             </select>
           </label>
 
-          <button className="reset-btn" onClick={() => setFilters({ letter: null, genre: null, age: null })}>
+          <button
+            className={`toggle-btn ${filters.letter || filters.genre || filters.age ? 'primary' : 'secondary'}`}
+            onClick={() => setFilters({ letter: null, genre: null, age: null })}
+          >
             Clear Filters
           </button>
+
 
           <button className={`toggle-btn ${viewFavourites ? 'secondary' : 'primary'}`} onClick={() => setViewFavourites(v => !v)}>
             {viewFavourites ? 'All Stories' : 'View Favourites'}
