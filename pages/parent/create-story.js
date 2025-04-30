@@ -429,7 +429,7 @@ const confirmSave = async () => {
             <div className="modal-content">
               {!saveSuccess ? (
                 <>
-                  <h2>Name Your Story</h2>
+                  <h2 className="success-heading">💜 Name Your Story</h2>
                   <input
                     type="text"
                     placeholder="Whiskers in Wonderwood..."
@@ -463,6 +463,8 @@ const confirmSave = async () => {
                       OK
                     </button>
                   </div>
+
+
                 </>
               )}
             </div>

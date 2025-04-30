@@ -5,10 +5,11 @@ import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { firestoreDB } from '../../firebase/firebaseConfig'; 
 import { collection, addDoc } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid'; 
 import '../../styles/create_story.css';  // reusing style
-import '../../styles/alertmodal.css';
+import '../../styles/alertmodal.css'
 
 
 export default function WriteStory() {
@@ -23,8 +24,31 @@ export default function WriteStory() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showAudioErrorModal, setShowAudioErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
+  // SAVE DRAFT-continue the story
+  const [user, setUser] = useState(null);
+  const [showResumeModal, setShowResumeModal] = useState(false);
+  const [draftData, setDraftData] = useState(null);
   const router = useRouter();
+  
+  // SAVE DRAFT-continue the story - conected to user
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+  
+      if (currentUser) {
+        const draftRef = doc(firestoreDB, "drafts", currentUser.uid);
+        const draftSnap = await getDoc(draftRef);
+        if (draftSnap.exists()) {
+          setDraftData(draftSnap.data());
+          setShowResumeModal(true);
+        }
+      }
+    });
+  
+    return () => unsubscribe();
+  }, []);
+  
 
   const handleBack = () => {
     router.push('/parent/create-story');
@@ -88,11 +112,22 @@ const pickRandomImageForGenre = (genre) => {
           storyText: storyText.trim()
         }),
       });
-  
       const data = await response.json();
       const nextPart = data.response || "Oops, the AI couldn't continue.";
-      setStoryText(prev => prev + "\n\n" + nextPart);
+      const updatedStory = storyText + "\n\n" + nextPart;
+      setStoryText(updatedStory);
       setGenerated(true);
+      
+      // ✅ Also save the AI-generated part to Firestore
+      if (user) {
+        await setDoc(doc(firestoreDB, "drafts", user.uid), {
+          title,
+          genre,
+          storyText: updatedStory,
+        });
+      }
+
+
   
     } catch (error) {
       console.error('Error generating next paragraph:', error);
@@ -137,6 +172,7 @@ const pickRandomImageForGenre = (genre) => {
         });
 
         setShowSuccessModal(true);
+        await deleteDoc(doc(firestoreDB, "drafts", user.uid));
 
     } catch (error) {
         console.error("❌ Error saving story:", error);
@@ -184,14 +220,21 @@ const pickRandomImageForGenre = (genre) => {
             
         <input
           type="text"
+          value={title}  // ← Resuming a draft will show the restored title
           placeholder="Enter your story title..."
-          value={title}
           onChange={(e) => {
-            setTitle(e.target.value);
-            if (errors.title) {
-              setErrors((prev) => ({ ...prev, title: null }));
+            const newTitle = e.target.value;
+            setTitle(newTitle);
+            if (errors.title) setErrors((prev) => ({ ...prev, title: null }));
+            if (user) {
+              setDoc(doc(firestoreDB, "drafts", user.uid), {
+                title: newTitle,
+                genre,
+                storyText,
+              });
             }
           }}
+          
           className={errors.title ? "input-error" : ""}
         />
 
@@ -200,11 +243,18 @@ const pickRandomImageForGenre = (genre) => {
         <select
           value={genre}
           onChange={(e) => {
-            setGenre(e.target.value);
-            if (errors.genre) {
-              setErrors((prev) => ({ ...prev, genre: null }));
+            const newGenre = e.target.value;
+            setGenre(newGenre);
+            if (errors.genre) setErrors((prev) => ({ ...prev, genre: null }));
+            if (user) {
+              setDoc(doc(firestoreDB, "drafts", user.uid), {
+                title,
+                genre: newGenre,
+                storyText,
+              });
             }
           }}
+          
           className={errors.genre ? "input-error" : ""}
         >
         <option value="">Select Genre</option>
@@ -218,14 +268,22 @@ const pickRandomImageForGenre = (genre) => {
 
         <div className="generated-story">
         <textarea
-            value={storyText}
-            onChange={(e) => setStoryText(e.target.value)}
-            placeholder="Start writing your magical bedtime story here..."
+          value={storyText}
+          onChange={(e) => {
+            const newText = e.target.value;
+            setStoryText(newText);
+            if (user) {
+              setDoc(doc(firestoreDB, "drafts", user.uid), {
+                title,
+                genre,
+                storyText: newText,
+              });
+            }
+          }}
+          placeholder="Start writing your magical bedtime story here..."
         />
+
         </div>
-
-
-
 
         <div className="actions">
             <button
@@ -248,8 +306,6 @@ const pickRandomImageForGenre = (genre) => {
                 ↩ Back
             </button>
             </div>
-
-
 
 
             {/* SAVE STORY MESSAGE */}
@@ -282,7 +338,7 @@ const pickRandomImageForGenre = (genre) => {
             {showErrorModal && (
             <div className="modal-backdrop">
                 <div className="modal-content">
-                <h2 className="error-heading">🚨 Incomplete Story</h2>
+                <h2 className="modal-title">🚨 Incomplete Story</h2>
                 <p>Please make sure your story has a <strong>title</strong> and some <strong>text</strong> before saving.</p>
                 <div className="modal-actions">
                     <button className="button button-primary" onClick={() => setShowErrorModal(false)}>
@@ -297,7 +353,7 @@ const pickRandomImageForGenre = (genre) => {
             {showAudioErrorModal && (
               <div className="modal-backdrop">
                 <div className="modal-content">
-                  <h2 className="error-heading">🚨 Incomplete Story</h2>
+                  <h2 className="modal-title">🚨 Incomplete Story</h2>
                   <p>Please write or generate some story text before using <strong>Read Aloud</strong>.</p>
                   <div className="modal-actions">
                     <button
@@ -310,6 +366,39 @@ const pickRandomImageForGenre = (genre) => {
                 </div>
               </div>
             )}
+
+
+            {showResumeModal && (
+              <div className="modal-backdrop">
+                <div className="modal-content">
+                  <h2 className="modal-title">📝 Resume Your Draft?</h2>
+                  <p>We found an unfinished story. Would you like to continue where you left off?</p>
+                  <div className="modal-actions">
+                    <button
+                      className="button button-primary"
+                      onClick={() => {
+                        setTitle(draftData.title || '');
+                        setGenre(draftData.genre || '');
+                        setStoryText(draftData.storyText || '');
+                        setShowResumeModal(false);
+                      }}
+                    >
+                      Yes, Resume
+                    </button>
+                    <button
+                      className="button button-secondary"
+                      onClick={async () => {
+                        await deleteDoc(doc(firestoreDB, "drafts", user.uid));
+                        setShowResumeModal(false);
+                      }}
+                    >
+                      No, Start Fresh
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
 
       </div>
     </Layout>
