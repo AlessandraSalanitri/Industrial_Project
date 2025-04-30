@@ -209,8 +209,8 @@ const confirmSave = async () => {
     // Optionally update the story to include its own Firestore ID
     await updateDoc(storyDocRef, { id: storyDocRef.id });
 
-    alert("Story saved successfully!");
-    handleBack() ;
+    setSaveSuccess(true); // <-- show the pretty success modal
+    
   } catch (error) {
     console.error("Error saving story:", error);
     alert("Failed to save story.");
