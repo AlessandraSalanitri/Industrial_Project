@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { firestoreDB } from '../../firebase/firebaseConfig'; 
-import { collection, addDoc } from 'firebase/firestore';
+// import { collection, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import {collection, addDoc, updateDoc, doc, setDoc, getDoc, deleteDoc} from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
-import { v4 as uuidv4 } from 'uuid'; 
+// import { doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
+// import { v4 as uuidv4 } from 'uuid'; 
 import '../../styles/create_story.css';  // reusing style
 import '../../styles/alertmodal.css'
 
@@ -138,47 +139,45 @@ const pickRandomImageForGenre = (genre) => {
   
 
 // SAVING STORY LOGIC
-    const handleSave = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
+  const handleSave = async () => {
     if (!user) {
-        alert("You must be logged in to save your story.");
-        return;
+      alert("You must be logged in to save your story.");
+      return;
     }
 
     if (!title.trim() || !storyText.trim()) {
-        setShowErrorModal(true);
-        return;
-      }
-      
-
-      const storyId = uuidv4(); // generate random story ID
-      const randomImageUrl = pickRandomImageForGenre(genre); // pick random image
-      
-
+      setShowErrorModal(true);
+      return;
+    }
 
     try {
-        await addDoc(collection(firestoreDB, "stories"), {
-        id: storyId,
+      const storyRef = await addDoc(collection(firestoreDB, "stories"), {
         title: title.trim(),
         content: storyText.trim(),
         genre: genre.trim() || "Unknown",
-        audioUrl: "", // save empty for now
+        audioUrl: "", // optional audio
         createdAt: new Date(),
         userId: user.uid,
         source: "manual",
-        imageUrl: randomImageUrl,
-        });
+        imageUrl: pickRandomImageForGenre(genre),
+        favourite: false, // optional default
+        read: false       // optional default
+      });
 
-        setShowSuccessModal(true);
-        await deleteDoc(doc(firestoreDB, "drafts", user.uid));
+      // ✅ Store Firestore-generated ID into the story document
+      await updateDoc(storyRef, { id: storyRef.id });
+
+      setShowSuccessModal(true);
+
+      // ✅ Clean up any saved draft
+      await deleteDoc(doc(firestoreDB, "drafts", user.uid));
 
     } catch (error) {
-        console.error("❌ Error saving story:", error);
-        alert("Failed to save your story. Please try again.");
+      console.error("❌ Error saving story:", error);
+      alert("Failed to save your story. Please try again.");
     }
-    };
+  };
+
 
   
   
@@ -264,6 +263,7 @@ const pickRandomImageForGenre = (genre) => {
         <option value="Science Fiction">Science Fiction</option>
         <option value="Historical Fiction">Historical Fiction</option>
         <option value="Animal Stories">Animal Stories</option>
+        <option value="Humor">Humor</option>
         </select>
 
         <div className="generated-story">
