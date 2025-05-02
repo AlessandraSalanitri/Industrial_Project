@@ -108,7 +108,10 @@ export default function SubscriptionPage() {
     {
       id: "pro",
       label: "Studio Pro",
-      desc: ["⋆ Advanced features for 2 users", "⋆ 30 story credits/day"],
+      desc: [
+        "⋆ Advanced features for 2 users",
+        <span key="unlimited" style={{ fontWeight: "bold" }}>⋆ 30 story credits/day</span>
+      ],
       tag: "For two devices",
       priceMonthly: "£ 3 / mo",
       priceYearly: "£ 30 / yr"
@@ -116,7 +119,10 @@ export default function SubscriptionPage() {
     {
       id: "unlimited",
       label: "Studio Unlimited",
-      desc: ["⋆ Everything unlocked", "⋆ Unlimited story credits"],
+      desc: [
+        "⋆ Everything unlocked",
+        <span key="unlimited" style={{ fontWeight: "bold" }}>⋆ Unlimited story credits</span>
+      ],      
       tag: "Unlimited devices",
       priceMonthly: "£ 6 / mo",
       priceYearly: "£ 60 / yr"

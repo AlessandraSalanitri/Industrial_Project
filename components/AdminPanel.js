@@ -6,9 +6,11 @@ import { useState, useEffect } from 'react';
 import { firebaseAuth, firestoreDB } from '../firebase/firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import '../styles/admin_panel.css';
+import { doc, getDoc } from 'firebase/firestore';
+
 
 export default function AdminPanel({ onClose }) {
-  const { user, logout } = useUser();
+  const { user, setUser, logout } = useUser();
   const router = useRouter();
 
   const [linkedChildren, setLinkedChildren] = useState([]);
@@ -22,6 +24,28 @@ export default function AdminPanel({ onClose }) {
   };
 
   const goToDashboard = () => router.push('/parent/dashboard');
+
+  //Fec user data to display number of credits
+  const fetchUserData = async () => {
+    if (!user?.userId) return;
+  
+    try {
+      const userRef = doc(firestoreDB, 'users', user.userId);
+      const docSnap = await getDoc(userRef);
+  
+      if (docSnap.exists()) {
+        const updatedUser = {
+          ...user,
+          ...docSnap.data()
+        };
+  
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
+    } catch (err) {
+      console.error("⚠️ Failed to refresh user data:", err);
+    }
+  };
 
   // Fetch linked accounts from Firestore
   const fetchLinkedAccounts = async () => {
@@ -41,6 +65,7 @@ export default function AdminPanel({ onClose }) {
   };
 
   useEffect(() => {
+    fetchUserData();
     fetchLinkedAccounts(); // Fetch linked accounts on load
   }, []);
 
@@ -50,6 +75,13 @@ export default function AdminPanel({ onClose }) {
     
   };
 
+  const planLabel = {
+    free: "Studio Free",
+    pro: "Studio Pro",
+    unlimited: "Studio Unlimited"
+  }[user?.subscriptionPlan] || "Unknown Plan";
+
+  
   return (
     <motion.div
       className="admin-panel"
@@ -69,6 +101,23 @@ export default function AdminPanel({ onClose }) {
         </div>
 
         <div className="admin-links">
+
+        {/* 🔔 Subscription Info */}
+        {user?.subscriptionPlan && (
+          <div className="admin-plan-info">
+            <div className="plan-name">
+              <strong>Current Plan:</strong> {planLabel}
+            </div>
+
+            {/* Show credits if on free or pro */}
+            {["free", "pro"].includes(user.subscriptionPlan) && (
+              <div className="plan-credits">
+                <strong>Credits:</strong> {user.creditsToday ?? 0} left today
+              </div>
+            )}
+          </div>
+        )}
+
           <button className="admin-btn" onClick={handlePersonalDetails}>
             <i className="icon">👤</i> Personal details
           </button>
