@@ -34,20 +34,22 @@
     background: var(--primary-color);
     color: white;
 }
-  
+
+
 .plans {
     display: flex;
     justify-content: center;
     gap: 40px;
     margin-bottom: 40px;
     flex-wrap: wrap;
-}
+    align-items: stretch; /* 👈 all cards match height */
+  }
   
-.plan-card {
+
+  .plan-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 200px;
     background: var(--gray);
     border-radius: 15px;
     padding: 20px;
@@ -56,6 +58,9 @@
     position: relative;
     transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
+    min-height: 250px; /* adjust if needed */
+    /* 🔧 fix inconsistent height */
+    height: 100%;
   }
   
 .plan-card:hover {
@@ -100,8 +105,23 @@
     gap: 20px;
 }
   
+
 .plan-card button {
-    margin-top: auto;
+    margin-top: 20px;
     align-self: center;
-    margin-bottom: 0;
+  }
+  
+
+.plan-feature {
+    margin: 2px 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    text-align: left;
+  }
+  
+  .price {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  transition: opacity 0.3s ease;
 }

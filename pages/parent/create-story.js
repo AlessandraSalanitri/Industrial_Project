@@ -597,6 +597,7 @@ const confirmSave = async () => {
             onConfirm={showAlertModal.onConfirm}
             onClose={showAlertModal.onClose}
             confirmLabel={showAlertModal.confirmLabel}
+            emoji={null} // 👈 disable emoji explicitly
           />
         )}
 
