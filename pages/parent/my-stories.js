@@ -268,6 +268,7 @@ export default function MyStories() {
           <button
             className="delete-selected-btn"
             onClick={handleDeleteSelected}
+            title="Delete Selected"
             disabled={selectedStoryIds.length === 0}
           >
             🗑
