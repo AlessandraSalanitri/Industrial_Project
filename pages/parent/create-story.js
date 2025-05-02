@@ -9,7 +9,8 @@ import '../../styles/create_story.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { MoonStars } from 'phosphor-react';
 import StoryPageTour from '../../components/StoryPageTour';
-import CuteError from '../../components/CuteError';
+import AlertModal from '../../components/AlertModal';
+
 
 
 
@@ -58,20 +59,25 @@ export default function CreateStory() {
   const [errors, setErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const [isReading, setIsReading] = useState(false);
-  const [offlineError, setOfflineError] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(null);
 
   const router = useRouter();
 
   const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
   // This ensures the user variable is properly set once a user logs in.
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setAuthLoading(false);
     });
   
     return () => unsubscribe();
   }, []);
+
+
 
   // Stop speech when navigating away
   useEffect(() => {
@@ -84,10 +90,29 @@ export default function CreateStory() {
     };
   }, [router.events]);
 
+    if (authLoading) {
+      return (
+        <Layout>
+          <div className="container">
+            <p>Loading your profile...</p>
+          </div>
+        </Layout>
+      );
+    }
+  
+
 
   // GENERATE STORY AI+ handle missing mandatry imput
+
+
   const handleGenerateAI = async () => {
     const newErrors = {};
+  
+    if (!user) {
+      console.error("🚫 Cannot generate story: User not loaded yet.");
+      setErrorMessage("Please wait... loading your profile.");
+      return;
+    }
   
     if (!age) {
       setErrorMessage("Tell us your age so we can make the story just right!");
@@ -99,57 +124,83 @@ export default function CreateStory() {
       setErrorMessage("Big adventures or tiny tales? Pick a reading length!");
       newErrors.length = "Please select a reading length.";
     }
-    
   
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
+  
     setErrors({});
-    setErrorMessage(''); // ✅ Clear the message if everything is filled
+    setErrorMessage('');
     setLoading(true);
+  
+    console.log("📤 Submitting to AI API with user:", user);
+    if (!user || !user.uid) {
+      console.error("❌ user or user.uid is missing:", user);
+      setErrorMessage("We couldn't identify you. Please log in again.");
+      setLoading(false);
+      return;
+    }
     
-
     try {
       const response = await fetch("/api/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ age, genre, setting, moral, tone, length, character }),
+        body: JSON.stringify({
+          userId: user?.uid,
+          age,
+          genre,
+          setting,
+          moral,
+          tone,
+          length,
+          character,
+        }),
       });
-    
-      const data = await response.json();
-    
-      if (!response.ok || !data.response) {
-        if (!navigator.onLine) {
-          setOfflineError(true); // show CuteError only if offline
-        } else {
-          setErrorMessage("😢 Oops! We couldn’t create your story right now. Try again soon.");
+
+      if (response.status === 403) {
+        const errorData = await response.json();
+        if (errorData.error === "No story credits left for today.") {
+          setLoading(false);
+          setShowAlertModal({
+            type: "error",
+            title: "😢 Out of Credits",
+            message: "Sorry, you’ve used all your story credits for today. Come back tomorrow or upgrade your plan.",
+            onConfirm: () => {
+              setShowAlertModal(null);
+              router.push("/parent/subscription");
+            },
+            onClose: () => setShowAlertModal(null),
+            confirmLabel: "View Plans",
+          });
+          return;
         }
+      }      
+  
+      const data = await response.json();
+      const generatedStory = data.response;
+  
+      if (!generatedStory) {
+        setErrorMessage("We couldn’t generate your story. Please try again later.");
         return;
       }
-    
-      const generatedStory = data.response;
+  
       setStory(generatedStory);
-    
+  
       const titleLine = generatedStory.split('\n')[0]
         .replace(/^"|"$/g, '')
         .replace(/\*\*/g, '')
         .trim();
-    
+  
       setStoryName(titleLine);
-    
     } catch (error) {
-      console.error("Error generating story:", error);
-      if (!navigator.onLine) {
-        setOfflineError(true); // show CuteError only if offline
-      } else {
-        setErrorMessage("😢 Oops! We couldn’t create your story right now. Try again soon.");
-      }
+      console.error("❌ Error generating story:", error);
+      setStory("Error: Could not generate story.");
     }
-    
+  
     setLoading(false);
   };
+  
   
   // Fetch user-selected voice from Firestore
   const fetchUserSelectedVoice = async () => {
@@ -285,9 +336,7 @@ const confirmSave = async () => {
   }
 };
 
-  if (offlineError) {
-    return <CuteError message="🌙 Your internet took a little nap. " />;
-  }
+
 
   return (
     <Layout>
@@ -438,14 +487,12 @@ const confirmSave = async () => {
             className={errors.character ? "input-error" : ""}
           />
 
-
-
-
         <div className="actions">
+
         {!story && (
             <>
               <button onClick={handleGenerateAI} className="button button-primary generate-button" disabled={loading}>
-                {loading ? 'Generating...' : '🎔 Generate Story'}
+               🎔 Generate Story
               </button>
 
               <button onClick={() => router.push('/parent/write-story')} className="button button-primary write-own-button">
@@ -541,6 +588,19 @@ const confirmSave = async () => {
           </div>
         )}
 
+
+        {showAlertModal && (
+          <AlertModal
+            type={showAlertModal.type}
+            title={showAlertModal.title}
+            message={showAlertModal.message}
+            onConfirm={showAlertModal.onConfirm}
+            onClose={showAlertModal.onClose}
+            confirmLabel={showAlertModal.confirmLabel}
+          />
+        )}
+
+
         {errorMessage && (
           <p className="friendly-error-message">{errorMessage}</p>
         )}
@@ -550,3 +610,13 @@ const confirmSave = async () => {
     </Layout>
   );
 }
+
+
+
+
+
+
+
+
+
+

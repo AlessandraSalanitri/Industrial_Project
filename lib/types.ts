@@ -23,8 +23,12 @@ export type TUserDetails = {
   address?: string;
   creditCard?: string;
 
-  //Optional added by the subscription plan chosen
+ // Subscription
   subscriptionPlan?: 'free' | 'pro' | 'unlimited';
+
+  // Daily credit tracking
+  creditsToday?: number;
+  lastCreditReset?: string; // Stored as ISO string e.g. "2025-05-02"
 };
 
 export type TMenuItem = {

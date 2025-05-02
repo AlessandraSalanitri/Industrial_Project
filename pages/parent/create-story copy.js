@@ -9,6 +9,7 @@ import '../../styles/create_story.css';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { MoonStars } from 'phosphor-react';
 import StoryPageTour from '../../components/StoryPageTour';
+import CuteError from '../../components/CuteError';
 
 
 
@@ -57,6 +58,7 @@ export default function CreateStory() {
   const [errors, setErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const [isReading, setIsReading] = useState(false);
+  const [offlineError, setOfflineError] = useState(false);
 
   const router = useRouter();
 
@@ -115,22 +117,37 @@ export default function CreateStory() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ age, genre, setting, moral, tone, length, character }),
       });
-  
+    
       const data = await response.json();
-      const generatedStory = data.response || "Oops! Something went wrong.";
+    
+      if (!response.ok || !data.response) {
+        if (!navigator.onLine) {
+          setOfflineError(true); // show CuteError only if offline
+        } else {
+          setErrorMessage("😢 Oops! We couldn’t create your story right now. Try again soon.");
+        }
+        return;
+      }
+    
+      const generatedStory = data.response;
       setStory(generatedStory);
-  
+    
       const titleLine = generatedStory.split('\n')[0]
-      .replace(/^"|"$/g, '')         // remove quotes
-      .replace(/\*\*/g, '')          // remove any ** bold marks
-      .trim();
+        .replace(/^"|"$/g, '')
+        .replace(/\*\*/g, '')
+        .trim();
     
       setStoryName(titleLine);
-  
+    
     } catch (error) {
       console.error("Error generating story:", error);
-      setStory("Error: Could not generate story.");
+      if (!navigator.onLine) {
+        setOfflineError(true); // show CuteError only if offline
+      } else {
+        setErrorMessage("😢 Oops! We couldn’t create your story right now. Try again soon.");
+      }
     }
+    
     setLoading(false);
   };
   
@@ -268,7 +285,9 @@ const confirmSave = async () => {
   }
 };
 
-
+  if (offlineError) {
+    return <CuteError message="🌙 Your internet took a little nap. " />;
+  }
 
   return (
     <Layout>
