@@ -1,5 +1,5 @@
 /* Container */
-.container{
+.container {
   margin-bottom: 20px;
   padding: 10%;
 }
@@ -12,34 +12,77 @@
   font-size: 48px;
   background-color: var(--white);
   text-shadow: 0 5 20px rgb(224, 178, 235);
-  margin-bottom: 20px;
+  margin-bottom: 40px;  /* Increased margin to prevent overlap */
 }
 
-
+/* Table styles */
 table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin-top: 30px;
+  border-collapse: collapse; /* Collapse borders to remove extra spacing */
+  margin-top: 40px;  /* Increased margin to give more space between title and table */
   background: var(--white);
   border-radius: 15px;
-  overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  table-layout: auto;
 }
 
+/* Table Header Styles */
 thead {
   background: var(--primary-color);
   color: white;
 }
 
-th,
-td {
-  padding: 14px 16px;
+/* Ensure header columns fit content and adjust padding */
+th {
+  padding: 10px 14px;    /* Adjusted padding for better fit */
   text-align: left;
-  font-size: 15px;
+  font-size: 14px;        /* Adjust font size for better fit */
+  white-space: nowrap;    /* Prevent wrapping */
+  overflow: hidden;       /* Hide overflow to ensure content fits */
+  text-overflow: ellipsis; /* Add ellipsis if content overflows */
 }
 
+/* First column (checkbox): minimal width, no padding or margin */
+th:first-child,
+td:first-child {
+  width: 1%;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+/* Checkbox: small, centered, no padding or margin */
+th:first-child input[type="checkbox"],
+td:first-child input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0 auto;
+  display: block;
+}
+/* Directly target the checkbox to make it as compact as possible */
+td input[type="checkbox"] {
+  width: 14px;             /* Set smaller width for the checkbox */
+  height: 14px;            /* Set smaller height for the checkbox */
+  margin: 0;               /* Remove margin */
+  padding: 0;              /* Remove padding */
+  display: inline-block;   /* Ensure compact checkbox */
+}
+
+/* Adjust the table cells' padding for better alignment */
+td {
+  padding: 10px 14px;     /* Adjust padding for better content fitting */
+  text-align: left;
+  font-size: 14px;
+  white-space: nowrap;     /* Prevent wrapping */
+}
+
+/* Optional: for rows in tbody, ensure no extra padding/margin */
+tbody tr {
+  height: 40px;            /* Ensure rows are consistent in height */
+}
+
+/* Optional: Adjust even row color */
 tbody tr:nth-child(even) {
   background: var(--gray);
 }
@@ -82,7 +125,6 @@ tbody tr:hover {
   color: white;
 }
 
-/* Listen button */
 td button {
   background: var(--secondary-color);
   border: none;
@@ -108,7 +150,6 @@ td button:hover {
   align-items: center;
 }
 
-/* Ensuring dropdown width consistency */
 .additional-filters select {
   padding: 5px;
   font-size: 14px;
@@ -143,7 +184,6 @@ td button:hover {
   cursor: pointer;
 }
 
-/* Story Content View */
 .story-content {
   margin-top: 30px;
   background: var(--gray);
@@ -156,11 +196,9 @@ td button:hover {
   margin-bottom: 1rem;
 }
 
-
 .back-button {
-  margin-top: 20px; /* Adjust this value for spacing after the button */
+  margin-top: 20px;
 }
-
 
 .toggle-btn.active {
   background-color: #4B0082;
@@ -173,13 +211,6 @@ td button:hover {
   margin-top: 10px;
 }
 
-
-.view-favourites-toggle {
-  display: flex;
-  justify-content: flex-end;
-  margin-left: auto;
-}
-
 .toggle-btn {
   padding: 8px 16px;
   border: 1px solid #ccc;
@@ -189,7 +220,6 @@ td button:hover {
   font-size: 14px;
   display: inline-block;
 }
-
 
 .toggle-btn.primary {
   background-color: #4B0082;
@@ -213,9 +243,6 @@ td button:hover {
   cursor: pointer;
 }
 
-/* Additional spacing for the filters */
-
-
 button.active {
   background-color: #007bff;
   color: white;
@@ -227,94 +254,12 @@ button.active {
   margin-top: 10px;
 }
 
-
-/* Action Buttons */
-.action-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-.action-buttons button {
-  padding: 6px 10px;
-  font-size: 13px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.action-buttons button:hover {
-  opacity: 0.9;
-}
-
-.action-buttons button:first-child {
-  background: var(--gray);
-  color: black;
-}
-
-.action-buttons .delete-btn {
-  background: crimson;
-  color: white;
-}
-
-.action-buttons .edit-btn {
-  background: var(--secondary-color);
-  color: white;
-}
-
-.favourite-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  padding: 6px;
-}
-
-.favourite-btn:hover {
-  color: var(--primary-color);
-}
-
-.alphabet-btn {
-  background-color: var(--gray);
-  color: var(--primary-color);
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  margin: 0 4px;
-}
-.alphabet-btn.primary {
-  background-color: var(--primary-color);
-  color: white;
-}
-.alphabet-btn.disabled {
-  opacity: 0.4;
-}
-.alphabet-btn {
-  background-color: var(--gray);
-  color: var(--primary-color);
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  margin: 0 4px;
-}
-
-.alphabet-btn.primary {
-  background-color: var(--primary-color);
-  color: white;
-}
-
 .select-delete-controls {
   display: flex;
   justify-content: flex-start;
   gap: 10px;
-  margin-top: 20px;     /* Pushes this block down from the above section */
-  padding-top: 20px;     /* Optional: adds internal space if there's a background */
+  margin-top: 20px;
+  padding-top: 20px;
 }
 
 .filters-actions {
