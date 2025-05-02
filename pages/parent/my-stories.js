@@ -177,24 +177,25 @@ export default function MyStories() {
         <h1>My Stories</h1>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-        {/* Filters */}
         <div className="alphabet-filter">
-          {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => {
-            const hasAny = stories.some((s) => s.title?.[0]?.toUpperCase() === letter);
-            return (
-              <button
-                key={letter}
-                type="button"
-                onClick={() => setFilters((f) => ({ ...f, letter }))}
-                className={`alphabet-btn ${hasAny ? 'primary' : ''}`}
-              >
-                {letter}
-              </button>
-            );
-          })}
+        {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => {
+          // Check if there's any story starting with this letter
+          const hasAny = stories.some((s) => s.title?.[0]?.toUpperCase() === letter);
+
+          return (
+            <button
+              key={letter}
+              type="button"
+              onClick={() => setFilters((f) => ({ ...f, letter }))}
+              className={`alphabet-btn ${hasAny ? 'primary' : ''}`} // Apply 'primary' class if a story exists
+            >
+              {letter}
+            </button>
+          );
+        })}
         </div>
 
-        {/* Filter Selects & Favourites */}
+        {/* Filter Selects */}
         <div className="filters-actions">
           <label>
             Genre:
@@ -223,14 +224,14 @@ export default function MyStories() {
           </label>
 
           <button
-            className={`toggle-btn ${filters.letter || filters.genre || filters.age ? 'primary' : 'secondary'}`}
+            className="toggle-btn secondary"
             onClick={handleClearFilters}
           >
-            {filters.letter || filters.genre || filters.age ? 'Clear Filters' : 'Filter'}
+            Clear Filters
           </button>
 
           <button
-            className={`toggle-btn ${viewFavourites ? 'secondary' : 'primary'} favourites-toggle`}
+            className="toggle-btn primary favourites-toggle"
             onClick={() => setViewFavourites((v) => !v)}
           >
             {viewFavourites ? 'All Stories' : 'View Favourites'}
@@ -284,13 +285,14 @@ export default function MyStories() {
                   <td>{story.character}</td>
                   <td className="action-buttons">
                     <button onClick={() => { setSelectedStory(story); setModalMode('view'); }}>View</button>
-                    <button className="edit-btn" onClick={() => { setSelectedStory(story); setModalMode('edit'); }}>Edit</button>
-                    <button className="delete-btn" onClick={() => handleDeleteStory(story.id)}>🗑</button>
+                    <button onClick={() => { setSelectedStory(story); setModalMode('edit'); }}>Edit</button>
+                    <button className="bin-btn" onClick={() => handleDeleteStory(story.id)}>🗑</button>
+
                     <button
                       className={`favourite-btn ${story.favourite ? 'favourite-active' : ''}`}
                       onClick={() => handleToggleFavourite(story.id, story.favourite)}
                     >
-                      {story.favourite ? <FaHeart size={20} color="red" /> : <FaRegHeart size={20} color="gray" />}
+                      {story.favourite ? <FaHeart /> : <FaRegHeart />}
                     </button>
                   </td>
                 </tr>

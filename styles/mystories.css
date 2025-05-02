@@ -43,6 +43,10 @@ th {
   text-overflow: ellipsis; /* Add ellipsis if content overflows */
 }
 
+td input[type="checkbox"] {
+  width: auto; /* Makes the checkbox column fit to the content size */
+}
+
 /* First column (checkbox): minimal width, no padding or margin */
 th:first-child,
 td:first-child {
@@ -62,24 +66,24 @@ td:first-child input[type="checkbox"] {
 }
 /* Directly target the checkbox to make it as compact as possible */
 td input[type="checkbox"] {
-  width: 14px;             /* Set smaller width for the checkbox */
-  height: 14px;            /* Set smaller height for the checkbox */
-  margin: 0;               /* Remove margin */
-  padding: 0;              /* Remove padding */
-  display: inline-block;   /* Ensure compact checkbox */
+  width: 14px;           
+  height: 14px;      
+  margin: 0;             
+  padding: 0;              
+  display: inline-block;   
 }
 
 /* Adjust the table cells' padding for better alignment */
 td {
-  padding: 10px 14px;     /* Adjust padding for better content fitting */
+  padding: 10px 14px;     
   text-align: left;
   font-size: 14px;
-  white-space: nowrap;     /* Prevent wrapping */
+  white-space: nowrap;   
 }
 
-/* Optional: for rows in tbody, ensure no extra padding/margin */
+
 tbody tr {
-  height: 40px;            /* Ensure rows are consistent in height */
+  height: 40px;        
 }
 
 /* Optional: Adjust even row color */
@@ -92,37 +96,73 @@ tbody tr:hover {
 }
 
 /* Action Buttons */
+/* Reuse this in other pages too */
 .action-buttons {
   display: flex;
-  gap: 10px;
-  justify-content: center;
+  gap: 6px;
 }
 
 .action-buttons button {
-  padding: 6px 10px;
-  font-size: 13px;
-  border: none;
-  border-radius: 6px;
+  height: 32px;
+  min-width: 32px;
+  padding: 4px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #4B0082;
+  color: #efe9e9;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 }
 
 .action-buttons button:hover {
-  opacity: 0.9;
+  background-color: #e0e0e0;
 }
 
-.action-buttons button:first-child {
-  background: var(--gray);
-  color: black;
+/* Red bin button */
+.action-buttons button.bin-btn {
+  color: #fff; /* White text */
+  background-color: #e53935; /* Red background */
+  border: none;
+  padding: 4px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-.action-buttons .delete-btn {
-  background: crimson;
-  color: white;
+.action-buttons button.bin-btn:hover {
+  background-color: #d32f2f; /* Darker red on hover */
 }
 
-.action-buttons .edit-btn {
-  background: var(--secondary-color);
-  color: white;
+
+.action-buttons button.bin-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Heart icons */
+.action-buttons .favourite-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: gray;
+}
+
+.action-buttons .favourite-active {
+  color: red;
+}
+
+.action-buttons .favourite-btn:hover {
+  opacity: 0.8;
+}
+
+/* Checkbox column fit to content */
+table td:first-child,
+table th:first-child {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
 }
 
 td button {
@@ -273,4 +313,18 @@ button.active {
 
 .favourites-toggle {
   margin-left: auto;
+}
+
+.alphabet-btn.primary {
+  background-color: #4B0082; /* Primary color (blue) */
+  color: white; /* Text color */
+}
+
+.alphabet-btn {
+  background-color: #f0f0f0; /* Default background color */
+  color: black; /* Default text color */
+}
+
+.alphabet-btn:hover {
+  background-color: #a16aaf; /* Darker blue on hover */
 }
