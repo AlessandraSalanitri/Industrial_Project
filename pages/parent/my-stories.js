@@ -8,6 +8,7 @@ import {
   doc,
   updateDoc,
   getDoc,
+  addDoc,
 } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { firestoreDB } from '../../firebase/firebaseConfig';
@@ -26,6 +27,8 @@ export default function MyStories() {
   const [sortConfig, setSortConfig] = useState({ key: 'title', direction: 'asc' });
   const [selectedStoryIds, setSelectedStoryIds] = useState([]);
   const router = useRouter();
+
+  const blankStory = { title: '', genre: '', age: '', content: '', character: '', favourite: false };
 
   const isFiltered =
     filters.letter !== null || filters.genre !== null || filters.age !== null || viewFavourites;
@@ -50,6 +53,10 @@ export default function MyStories() {
       }
     })();
   }, [user]);
+
+  const handleCreateStory = () => {
+    router.push('/parent/create-story');
+  };
 
   const handleDeleteStory = async (id) => {
     try {
@@ -94,23 +101,32 @@ export default function MyStories() {
 
   const handleUpdateStory = async (updated) => {
     try {
-      const ref = doc(firestoreDB, 'stories', updated.id);
-      await updateDoc(ref, {
-        title: updated.title,
-        genre: updated.genre,
-        age: updated.age,
-        content: updated.content,
-      });
+      if (modalMode === 'create') {
+        await addDoc(collection(firestoreDB, 'stories'), {
+          ...updated,
+          userId: user.uid,
+          favourite: false,
+        });
+      } else {
+        const ref = doc(firestoreDB, 'stories', updated.id);
+        await updateDoc(ref, {
+          title: updated.title,
+          genre: updated.genre,
+          age: updated.age,
+          content: updated.content,
+        });
+      }
+
       const snap = await getDocs(collection(firestoreDB, 'stories'));
       const userStories = snap.docs
         .map((d) => ({ id: d.id, ...d.data() }))
         .filter((s) => s.userId === user.uid);
       setStories(userStories);
       setSelectedStory(null);
-      alert('Story updated successfully!');
+      alert(`Story ${modalMode === 'create' ? 'created' : 'updated'} successfully!`);
     } catch (e) {
-      console.error('Error updating story:', e);
-      setErrorMessage('Failed to update story. Please try again!');
+      console.error('Error saving story:', e);
+      setErrorMessage(`Failed to ${modalMode === 'create' ? 'create' : 'update'} story. Please try again!`);
     }
   };
 
@@ -180,7 +196,10 @@ export default function MyStories() {
   return (
     <Layout>
       <div className="container">
-        <h1>My Stories</h1>
+        <div className="my-stories-header">
+          <h1>My Stories</h1>
+        </div>
+
         {errorMessage && <div className="error-message">{errorMessage}</div>}
 
         <div className="alphabet-filter">
@@ -245,6 +264,7 @@ export default function MyStories() {
           <button className="toggle-btn secondary" onClick={toggleSelectAll}>
             {selectedStoryIds.length === sortedStories.length ? 'Deselect All' : 'Select All'}
           </button>
+          
           <button
             className="toggle-btn primary"
             onClick={handleDeleteSelected}
@@ -252,7 +272,14 @@ export default function MyStories() {
           >
             🗑
           </button>
-        </div>
+          <button
+            className="create-story-btn primary-button"
+            onClick={handleCreateStory}
+            title="Create New Story"
+          >
+            <span className="plus-icon">+</span>
+          </button>
+          </div>
 
         <table>
           <thead>
@@ -300,6 +327,8 @@ export default function MyStories() {
                     <button onClick={() => { setSelectedStory(story); setModalMode('view'); }}>View</button>
                     <button onClick={() => { setSelectedStory(story); setModalMode('edit'); }}>Edit</button>
                     <button className="bin-btn" onClick={() => handleDeleteStory(story.id)}>🗑</button>
+
+      
                     <button
                       className={`favourite-btn ${story.favourite ? 'favourite-active' : ''}`}
                       onClick={() => handleToggleFavourite(story.id, story.favourite)}
