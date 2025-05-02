@@ -159,3 +159,32 @@ h2 {
       font-size: 20px;
     }
   }
+
+  /* Google Sign-In Button Style */
+  .google-btn {
+    background-color: white;  /* Google Blue */
+    color: rgb(25, 24, 24);
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    
+    border: 2px solid #4285F4;  /* Google Blue border */
+    transition: border-color 0.3s ease;  /* Smooth transition on hover */
+  }
+  
+
+.google-btn:hover {
+  background-color: #357AE8;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
