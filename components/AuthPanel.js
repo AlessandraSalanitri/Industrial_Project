@@ -8,28 +8,37 @@ import { useUser } from "../context/UserContext";
 import { firebaseAuth } from "../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import "../styles/auth.css";
+import ResetPasswordModal from "./ResetPasswordModal";
 
 export default function AuthPanel({ mode }) {
   const router = useRouter();
   const { login } = useUser();
+
   const [isSignUp, setIsSignUp] = useState(false);
-  const [form, setForm] = useState({ email: "", password: "", confirmPassword: "", role: "parent" });
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "parent",
+  });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
-    setIsSignUp(mode === 'signup');
+    setIsSignUp(mode === "signup");
   }, [mode]);
 
   const handleSwitch = () => {
-    setIsSignUp(prev => !prev);
+    setIsSignUp((prev) => !prev);
     setError("");
     setForm({ email: "", password: "", confirmPassword: "", role: "parent" });
+    router.replace(isSignUp ? "/login" : "/signup");
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
@@ -37,93 +46,102 @@ export default function AuthPanel({ mode }) {
     setError("");
 
     if (isSignUp && form.password !== form.confirmPassword) {
-      return setError("Passwords do not match, please double check.");
+      return setError("Passwords do not match.");
     }
 
     try {
       setLoading(true);
 
       if (isSignUp) {
-        const { error } = await signUp(form.email, form.password, form.role);
-        if (error) {
-          setError(error.message || "Signup failed.");
+        const { error: signUpError } = await signUp(
+          form.email,
+          form.password,
+          form.role
+        );
+        if (signUpError) {
+          if (signUpError.code === "auth/email-already-in-use") {
+            setError("Email already in use. Redirecting to login...");
+            setRedirecting(true);
+            setTimeout(() => {
+              router.replace("/login");
+            }, 2000);
+            return;
+          }
+          setError(signUpError.message || "Signup failed.");
           return;
         }
-        // Go to login page after signup
-        router.push("/login");
+        setRedirecting(true);
+        setTimeout(() => {
+          router.replace("/login");
+        }, 2000);
       } else {
-        const { result, error } = await signIn(form.email, form.password);
-        if (error) {
-          setError(error.message || "Login failed.");
+        const { result, error: signInError } = await signIn(
+          form.email,
+          form.password
+        );
+        if (signInError || !result) {
+          setError(signInError?.message || "Invalid credentials.");
           return;
         }
 
         login(result);
 
-        // Redirect based on role
-        if (result?.role === "parent") {
-          router.push("/parent/dashboard");
-        } else if (result?.role === "child") {
+        if (result.role === "parent") {
+          router.replace("/parent/dashboard");
+        } else if (result.role === "child") {
           if (!result.avatar) {
-            router.push("/child/create_avatar");
+            router.replace("/child/create_avatar");
           } else {
-            router.push("/child/dashboard");
+            router.replace("/child/dashboard");
           }
         } else {
-          router.push("/");
+          router.replace("/");
         }
       }
     } catch (err) {
-      setError(err.message || "Something went wrong");
+      setError(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Google Sign-In Logic
   const handleGoogleLogin = async () => {
-    const provider = new GoogleAuthProvider();
+    setError("");
     try {
-      const result = await signInWithPopup(firebaseAuth, provider);
-      const user = result.user;
+      const provider = new GoogleAuthProvider();
+      const { user } = await signInWithPopup(firebaseAuth, provider);
 
       if (!user.email) {
         setError("Google login failed. No email provided.");
         return;
       }
 
-      // Example: Assume parent role — you can enhance this with Firestore/claims logic
       const userData = {
         uid: user.uid,
         email: user.email,
         displayName: user.displayName,
-        role: "parent" // or determine dynamically
+        role: "parent",
       };
 
       login(userData);
-
-      // Redirect based on role
-      if (userData.role === "parent") {
-        router.push("/parent/dashboard");
-      } else if (userData.role === "child") {
-        router.push("/child/dashboard");
+      router.replace("/parent/dashboard");
+    } catch (err) {
+      console.error(err);
+      if (err.code === "auth/cancelled-popup-request") {
+        setError("Sign‑in cancelled. Please try again.");
       } else {
-        router.push("/");
+        setError("Google login failed. Please try again.");
       }
-
-    } catch (error) {
-      console.error("Google login failed:", error);
-      setError("Google login failed. Please try again.");
     }
   };
 
   return (
     <div className="auth-wrapper">
-      <div className={`auth-panel ${isSignUp ? 'signup-mode' : ''}`}>
+      <div className={`auth-panel ${isSignUp ? "signup-mode" : ""}`}>
         <AnimatePresence mode="wait">
           <motion.div
-            key={isSignUp ? 'signup-panel' : 'login-panel'}
-            className={`auth-panel ${isSignUp ? 'signup-mode' : ''}`}
+            key={isSignUp ? "signup-panel" : "login-panel"}
+            className={`auth-panel ${isSignUp ? "signup-mode" : ""}`}
             initial={{ x: isSignUp ? 300 : -300, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: isSignUp ? -300 : 300, opacity: 0 }}
@@ -132,18 +150,23 @@ export default function AuthPanel({ mode }) {
             <div className="form-box">
               <h2>{isSignUp ? "Sign Up" : "Login"}</h2>
               {error && <p className="error">{error}</p>}
+              {redirecting && (
+                <p className="redirect-message">
+                  Redirecting to login… Please wait.
+                </p>
+              )}
               <form onSubmit={handleSubmit}>
                 <input
-                  type="email"
                   name="email"
+                  type="email"
                   placeholder="Email"
                   value={form.email}
                   onChange={handleChange}
                   required
                 />
                 <input
-                  type="password"
                   name="password"
+                  type="password"
                   placeholder="Password"
                   value={form.password}
                   onChange={handleChange}
@@ -152,31 +175,46 @@ export default function AuthPanel({ mode }) {
                 {isSignUp && (
                   <>
                     <input
-                      type="password"
                       name="confirmPassword"
+                      type="password"
                       placeholder="Confirm Password"
                       value={form.confirmPassword}
                       onChange={handleChange}
                       required
                     />
-                    <select name="role" value={form.role} onChange={handleChange}>
+                    <select
+                      name="role"
+                      value={form.role}
+                      onChange={handleChange}
+                    >
                       <option value="parent">Parent</option>
                       <option value="child">Child</option>
                     </select>
                   </>
                 )}
-                <button className={`button ${isSignUp ? "button-primary" : "button-secondary"}`} type="submit" disabled={loading}>
-                  {loading ? "Please wait..." : isSignUp ? "Sign Up" : "Login"}
+                <button
+                  type="submit"
+                  className={`button ${
+                    isSignUp ? "button-primary" : "button-secondary"
+                  }`}
+                  disabled={loading || redirecting}
+                >
+                  {loading
+                    ? "Please wait…"
+                    : isSignUp
+                    ? "Sign Up"
+                    : "Login"}
                 </button>
-
                 {!isSignUp && (
                   <p className="forgot-password">
-                    <span onClick={() => setShowResetModal(true)} className="link">
+                    <span
+                      onClick={() => setShowResetModal(true)}
+                      className="link"
+                    >
                       Forgot your password?
                     </span>
                   </p>
                 )}
-
                 <button
                   type="button"
                   onClick={handleGoogleLogin}
@@ -192,15 +230,19 @@ export default function AuthPanel({ mode }) {
                   Sign in with Google
                 </button>
               </form>
-
               <p className="switch-text">
-                {isSignUp ? "Already have an account?" : "Don't have an account?"}
-                <button type="button" onClick={handleSwitch} className="link">
+                {isSignUp
+                  ? "Already have an account?"
+                  : "Don't have an account?"}{" "}
+                <button
+                  type="button"
+                  onClick={handleSwitch}
+                  className="link"
+                >
                   {isSignUp ? "Login here" : "Sign up here"}
                 </button>
               </p>
             </div>
-
             <div className="auth-image">
               <Image
                 src="/assets/login_img.png"
@@ -213,7 +255,6 @@ export default function AuthPanel({ mode }) {
           </motion.div>
         </AnimatePresence>
       </div>
-
       {showResetModal && (
         <ResetPasswordModal onClose={() => setShowResetModal(false)} />
       )}
