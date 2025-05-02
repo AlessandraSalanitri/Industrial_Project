@@ -7,7 +7,6 @@
 .title {
   color: transparent;
   -webkit-text-stroke: 1.5px var(--primary-color);
-  text-stroke: 1.5px var(--primary-color); /* fallback for other browsers */
   font-weight: bold;
   text-align: center;
   font-size: 48px;
@@ -310,4 +309,11 @@ button.active {
   color: white;
 }
 
+.select-delete-controls {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 20px;     /* Pushes this block down from the above section */
+  padding-top: 20px;     /* Optional: adds internal space if there's a background */
+}
 

@@ -24,6 +24,7 @@ export default function MyStories() {
   const [viewFavourites, setViewFavourites] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: 'title', direction: 'asc' });
+  const [selectedStoryIds, setSelectedStoryIds] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -49,9 +50,9 @@ export default function MyStories() {
 
   const handleDeleteStory = async (id) => {
     try {
-      const storyRef = doc(firestoreDB, 'stories', id);
-      await deleteDoc(storyRef);
+      await deleteDoc(doc(firestoreDB, 'stories', id));
       setStories((prev) => prev.filter((s) => s.id !== id));
+      setSelectedStoryIds((prev) => prev.filter((sid) => sid !== id));
       alert('Story deleted successfully!');
     } catch (e) {
       console.error('Error deleting story:', e);
@@ -59,22 +60,28 @@ export default function MyStories() {
     }
   };
 
+  const handleDeleteSelected = async () => {
+    if (!window.confirm('Are you sure you want to delete selected stories?')) return;
+    try {
+      await Promise.all(selectedStoryIds.map((id) => deleteDoc(doc(firestoreDB, 'stories', id))));
+      setStories((prev) => prev.filter((s) => !selectedStoryIds.includes(s.id)));
+      setSelectedStoryIds([]);
+      alert('Selected stories deleted!');
+    } catch (e) {
+      console.error('Error deleting selected stories:', e);
+      setErrorMessage('Failed to delete some stories. Try again.');
+    }
+  };
+
   const handleToggleFavourite = async (storyId, currentStatus) => {
     try {
       const storyRef = doc(firestoreDB, 'stories', storyId);
       const snap = await getDoc(storyRef);
-
-      if (!snap.exists()) {
-        setErrorMessage('Story not found; please refresh.');
-        return;
-      }
-
+      if (!snap.exists()) return setErrorMessage('Story not found; please refresh.');
       await updateDoc(storyRef, { favourite: !currentStatus });
-
       setStories((prev) =>
         prev.map((s) => (s.id === storyId ? { ...s, favourite: !currentStatus } : s))
       );
-
       alert(`Story ${!currentStatus ? 'added to' : 'removed from'} favourites`);
     } catch (e) {
       console.error('Error toggling favourite:', e);
@@ -91,7 +98,6 @@ export default function MyStories() {
         age: updated.age,
         content: updated.content,
       });
-
       const snap = await getDocs(collection(firestoreDB, 'stories'));
       const userStories = snap.docs
         .map((d) => ({ id: d.id, ...d.data() }))
@@ -118,16 +124,31 @@ export default function MyStories() {
   const handleStopStory = () => window.speechSynthesis.cancel();
 
   const handleSort = (key) => {
-    setSortConfig((prev) => {
-      const direction = prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc';
-      return { key, direction };
-    });
+    setSortConfig((prev) => ({
+      key,
+      direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc',
+    }));
   };
+
+  const toggleSelect = (id) => {
+    setSelectedStoryIds((prev) =>
+      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedStoryIds.length === sortedStories.length) {
+      setSelectedStoryIds([]);
+    } else {
+      setSelectedStoryIds(sortedStories.map((s) => s.id));
+    }
+  };
+
+  const handleClearFilters = () => setFilters({ letter: null, genre: null, age: null });
 
   const sortedStories = [...stories]
     .filter((s) => {
-      const startsWith =
-        !filters.letter || s.title?.[0]?.toUpperCase() === filters.letter;
+      const startsWith = !filters.letter || s.title?.[0]?.toUpperCase() === filters.letter;
       const matchesGenre = !filters.genre || s.genre === filters.genre;
       const matchesAge = !filters.age || s.age === filters.age;
       const matchesFav = !viewFavourites || s.favourite;
@@ -136,21 +157,18 @@ export default function MyStories() {
     .sort((a, b) => {
       const aVal = a[sortConfig.key] || '';
       const bVal = b[sortConfig.key] || '';
-      const compare = aVal.toString().localeCompare(bVal.toString());
-      return sortConfig.direction === 'asc' ? compare : -compare;
+      return sortConfig.direction === 'asc'
+        ? aVal.localeCompare(bVal)
+        : bVal.localeCompare(aVal);
     });
 
   const renderArrow = (key) => {
     const isActive = sortConfig.key === key;
     return (
       <span style={{ marginLeft: 4 }}>
-        {isActive && sortConfig.direction === 'asc' ? '↑' : isActive ? '↓' : '↕'}
+        {isActive ? (sortConfig.direction === 'asc' ? '↑' : '↓') : '↕'}
       </span>
     );
-  };
-
-  const handleClearFilters = () => {
-    setFilters({ letter: null, genre: null, age: null });
   };
 
   return (
@@ -159,7 +177,7 @@ export default function MyStories() {
         <h1>My Stories</h1>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-        {/* Alphabet Filter */}
+        {/* Filters */}
         <div className="alphabet-filter">
           {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => {
             const hasAny = stories.some((s) => s.title?.[0]?.toUpperCase() === letter);
@@ -176,59 +194,68 @@ export default function MyStories() {
           })}
         </div>
 
-        {/* Other Filters and Toggle Favourites */}
+        {/* Filter Selects & Favourites */}
         <div className="filters-actions">
-  <label style={{ marginRight: '20px' }}>
-    Genre:
-    <select
-      value={filters.genre || ''}
-      onChange={(e) => setFilters((f) => ({ ...f, genre: e.target.value || null }))}
-    >
-      <option value="">All</option>
-      {[...new Set(stories.map((s) => s.genre))].map((g) => (
-        <option key={g} value={g}>
-          {g}
-        </option>
-      ))}
-    </select>
-  </label>
+          <label>
+            Genre:
+            <select
+              value={filters.genre || ''}
+              onChange={(e) => setFilters((f) => ({ ...f, genre: e.target.value || null }))}
+            >
+              <option value="">All</option>
+              {[...new Set(stories.map((s) => s.genre))].map((g) => (
+                <option key={g} value={g}>{g}</option>
+              ))}
+            </select>
+          </label>
 
-  <label style={{ marginRight: '20px' }}>
-    Age:
-    <select
-      value={filters.age || ''}
-      onChange={(e) => setFilters((f) => ({ ...f, age: e.target.value || null }))}
-    >
-      <option value="">All</option>
-      {[...new Set(stories.map((s) => s.age))].map((a) => (
-        <option key={a} value={a}>
-          {a}
-        </option>
-      ))}
-    </select>
-  </label>
+          <label>
+            Age:
+            <select
+              value={filters.age || ''}
+              onChange={(e) => setFilters((f) => ({ ...f, age: e.target.value || null }))}
+            >
+              <option value="">All</option>
+              {[...new Set(stories.map((s) => s.age))].map((a) => (
+                <option key={a} value={a}>{a}</option>
+              ))}
+            </select>
+          </label>
 
-  <button
-    className={`toggle-btn ${filters.letter || filters.genre || filters.age ? 'primary' : 'secondary'}`}
-    onClick={handleClearFilters}
-  >
-    {filters.letter || filters.genre || filters.age ? 'Clear Filters' : 'Filter'}
-  </button>
+          <button
+            className={`toggle-btn ${filters.letter || filters.genre || filters.age ? 'primary' : 'secondary'}`}
+            onClick={handleClearFilters}
+          >
+            {filters.letter || filters.genre || filters.age ? 'Clear Filters' : 'Filter'}
+          </button>
 
           <button
             className={`toggle-btn ${viewFavourites ? 'secondary' : 'primary'}`}
             onClick={() => setViewFavourites((v) => !v)}
-            style={{ float: 'right' }} 
-
           >
             {viewFavourites ? 'All Stories' : 'View Favourites'}
           </button>
         </div>
 
-        {/* Story Table */}
+        {/* Select/Delete */}
+        <div className="select-delete-controls">
+          <button className="toggle-btn secondary" onClick={toggleSelectAll}>
+            {selectedStoryIds.length === sortedStories.length ? 'Deselect All' : 'Select All'}
+          </button>
+          <button
+            className="toggle-btn primary"
+            onClick={handleDeleteSelected}
+            disabled={selectedStoryIds.length === 0}
+          >
+            🗑
+          </button>
+        </div>
+
+        {/* Table */}
         <table>
           <thead>
             <tr>
+              <th><input type="checkbox" checked={selectedStoryIds.length === sortedStories.length && sortedStories.length > 0} onChange={toggleSelectAll} /></th>
               <th onClick={() => handleSort('title')} style={{ cursor: 'pointer' }}>
                 Title {renderArrow('title')}
               </th>
@@ -246,12 +273,11 @@ export default function MyStories() {
           </thead>
           <tbody>
             {sortedStories.length === 0 ? (
-              <tr>
-                <td colSpan="5">No stories found. Try changing filters.</td>
-              </tr>
+              <tr><td colSpan="6">No stories found. Try changing filters.</td></tr>
             ) : (
               sortedStories.map((story) => (
                 <tr key={story.id}>
+                  <td><input type="checkbox" checked={selectedStoryIds.includes(story.id)} onChange={() => toggleSelect(story.id)} /></td>
                   <td>{story.title}</td>
                   <td>{story.age}</td>
                   <td>{story.genre}</td>
@@ -259,11 +285,10 @@ export default function MyStories() {
                   <td className="action-buttons">
                     <button onClick={() => { setSelectedStory(story); setModalMode('view'); }}>View</button>
                     <button className="edit-btn" onClick={() => { setSelectedStory(story); setModalMode('edit'); }}>Edit</button>
-                    <button className="delete-btn" onClick={() => handleDeleteStory(story.id)}>Delete</button>
+                    <button className="delete-btn" onClick={() => handleDeleteStory(story.id)}>🗑</button>
                     <button
                       className={`favourite-btn ${story.favourite ? 'favourite-active' : ''}`}
                       onClick={() => handleToggleFavourite(story.id, story.favourite)}
-                      aria-label={story.favourite ? 'Remove from favourites' : 'Add to favourites'}
                     >
                       {story.favourite ? <FaHeart size={20} color="red" /> : <FaRegHeart size={20} color="gray" />}
                     </button>
