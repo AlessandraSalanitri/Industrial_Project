@@ -266,7 +266,7 @@ export default function MyStories() {
           </button>
           
           <button
-            className="toggle-btn primary"
+            className="delete-selected-btn"
             onClick={handleDeleteSelected}
             disabled={selectedStoryIds.length === 0}
           >
@@ -361,3 +361,4 @@ export default function MyStories() {
     </Layout>
   );
 }
+

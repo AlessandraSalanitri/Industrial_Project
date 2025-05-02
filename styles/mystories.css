@@ -349,3 +349,23 @@ button.active {
 .create-story-btn:hover {
   background-color: #2b6cb0;
 }
+
+.delete-selected-btn {
+  width: 3rem;
+  height: 3rem;
+  font-size: 2rem;
+  line-height: 1.5rem;
+  border-radius: 50%;
+  background-color:#4B0082;;
+  color: White;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.delete-selected-btn:hover {
+  background-color: #2b6cb0;
+}
