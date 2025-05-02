@@ -230,7 +230,7 @@ export default function MyStories() {
           </button>
 
           <button
-            className={`toggle-btn ${viewFavourites ? 'secondary' : 'primary'}`}
+            className={`toggle-btn ${viewFavourites ? 'secondary' : 'primary'} favourites-toggle`}
             onClick={() => setViewFavourites((v) => !v)}
           >
             {viewFavourites ? 'All Stories' : 'View Favourites'}

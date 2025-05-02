@@ -317,3 +317,15 @@ button.active {
   padding-top: 20px;     /* Optional: adds internal space if there's a background */
 }
 
+.filters-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.favourites-toggle {
+  margin-left: auto;
+}
