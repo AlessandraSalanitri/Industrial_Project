@@ -265,40 +265,44 @@ textarea {
 }
 
 
-/* === GLOBAL LIGHT/DARK TOGGLE STYLES === */
-.theme-toggle.top-right {
-  position: fixed;
-  top: 3%;
-  right: 10%;
-  z-index: 9999;
-  display: inline-flex;
-  border: 1px solid #cccccc;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #f9f9f9;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-}
-
-.toggle-btn {
-  padding: 8px 14px;
+/* === GLOBAL DARK MODE BASE STYLES === */
+.theme-toggle-btn {
+  width: 40px;       
+  height: 40px;
+  font-size: 1.5rem; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--primary-color); 
+  border-radius: 50%;
+  background-color: var(--dark-gray);
   cursor: pointer;
-  background: #eee;
-  font-weight: 600;
-  border: none;
-  color: #4b0082;
   transition: all 0.3s ease;
 }
 
-.toggle-btn.active {
-  background: #4b0082;
+.theme-toggle-btn:hover {
+  box-shadow: 0 0 8px var(--dark-gray); 
+}
+
+html.dark .theme-toggle-btn {
+  border-color: var(--dark-gray);
+  background-color: #1a1a1a;
+}
+
+/* Dark mode for specific layout sections */
+html.dark .child-dashboard {
+  background-color: #111;
   color: white;
 }
 
-.toggle-btn:hover {
-  background: #d1c4e9;
-  color: #4b0082;
+html.dark .dashboard-header {
+  background-color: #1a1a1a;
 }
 
+html.dark .story-content-view {
+  background-color: #222;
+  border-color: #444;
+}
 
 /* === Global Story Title (for Create, Write, My Stories) === */
   .story-title {
@@ -339,24 +343,3 @@ button.active {
 }
 
 
-
-/* Parent dashboard global style to keep mode toggle and notif icon in place
-.top-controls-inner {
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-  
-.notification-container {
-  position: relative;
-  margin-top: 5px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-}
-  
-.notification-bell-icon {
-  font-size: 26px;
-} */
-  

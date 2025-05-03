@@ -7,11 +7,11 @@ import Layout from '../../components/Layout';
 import Image from 'next/image';
 import Link from 'next/link';
 import '../../styles/parent_dashboard.css';
+import { ThemeToggle } from '../../components/ThemeToggle';
 import '../../styles/darkMode.css';
 import '../../styles/notification_bell.css'; // Separate new CSS for the bell
 
 export default function ParentDashboard() {
-  const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true); // new state
@@ -156,12 +156,6 @@ export default function ParentDashboard() {
     }
   };  
 
-  const handleThemeToggle = (mode) => {
-    const isDark = mode === 'dark';
-    setDarkMode(isDark);
-    localStorage.setItem('theme', mode);
-    document.body.classList.toggle('dark-mode', isDark);
-  };
   
 
   return (
@@ -173,18 +167,7 @@ export default function ParentDashboard() {
       
           {/* LEFT: THEME TOGGLE */}
           <div className="theme-toggle">
-            <button
-              className={`toggle-btn ${!darkMode ? 'active' : ''}`}
-              onClick={() => handleThemeToggle('light')}
-            >
-              Light
-            </button>
-            <button
-              className={`toggle-btn ${darkMode ? 'active' : ''}`}
-              onClick={() => handleThemeToggle('dark')}
-            >
-              Dark
-            </button>
+            <ThemeToggle />
           </div>
       
           {/* RIGHT: NOTIFICATION BELL */}

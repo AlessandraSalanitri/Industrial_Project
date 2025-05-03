@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import StoryList from '../../components/StoryList';
 import '../../styles/child_dashboard.css';
+import { ThemeToggle } from '../../components/ThemeToggle';
 import '../../styles/darkMode.css';
 import { firebaseAuth, firestoreDB } from '../../firebase/firebaseConfig';
 import { collection, getDoc, doc, query, where, getDocs } from 'firebase/firestore';
 
 export default function ChildDashboard() {
-  const [darkMode, setDarkMode] = useState(false);
   const [stories, setStories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -44,12 +44,6 @@ export default function ChildDashboard() {
     }
   }, [user]);
 
-  const handleThemeToggle = (mode) => {
-    const isDark = mode === 'dark';
-    setDarkMode(isDark);
-    localStorage.setItem('theme', mode);
-    document.body.classList.toggle('dark-mode', isDark);
-  };
 
   const fetchStories = async () => {
     setIsLoading(true);
@@ -108,17 +102,7 @@ export default function ChildDashboard() {
     {/* --- New Dashboard Header --- */}
     <div className="dashboard-header">
       <h1 className="dashboard-title">Your Stories</h1>
-
-      <div className="dashboard-controls">
-        <div className="theme-toggle">
-          <button className={`toggle-btn ${!darkMode ? 'active' : ''}`} onClick={() => handleThemeToggle('light')}>
-            Light
-          </button>
-          <button className={`toggle-btn ${darkMode ? 'active' : ''}`} onClick={() => handleThemeToggle('dark')}>
-            Dark
-          </button>
-        </div>
-      </div>
+        <ThemeToggle />
     </div>
 
     {/* --- Search and Filters are already inside StoryList --- */}

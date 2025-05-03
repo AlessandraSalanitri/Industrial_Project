@@ -1,5 +1,5 @@
 /* === GLOBAL CSS DARK MODE === */
-.dark-mode {
+html.dark {
     --secondary-color: #E2E8F0; /* In dark mode, golden yellow as primary */
     --primary-color: #4B0082; 
     --white: #FFFFFF;
@@ -8,59 +8,59 @@
     --background-color: #121212;
 }
 
-.dark-mode p {
+html.dark p {
   color: var(--white);
 }
   
-body.dark-mode {
+html.dark body {
     background-color: var(--background-color);
     color: var(--white);
 }
 
-.dark-mode .button-primary {
+html.dark .button-primary {
     background-color: var(--primary-color);
     color: var(--alt);
     border: 2px solid var(--alt);
 }
 
-.dark-mode .button-primary:hover {
+html.dark .button-primary:hover {
     background-color: var(--alt);
     color: var(--primary-color);
     border: 2px solid var(--primary-color);
 }
 
-.dark-mode .button-secondary {
+html.dark .button-secondary {
     background-color: var(--secondary-color);
     color: var(--primary-color);
     border: 2px solid var(--primary-color);
 }
   
-.dark-mode .button-secondary:hover {
+html.dark .button-secondary:hover {
     background-color: var(--alt);
 }
 
 
 
 /* ======== NAVBAR DARK MODE ======== */
-.dark-mode header {
+html.dark header {
     background-color: var(--background-color);
 }
   
-.dark-mode nav {
+html.dark nav {
     background-color: transparent;
     color: var(--white);
 }
    
-.dark-mode nav ul li a:hover,
-.dark-mode nav ul li .active {
+html.dark nav ul li a:hover,
+html.dark nav ul li .active {
     color: var(--alt);
 }
   
-.dark-mode .avatar-icon {
+html.dark .avatar-icon {
     border: 2px solid var(--secondary-color);
 }
 
-.dark-mode .container {
+html.dark .container {
     background-color: transparent;
     padding: 40px 80px;
     margin-top: 130px;
@@ -68,60 +68,58 @@ body.dark-mode {
     margin: 0 auto;
 }
 
-.dark-mode .hamburger .bar{
+html.dark .hamburger .bar{
     color: var(--alt);
 }
 
 nav.main-nav {
     background-color: var(--background-color);
-  }
+}
   
-
-
 /* === CONTACT PAGE DARK MODE === */
-.dark-mode .contact-page {
+html.dark .contact-page {
     background: linear-gradient(to bottom right, #121212 60%, var(--primary-color) 60%);
 }
   
-.dark-mode .contact-info {
+html.dark .contact-info {
     color: var(--white);
 }
   
-.dark-mode .contact-item {
+html.dark .contact-item {
     color: var(--white);
 }
-  
-.dark-mode .contact-item:hover {
+
+html.dark .contact-item:hover {
     color: var(--secondary-color);
 }
   
-.dark-mode .contact-item img {
+html.dark .contact-item img {
     filter: brightness(1.5);
 }
   
-.dark-mode .contact-form-container {
+html.dark .contact-form-container {
     background-color: #222;
     border: 1px solid #FFD700;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
 }
   
-.dark-mode .contact-form-container h2 {
+html.dark .contact-form-container h2 {
     color: var(--white);
 }
   
-.dark-mode input,
-.dark-mode textarea {
+html.dark input,
+html.dark textarea {
     background-color: #333;
     color: var(--white);
     border: 1px solid #FFD700;
 }
   
-.dark-mode input::placeholder,
-.dark-mode textarea::placeholder {
+html.dark input::placeholder,
+html.dark textarea::placeholder {
     color: #aaa;
 }
   
-.dark-mode .socials {
+html.dark .socials {
     color: var(--white);
 }
 
@@ -129,40 +127,39 @@ nav.main-nav {
 
 /* === ABOUT PAGE DARK MODE === */
 
-.dark-mode .about-container {
+html.dark .about-container {
     background-color: var(--background-color);
 }
   
-.dark-mode .about-container h1 {
+html.dark .about-container h1 {
     color: var(--secondary-color);
 }
   
-.dark-mode .about-card {
+html.dark .about-card {
     background-color: var(--background-color);
 
 }
   
-.dark-mode .about-card p {
+html.dark .about-card p {
     color: #e0e0e0;
 }
   
-.dark-mode .about-card .closing-line {
+html.dark .about-card .closing-line {
     color: var(--alt);
 }
   
-.dark-mode .about-image {
+html.dark .about-image {
     border-color: var(--secondary-color);
 }
   
 /* ======== AVATAR PANEL======== */
-.dark-mode .avatar-img {
+html.dark .avatar-img {
     box-shadow: 0 0 10px rgba(233, 233, 17, 0.5);
 }
 
 
 /* Exiting password handle tries modal */
-  
-.dark-mode .modal {
+html.dark .modal {
     background: rgb(53, 51, 51);
     box-shadow: 0 6px 20px rgba(192, 36, 206, 0.8);
 }
@@ -170,42 +167,42 @@ nav.main-nav {
 
 
 /* === ADMIN_PANEL DARK MODE === */
-.dark-mode .admin-panel {
+html.dark .admin-panel {
     background-color: var(--dark-gray);
     box-shadow: -5px 0 20px rgba(255, 255, 255, 0.05);
 }
 
-.dark-mode .admin-header button {
+html.dark .admin-header button {
     background: #333;
     border: 2px solid #666;
     color: white;
 }
 
-.dark-mode .admin-content {
+html.dark .admin-content {
     color: white;
 }
   
-.dark-mode .admin-avatar img {
+html.dark .admin-avatar img {
     border-color: var(--secondary-color);
 }
 
-.dark-mode .admin-username {
+html.dark .admin-username {
     background: #333;
     color: white;
     border: 1px solid #666;
 }
   
-.dark-mode .admin-btn {
+html.dark .admin-btn {
     color: white;
 }
 
-.dark-mode .admin-username {
+html.dark .admin-username {
     background: #333;
     color: white;
     border: 1px solid #666;
 }
   
-.dark-mode .admin-btn {
+html.dark .admin-btn {
     color: var(--gray);
 }
 
@@ -213,88 +210,84 @@ nav.main-nav {
 
 /* === PERSONAL DETAILS PAGE DARK MODE === */
 
-.dark-mode .personal-details-page {
+html.dark .personal-details-page {
     background-color: #1e1e1e;
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
 }
 
-.dark-mode .personal-details-page h1 {
+html.dark .personal-details-page h1 {
     color: var(--secondary-color);
 }
 
-.dark-mode .detail-row {
+html.dark .detail-row {
     background: #2a2a2a;
     border: 1px solid #444;
 }
 
-.dark-mode .detail-label {
+html.dark .detail-label {
     color: var(--secondary-color);
 }
   
-.dark-mode .detail-value {
+html.dark .detail-value {
     color: #cccccc;
 }
 
 
-
-
 /* ======== SUBSCRIPTION PLAN DARK MODE ======== */
-
-.dark-mode .subscription-wrapper {
+html.dark .subscription-wrapper {
     background-color: var(--background-color);
     color: var(--secondary-color);
 }
 
-.dark-mode .subscription-wrapper {
+html.dark .subscription-wrapper {
     background-color: var(--background-color);
     color: var(--white);
 }
 
 
-.dark-mode .billing-toggle span {
+html.dark .billing-toggle span {
     background: var(--secondary-color);
     color: var(--background-color);
 }
   
-.dark-mode .billing-toggle .active {
+html.dark .billing-toggle .active {
     background: var(--primary-color);
     color: var(--white);
 }
   
-.dark-mode .plan-card {
+html.dark .plan-card {
     background: VAR(--dark-gray);
     color: var(--white);
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
     border: 1px solid var(--primary-color);
 }
   
-.dark-mode .plan-card:hover {
+html.dark .plan-card:hover {
     box-shadow: 0 6px 14px rgba(255, 255, 255, 0.1);
 }
   
-.dark-mode .plan-card.selected {
+html.dark .plan-card.selected {
     border-color: var(--secondary-color);
 }
   
-.dark-mode .plan-card .tag {
+html.dark .plan-card .tag {
     background: #5f5f5f;
     color: var(--background-color);
 }
   
-.dark-mode .plan-card h3 {
+html.dark .plan-card h3 {
     color: var(--secondary-color);
 }
   
-.dark-mode .plan-card .price {
+html.dark .plan-card .price {
     color: var(--primary-color);
 }
  
 
 
 /* ======== LINKED ACCOUNTS DARK MODE ======== */
-
-.dark-mode .links-table th,
-.dark-mode .links-table td {
+html.dark .links-table th,
+html.dark .links-table td {
   padding: 12px 16px;
   border: 1px solid var(--dark-gray);
   text-align: left;
@@ -302,18 +295,18 @@ nav.main-nav {
   font-size: 15px;
 }
 
-.dark-mode .links-table th {
+html.dark .links-table th {
     background-color: var(--primary-color);
     color: var(--white);
 }
 
 
 /* ======== SETTINGS DARK MODE ======== */
-.dark-mode .settings-container {
+html.dark .settings-container {
     padding-top: 10%;
 }
 
-.dark-mode .settings-title {
+html.dark .settings-title {
     color: transparent;
     -webkit-text-stroke: 1.5px var(--alt);
     text-stroke: 1.5px var(--alt); /* fallback for other browsers */
@@ -324,30 +317,30 @@ nav.main-nav {
     text-shadow: 0 5 20px rgb(240, 240, 137);
 }
 
-.dark-mode .link-child-container input {
+html.dark .link-child-container input {
     background-color: #454343;
     color: var(--white);
     border-color: var(--primary-color);
 }
 
-.dark-mode .link-child-container input:hover,
-.dark-mode .link-child-container input:active {
+html.dark .link-child-container input:hover,
+html.dark .link-child-container input:active {
     border-color: var(--alt);
 }
 
-.dark-mode .info-box {
+html.dark .info-box {
     background-color: #454343;
     border-left-color: var(--alt);
     color: var(--white);
 }
 
-.dark-mode .voice-card.selected {
+html.dark .voice-card.selected {
     border: 2px solid var(--primary-color);
 }
 
 /* ======== STORY LIST DARK MODE ======== */
 
-.dark-mode .dashboard-title {
+html.dark .dashboard-title {
   color: transparent;
   -webkit-text-stroke: 1.5px var(--alt);
   text-stroke: 1.5px var(--alt); /* fallback for other browsers */
@@ -358,7 +351,7 @@ nav.main-nav {
 }
 
 
-.dark-mode .play-button {
+html.dark .play-button {
     position: absolute;
     background: var(--alt);
     border: 3px solid var(--primary-color);
@@ -370,7 +363,7 @@ nav.main-nav {
     cursor: pointer;
 }
 
-.dark-mode .play-button:hover{
+html.dark .play-button:hover{
     background: var(--primary-color);
     border: 3px solid var(--alt);
     color: var(--secondary-color);
@@ -378,13 +371,13 @@ nav.main-nav {
     height: 50px;
 }
 
-.dark-mode .story-card {
+html.dark .story-card {
     background: var(--background-color);
     display: flex;
     border: 1px solid var(--alt);
 }
 
-.dark-mode .play-action {
+html.dark .play-action {
     background-color: var(--primary-color);
     border: 2px solid var(--alt);
     color: var(--white);
@@ -395,26 +388,26 @@ nav.main-nav {
     transition: 0.3s;
 }
   
-.dark-mode .play-action:hover {
+html.dark .play-action:hover {
     border: 2px solid var(--primary-color);
     background: var(--alt);
     color: var(--background-color);
 }
 
-.dark-mode .search-input,
-.dark-mode .filter-select {
+html.dark .search-input,
+html.dark .filter-select {
   background-color: #222;
   color: var(--white);
   border: 1px solid var(--secondary-color);
 }
 
-.dark-mode .dashboard-controls button {
+html.dark .dashboard-controls button {
   background-color: #222;
   color: var(--secondary-color);
   border-color: var(--secondary-color);
 }
 
-.dark-mode .dashboard-controls button:hover {
+html.dark .dashboard-controls button:hover {
   background-color: var(--secondary-color);
   color: var(--black);
 }
@@ -423,66 +416,64 @@ nav.main-nav {
 
 
 /* === STORY MODAL DARK MODE === */
-.dark-mode .story-modal {
+html.dark .story-modal {
     background-color: #1c1c1c;
     color: #eee;
 }
   
-.dark-mode .story-modal-title {
+html.dark .story-modal-title {
     color: var(--secondary-color);
 }
   
-.dark-mode .story-modal-text {
+html.dark .story-modal-text {
     color: #f1f1f1;
 }
 
-.story-modal.dark-mode .modal-close {
+html.dark .story-modal .modal-close {
     color: #fff;
 }
 
-.dark-mode .story-modal-progress {
+html.dark .story-modal-progress {
     background-color: #333;
 }
   
-.dark-mode .story-modal-progress-bar {
+html.dark .story-modal-progress-bar {
     background-color: var(--secondary-color);
 }
   
-.dark-mode .story-modal-controls button {
+html.dark .story-modal-controls button {
     background-color: #2c2c2c;
     color: var(--white);
     border: 1px solid var(--secondary-color);
 }
   
-.dark-mode .story-modal-controls button:hover {
+html.dark .story-modal-controls button:hover {
     background-color: var(--secondary-color);
     color: #1c1c1c;
 }
 
 /* ======== FOOTER DARK MODE REMAINS PURPLE======== */
-
-.dark-mode footer {
+html.dark footer {
     background-color: var(--primary-color);
     color: var(--white);
 }
   
   
 /* ======== PARENT DASHBOARD======== */
-
-.dark-mode .dashboard-card {
+html.dark .dashboard-card {
     background-color:  var(--dark-background-color);
     box-shadow: 0 2px 6px rgba(255,255,255,0.1); /* softer white-ish shadow */
 }
 
-.dark-mode .toggle-btn {
+html.dark .toggle-btn {
     transition: background 0.3s ease;
 }
   
-.dark-mode .toggle-btn.active {
+html.dark .toggle-btn.active {
     background-color: var(--primary-color);
     color: white;
 }
 
-.dark-mode .top-controls {
+html.dark .top-controls {
     background-color: var(--background-color);
 }

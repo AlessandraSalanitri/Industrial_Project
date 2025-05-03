@@ -1,10 +1,10 @@
 import '@/styles/global.css'
 import '@/styles/darkMode.css'
 import { UserProvider } from '../context/UserContext';
-import { useState, useEffect } from 'react';
+import { ThemeProvider } from 'next-themes';
+import { useEffect } from 'react';
 
 function MyApp({ Component, pageProps }) {
-  const [darkMode, setDarkMode] = useState(false);
 
   // Clear dark mode on logout (when no user is saved)
   useEffect(() => {
@@ -16,11 +16,16 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <UserProvider>
-      <div className={darkMode ? 'dark' : ''}>
-        <Component {...pageProps} setDarkMode={setDarkMode} darkMode={darkMode} />
-      </div>
-    </UserProvider>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <UserProvider>
+        <Component {...pageProps} />
+      </UserProvider>
+    </ThemeProvider>
   );
 }
 
