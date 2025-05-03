@@ -1,4 +1,4 @@
-
+//pages/parent/dashboard
 import { useEffect, useState } from 'react';
 import { Bell } from 'phosphor-react';
 import { doc, updateDoc, collection, query, where, onSnapshot, addDoc, getDocs, getDoc } from "firebase/firestore"; // Added getDoc here
@@ -19,8 +19,41 @@ export default function ParentDashboard() {
   useEffect(() => {
     const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
       if (user) {
+        
+        const checkAndResetCredits = async () => {
+          const userDocRef = doc(firestoreDB, "users", user.uid);
+          const userSnap = await getDoc(userDocRef);
+        
+          if (userSnap.exists()) {
+            const data = userSnap.data();
+            const plan = data.subscriptionPlan || "free";
+            const today = new Date().toISOString().split("T")[0];
+        
+            if (plan !== "unlimited") {
+              const defaultCredits = plan === "pro" ? 30 : 5;
+              const lastReset = data.lastCreditReset;
+        
+              if (lastReset !== today) {
+                await updateDoc(userDocRef, {
+                  creditsToday: defaultCredits,
+                  lastCreditReset: today
+                });
+        
+                // refresh localStorage if you're relying on it
+                const updatedUser = {
+                  ...data,
+                  creditsToday: defaultCredits,
+                  lastCreditReset: today
+                };
+                localStorage.setItem("user", JSON.stringify(updatedUser));
+              }
+            }
+          }
+        };
+        await checkAndResetCredits(user);
+
         try {
-          // Fetch user's notification setting
+          // 🔔 Fetch user's notification setting
           const userDocRef = doc(firestoreDB, "users", user.uid);
           const userDocSnap = await getDoc(userDocRef);
 
