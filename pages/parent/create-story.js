@@ -60,6 +60,7 @@ export default function CreateStory() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isReading, setIsReading] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(null);
+  const [creditsLeft, setCreditsLeft] = useState(null);
 
   const router = useRouter();
 
@@ -69,15 +70,24 @@ export default function CreateStory() {
   // This ensures the user variable is properly set once a user logs in.
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       setAuthLoading(false);
+  
+      if (currentUser) {
+        const userDocRef = doc(firestoreDB, "users", currentUser.uid);
+        const userSnap = await getDoc(userDocRef);
+  
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+          setCreditsLeft(data.creditsToday ?? 0);
+        }
+      }
     });
   
     return () => unsubscribe();
   }, []);
-
-
+  
 
   // Stop speech when navigating away
   useEffect(() => {
@@ -336,13 +346,19 @@ const confirmSave = async () => {
   }
 };
 
-
-
   return (
     <Layout>
+      
       <StoryPageTour />  {/* Tutorial when the user enter for the first time on this page */}
       <div className="container">
+        
         <h1 className="title">Create Your Story</h1>
+
+        {creditsLeft !== null && (
+        <div className="credit-info-right">
+          🪙 <strong>{creditsLeft}</strong>
+        </div>
+        )}
 
         <select 
           value={age} 
@@ -408,7 +424,6 @@ const confirmSave = async () => {
           </select>
 
 
-
           <select 
             value={moral} 
             onChange={(e) => {
@@ -433,7 +448,6 @@ const confirmSave = async () => {
           <option value="Environmental Awareness">Environmental Awareness</option>
           <option value="Creativity and Imagination">Creativity & Imagination</option>
           </select>
-
 
 
           <select 
@@ -491,6 +505,10 @@ const confirmSave = async () => {
 
         {!story && (
             <>
+              <button onClick={() => router.push('/parent/dashboard')} className="button button-secondary">
+              ↩ Back
+              </button>
+
               <button onClick={handleGenerateAI} className="button button-primary generate-button" disabled={loading}>
                🎔 Generate Story
               </button>
@@ -499,26 +517,23 @@ const confirmSave = async () => {
                𓂃🖊 Create Your Own Story
               </button>
 
-              <button onClick={() => router.push('/parent/dashboard')} className="button button-secondary">
-                Back
-              </button>
             </>
           )}
 
           {story && (
             <>
+              <button onClick={handleBack} className="button button-secondary">↩ Back</button>
+              <button onClick={handleSaveStory} className="button button-primary">🖫 Save Story</button>
               <button onClick={handleConvertToAudio} className="button button-primary">
                 {isReading ? "⏹ Stop Reading" : "▶ Read Aloud"}
               </button>
-              <button onClick={handleSaveStory} className="button button-primary">Save Story</button>
-              <button onClick={handleBack} className="button button-secondary">Back</button>
+
             </>
           )}
         </div>
 
         {story && (
           <div className="generated-story">
-            <label htmlFor="story">Generated Story</label>
             {storyName && (
               <div className="story-title">
                 <MoonStars
@@ -538,8 +553,6 @@ const confirmSave = async () => {
             />
           </div>
         )}
-
-
 
         {showModal && (
           <div className="modal-backdrop">

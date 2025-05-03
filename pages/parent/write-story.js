@@ -12,7 +12,8 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import '../../styles/create_story.css';  // reusing style
 import '../../styles/alertmodal.css'
 import CuteError from '../../components/CuteError';
-
+import { useUser } from '../../context/UserContext';
+import AlertModal from '../../components/AlertModal';
 
 export default function WriteStory() {
   const [storyText, setStoryText] = useState('');
@@ -27,38 +28,51 @@ export default function WriteStory() {
   const [showAudioErrorModal, setShowAudioErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   // SAVE DRAFT-continue the story
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useUser();
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [draftData, setDraftData] = useState(null);
   const router = useRouter();
   const [offlineError, setOfflineError] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(null);
+
+  const [creditsLeft, setCreditsLeft] = useState(null);
 
   // SAVE DRAFT-continue the story - conected to user
 
-useEffect(() => {
-  const auth = getAuth();
-  const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-    setUser(currentUser);
-
-    if (currentUser) {
-      const draftRef = doc(firestoreDB, "drafts", currentUser.uid);
-      try {
-        const draftSnap = await getDoc(draftRef);
-        if (draftSnap.exists()) {
-          setDraftData(draftSnap.data());
-          setShowResumeModal(true);
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+  
+      if (currentUser) {
+        // 🔍 Fetch credits
+        const userDocRef = doc(firestoreDB, "users", currentUser.uid);
+        const userSnap = await getDoc(userDocRef);
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+          setCreditsLeft(data.creditsToday ?? 0);
         }
-      } catch (error) {
-        console.error('Error fetching draft:', error);
-        if (error.message.toLowerCase().includes('offline')) {
-          setOfflineError(true);
+  
+        // 📝 Check for saved draft
+        const draftRef = doc(firestoreDB, "drafts", currentUser.uid);
+        try {
+          const draftSnap = await getDoc(draftRef);
+          if (draftSnap.exists()) {
+            setDraftData(draftSnap.data());
+            setShowResumeModal(true);
+          }
+        } catch (error) {
+          console.error('Error fetching draft:', error);
+          if (error.message.toLowerCase().includes('offline')) {
+            setOfflineError(true);
+          }
         }
       }
-    }
-  });
-
-  return () => unsubscribe();
-}, []);
+    });
+  
+    return () => unsubscribe();
+  }, []);
+  
 
 // ✅ Show cute error page if offline
 if (offlineError) {
@@ -122,13 +136,33 @@ const handleGenerateNext = async () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        userId: user?.uid,
         mode: "continue",
         title: title.trim(),
         genre: genre.trim(),
-        storyText: storyText.trim()
+        storyText: storyText.trim(),
       }),
     });
 
+    if (response.status === 403) {
+      const errorData = await response.json();
+      if (errorData.error === "No story credits left for today.") {
+        setLoading(false);
+        setShowAlertModal({
+          type: "error",
+          title: "😢 Out of Credits",
+          message: "Sorry, you’ve used all your story credits for today. Come back tomorrow or upgrade your plan.",
+          onConfirm: () => {
+            setShowAlertModal(null);
+            router.push("/parent/subscription");
+          },
+          onClose: () => setShowAlertModal(null),
+          confirmLabel: "View Plans",
+        });
+        return;
+      }
+    }   
+    
     const data = await response.json();
 
     // Handle failure in API response
@@ -143,11 +177,24 @@ const handleGenerateNext = async () => {
       return; // ⬅️ Make sure to stop execution
     }
     
-
     const nextPart = data.response;
     const updatedStory = storyText + "\n\n" + nextPart;
     setStoryText(updatedStory);
     setGenerated(true);
+
+    // ✅ Refresh credits after generation
+    const refreshedDoc = await getDoc(doc(firestoreDB, "users", user.uid));
+    if (refreshedDoc.exists()) {
+      const updatedUser = {
+        ...user,
+        ...refreshedDoc.data(),
+        userId: user.uid,
+      };
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      // ✅ Live update credits display
+      setCreditsLeft(updatedUser.creditsToday ?? 0);
+    }
 
     // Save to Firestore draft
     if (user) {
@@ -248,6 +295,12 @@ const handleGenerateNext = async () => {
       <div className="container">
         <h1>Write Your Own Story</h1>
 
+        {creditsLeft !== null && (
+          <div className="credit-info-right">
+            🪙 <strong>{creditsLeft}</strong>
+          </div>
+        )}
+
         {errorMessage && (
               <p className="friendly-error-message">{errorMessage}</p>
             )}
@@ -321,25 +374,23 @@ const handleGenerateNext = async () => {
         </div>
 
         <div className="actions">
-            <button
-                onClick={handleGenerateNext}
-                className="button button-primary"
-                disabled={loading}
-            >
-                {loading ? 'Generating next paragraph...' : 'Generate Next Paragraph'}
+
+         <button onClick={handleBack} className="button button-secondary">
+              ↩ Back
             </button>
 
-            <button onClick={handleSave} className="button button-primary">
-                Save Story
-            </button>
-            <button onClick={handleConvert} className="button button-primary">
+          <button onClick={handleGenerateNext} className="button button-primary">
+              ↻ Generate Next
+          </button>
+
+          <button onClick={handleSave} className="button button-primary">
+             🖫 Save Story
+          </button>
+            
+          <button onClick={handleConvert} className="button button-primary">
             {isReading ? "⏹ Stop Reading" : "▶ Read Aloud"}
-            </button>
+          </button>
 
-
-            <button onClick={handleBack} className="button button-secondary">
-                ↩ Back
-            </button>
             </div>
 
 
@@ -433,6 +484,20 @@ const handleGenerateNext = async () => {
                 </div>
               </div>
             )}
+
+
+        {showAlertModal && (
+          <AlertModal
+            type={showAlertModal.type}
+            title={showAlertModal.title}
+            message={showAlertModal.message}
+            onConfirm={showAlertModal.onConfirm}
+            onClose={showAlertModal.onClose}
+            confirmLabel={showAlertModal.confirmLabel}
+            emoji={null} // 👈 disable emoji explicitly
+          />
+        )}
+
 
 
       </div>

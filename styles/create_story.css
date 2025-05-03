@@ -216,3 +216,12 @@ textarea {
   0% { opacity: 0; transform: translateY(-10px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+
+
+.credit-info-right {
+  text-align: right;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: #333;
+  padding-right: 4px;
+}

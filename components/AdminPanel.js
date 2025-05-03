@@ -115,7 +115,7 @@ export default function AdminPanel({ onClose }) {
             {/* Show credits if on free or pro */}
             {["free", "pro"].includes(user.subscriptionPlan) && (
               <div className="plan-credits">
-                <strong>Credits:</strong> {user.creditsToday ?? 0} left today
+                <strong>🪙 Credits:</strong> {user.creditsToday ?? 0} left today
               </div>
             )}
           </div>
