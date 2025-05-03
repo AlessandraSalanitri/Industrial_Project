@@ -5,7 +5,7 @@
     width: 25vw;
     max-width: 350px;
     height: 100vh;
-    background-color: #eeeeee;
+    background-color: var(--gray);
     box-shadow: -5px 0 20px rgba(0, 0, 0, 0.15);
     z-index: 1500;
     padding: 20px;

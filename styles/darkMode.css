@@ -206,6 +206,11 @@ html.dark .admin-btn {
     color: var(--gray);
 }
 
+html.dark .plan-name,
+html.dark .plan-credits {
+    color: var(--background-color);
+}
+
 
 
 /* === PERSONAL DETAILS PAGE DARK MODE === */
