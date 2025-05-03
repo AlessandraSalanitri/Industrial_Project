@@ -27,19 +27,20 @@ export default async function handler(req, res) {
     const userData = userSnap.data();
     const plan = userData.subscriptionPlan || "free";
     const today = new Date().toISOString().split("T")[0];
-    let credits = userData.creditsToday ?? 0;
+    let resetCredits = plan === "pro" ? 30 : 5;
+    let credits = typeof userData.creditsToday === "number" ? userData.creditsToday : resetCredits;
     const lastReset = userData.lastCreditReset;
 
     if (plan !== "unlimited") {
       let resetCredits = plan === "pro" ? 30 : 5;
-
-      if (lastReset !== today) {
+    
+      if (lastReset !== today || typeof userData.creditsToday !== "number") {
         credits = resetCredits - 1;
         await updateDoc(userRef, {
           creditsToday: credits,
           lastCreditReset: today,
         });
-      } else if (credits <= 0) {
+      } else if (credits <= 0 || isNaN(credits)) {
         return res.status(403).json({ error: "No story credits left for today." });
       } else {
         await updateDoc(userRef, {
@@ -47,7 +48,6 @@ export default async function handler(req, res) {
         });
       }
     }
-
     
   } catch (err) {
     console.error("❌ Error checking user credits:", err);

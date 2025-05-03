@@ -27,9 +27,11 @@ export default async function signUp(
       role,
       avatar: null,
       subscriptionPlan: "free",
-      credits: 5,
-      lastCreditUpdate: serverTimestamp()
+      credits: 5, 
+      creditsToday: 5, 
+      lastCreditReset: new Date().toISOString().split("T")[0], 
     });
+    
 
     console.log("User role + subscription info saved:", user.uid);
 

@@ -25,20 +25,22 @@ export default function AdminPanel({ onClose }) {
 
   const goToDashboard = () => router.push('/parent/dashboard');
 
-  //Fec user data to display number of credits
+  // ✅ Fetch user data to refresh credits (supports both userId and uid)
   const fetchUserData = async () => {
-    if (!user?.userId) return;
-  
+    const userId = user?.userId || user?.uid; // Fallback if one is missing
+    if (!userId) return;
+
     try {
-      const userRef = doc(firestoreDB, 'users', user.userId);
+      const userRef = doc(firestoreDB, 'users', userId);
       const docSnap = await getDoc(userRef);
-  
+
       if (docSnap.exists()) {
         const updatedUser = {
           ...user,
-          ...docSnap.data()
+          ...docSnap.data(),
+          userId, // Ensure it's included
         };
-  
+
         setUser(updatedUser);
         localStorage.setItem('user', JSON.stringify(updatedUser));
       }
@@ -46,6 +48,7 @@ export default function AdminPanel({ onClose }) {
       console.error("⚠️ Failed to refresh user data:", err);
     }
   };
+
 
   // Fetch linked accounts from Firestore
   const fetchLinkedAccounts = async () => {
