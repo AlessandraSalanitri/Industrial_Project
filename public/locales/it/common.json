@@ -120,7 +120,9 @@
   "Title is required": "Il titolo è obbligatorio",
   "✨ A magical story needs a title to begin!": "✨ Una storia magica ha bisogno di un titolo per iniziare!",
   "Genre is required": "Il genere è obbligatorio",
-  "📚 Pick a genre so we know what kind of adventure to tell!": "📚 Scegli un genere così sappiamo che tipo di avventura raccontare!"
+  "📚 Pick a genre so we know what kind of adventure to tell!": "📚 Scegli un genere così sappiamo che tipo di avventura raccontare!",
 
-
+  "HOME": "HOME",
+  "ABOUT": "INFORMAZZIONI",
+  "CONTACT": "CONTATTO"
 }

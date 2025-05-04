@@ -122,9 +122,11 @@
   "Title is required": "Title is required",
   "✨ A magical story needs a title to begin!": "✨ A magical story needs a title to begin!",
   "Genre is required": "Genre is required",
-  "📚 Pick a genre so we know what kind of adventure to tell!": "📚 Pick a genre so we know what kind of adventure to tell!"
+  "📚 Pick a genre so we know what kind of adventure to tell!": "📚 Pick a genre so we know what kind of adventure to tell!",
 
-  
+  "HOME": "HOME",
+  "ABOUT": "ABOUT",
+  "CONTACT": "CONTACT"
 
   }
   
