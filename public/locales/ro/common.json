@@ -70,12 +70,12 @@
 
   "Back": "Înapoi",
   "Generate Story": "Generează poveste",
-  "Create Your Own Story": "Creează-ți propria poveste",
+  "Create Your Own Story": "Creează-ți Propria Poveste",
 
 
-  "Save Story": "Salvează povestea",
-  "⏹ Stop Reading": "⏹ Oprește citirea",
-  "▶ Read Aloud": "▶ Citește cu voce tare",
+  "Save Story": "Salvează",
+  "⏹ Stop Reading": "⏹ Oprește",
+  "▶ Read Aloud": "▶ Citește",
 
   "Name Your Story": "Dă un nume poveștii tale",
 
@@ -94,7 +94,36 @@
     "selectGenre": "Te rugăm să alegi un gen.",
     "lengthMissing": "Aventuri mari sau povești scurte? Alege o durată!",
     "selectLength": "Te rugăm să alegi o durată de lectură."
-  }
+  },
+
+  "Write Your Own Story": "Scrie-ți Propria Poveste",
+
+  "Select Genre": "Alege Genul",
+
+  "Generate Next": "Generează următorul",
+
+
+  "storySavedModalMessage": "Povestea ta <1>„{{title}}”</1> a fost salvată și se află acum în <3>Poveștile mele</3>.",
+  "Untitled Story": "Poveste fără titlu",
+
+  "Incomplete Story": "Poveste incompletă",
+  "incompleteStoryMessage": "Asigură-te că povestea ta are un <1>titlu</1> și ceva <3>text</3> înainte de a salva.",
+
+  "audioErrorMessage": "Scrie sau generează un text înainte de a folosi <1>Citește cu voce tare</1>.",
+
+  "Resume Your Draft?": "Reia schița ta?",
+  "resumeMessage": "Am găsit o poveste neterminată. Vrei să continui de unde ai rămas?",
+  "Yes, Resume": "Da, continuă",
+  "No, Start Fresh": "Nu, începe de la zero",
+
+  "Enter your story title...": "Scrie titlul poveștii tale...",
+  "Start writing your magical bedtime story here...": "Începe să scrii aici povestea ta magică de noapte bună...",
+
+  "Title is required": "Titlul este obligatoriu",
+  "✨ A magical story needs a title to begin!": "✨ O poveste magică are nevoie de un titlu pentru a începe!",
+  "Genre is required": "Genul este obligatoriu",
+  "📚 Pick a genre so we know what kind of adventure to tell!": "📚 Alege un gen ca să știm ce fel de aventură să spunem!"
+
 
 
 }

@@ -14,7 +14,6 @@ import { speakWithUserVoice, stopSpeech } from '../../utils/tts';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation, Trans } from 'next-i18next';
 
-
 export async function getServerSideProps({ locale }) {
   return {
     props: {
@@ -22,7 +21,6 @@ export async function getServerSideProps({ locale }) {
     },
   };
 }
-
 
 
 // ✨ Random image picker based on genre
@@ -50,8 +48,6 @@ const pickRandomImageForGenre = (genre) => {
 
   return `${genrePath}${fileName}`;
 };
-
-
 
 export default function CreateStory() {
   const [story, setStory] = useState('');

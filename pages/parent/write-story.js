@@ -15,6 +15,17 @@ import CuteError from '../../components/CuteError';
 import { useUser } from '../../context/UserContext';
 import AlertModal from '../../components/AlertModal';
 import { speakWithUserVoice } from '../../utils/tts';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation, Trans } from 'next-i18next';
+
+
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
+}
 
 export default function WriteStory() {
   const [storyText, setStoryText] = useState('');
@@ -35,6 +46,7 @@ export default function WriteStory() {
   const router = useRouter();
   const [offlineError, setOfflineError] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(null);
+  const { t } = useTranslation('common');
 
   const [creditsLeft, setCreditsLeft] = useState(null);
 
@@ -116,12 +128,12 @@ const handleGenerateNext = async () => {
   const newErrors = {};
 
   if (!title.trim()) {
-    newErrors.title = 'Title is required';
-    setErrorMessage("✨ A magical story needs a title to begin!");
+    newErrors.title = t('Title is required');
+    setErrorMessage(t('✨ A magical story needs a title to begin!'));
   } else if (!genre.trim()) {
-    newErrors.genre = 'Genre is required';
-    setErrorMessage("📚 Pick a genre so we know what kind of adventure to tell!");
-  }
+    newErrors.genre = t('Genre is required');
+    setErrorMessage(t('📚 Pick a genre so we know what kind of adventure to tell!'));
+  }  
 
   if (Object.keys(newErrors).length > 0) {
     setErrors(newErrors);
@@ -288,7 +300,7 @@ const handleConvert = () => {
   return (
     <Layout>
       <div className="container">
-        <h1>Write Your Own Story</h1>
+        <h1>{t('Write Your Own Story')}</h1>
 
         {creditsLeft !== null && (
           <div className="credit-info-right">
@@ -300,10 +312,10 @@ const handleConvert = () => {
               <p className="friendly-error-message">{errorMessage}</p>
             )}
             
-        <input
+          <input
           type="text"
-          value={title}  // ← Resuming a draft will show the restored title
-          placeholder="Enter your story title..."
+          value={title}
+          placeholder={t('Enter your story title...')}
           onChange={(e) => {
             const newTitle = e.target.value;
             setTitle(newTitle);
@@ -316,9 +328,9 @@ const handleConvert = () => {
               });
             }
           }}
-          
           className={errors.title ? "input-error" : ""}
         />
+
 
 
 
@@ -339,121 +351,130 @@ const handleConvert = () => {
           
           className={errors.genre ? "input-error" : ""}
         >
-        <option value="">Select Genre</option>
-        <option value="Fantasy">Fantasy</option>
-        <option value="Adventure">Adventure</option>
-        <option value="Mystery">Mystery</option>
-        <option value="Science Fiction">Science Fiction</option>
-        <option value="Historical Fiction">Historical Fiction</option>
-        <option value="Animal Stories">Animal Stories</option>
-        <option value="Humor">Humor</option>
+          <option value="">{t('Select Genre')}</option>
+          <option value="Fantasy">{t('Fantasy')}</option>
+          <option value="Adventure">{t('Adventure')}</option>
+          <option value="Mystery">{t('Mystery')}</option>
+          <option value="Science Fiction">{t('Science Fiction')}</option>
+          <option value="Historical Fiction">{t('Historical Fiction')}</option>
+          <option value="Animal Stories">{t('Animal Stories')}</option>
+          <option value="Humor">{t('Humor')}</option>
         </select>
 
         <div className="generated-story">
         <textarea
-          value={storyText}
-          onChange={(e) => {
-            const newText = e.target.value;
-            setStoryText(newText);
-            if (user) {
-              setDoc(doc(firestoreDB, "drafts", user.uid), {
-                title,
-                genre,
-                storyText: newText,
-              });
-            }
-          }}
-          placeholder="Start writing your magical bedtime story here..."
-        />
+        value={storyText}
+        onChange={(e) => {
+          const newText = e.target.value;
+          setStoryText(newText);
+          if (user) {
+            setDoc(doc(firestoreDB, "drafts", user.uid), {
+              title,
+              genre,
+              storyText: newText,
+            });
+          }
+        }}
+        placeholder={t('Start writing your magical bedtime story here...')}
+      />
 
         </div>
 
         <div className="actions">
 
-         <button onClick={handleBack} className="button button-secondary">
-              ↩ Back
-            </button>
+        <button onClick={handleBack} className="button button-secondary">
+          ↩ {t('Back')}
+        </button>
 
-          <button onClick={handleGenerateNext} className="button button-primary">
-              ↻ Generate Next
-          </button>
+        <button onClick={handleGenerateNext} className="button button-primary">
+          ↻ {t('Generate Next')}
+        </button>
 
-          <button onClick={handleSave} className="button button-primary">
-             🖫 Save Story
-          </button>
-            
-          <button onClick={handleConvert} className="button button-primary">
-            {isReading ? "⏹ Stop Reading" : "▶ Read Aloud"}
-          </button>
+        <button onClick={handleSave} className="button button-primary">
+          🖫 {t('Save Story')}
+        </button>
 
-            </div>
+        <button onClick={handleConvert} className="button button-primary">
+          {isReading ? t('⏹ Stop Reading') : t('▶ Read Aloud')}
+        </button>
+
+        </div>
 
 
             {/* SAVE STORY MESSAGE */}
             {showSuccessModal && (
-            <div className="modal-backdrop">
-                <div className="modal-content">
-                <h2 className="success-heading">🎉 Story Saved Successfully!</h2>
+              <div className="modal-backdrop">
+              <div className="modal-content">
+                <h2 className="success-heading">🎉 {t('Story Saved Successfully!')}</h2>
                 <p>
-                    Your story <strong>“{title || "Untitled"}”</strong> has been saved and is now in <strong>My Stories</strong>.
+                  <Trans i18nKey="storySavedModalMessage" values={{ title: title || t('Untitled Story') }}>
+                    Your story <strong>“{{title}}”</strong> has been saved and is now in <strong>My Stories</strong>.
+                  </Trans>
                 </p>
                 <div className="modal-actions">
-                    <button
+                  <button
                     className="button button-primary"
                     onClick={() => {
-                        setShowSuccessModal(false);
-                        setStoryText('');
-                        setTitle('');
-                        setGenre('');
-                        router.push('/parent/my-stories');
+                      setShowSuccessModal(false);
+                      setStoryText('');
+                      setTitle('');
+                      setGenre('');
+                      router.push('/parent/my-stories');
                     }}
-                    >
-                    OK
-                    </button>
+                  >
+                    {t('OK')}
+                  </button>
                 </div>
-                </div>
+              </div>
             </div>
             )}
 
             {/* POP UP MESSAGE IF THE REQ FIELDS ARE NOT COMPLETED */}
             {showErrorModal && (
             <div className="modal-backdrop">
-                <div className="modal-content">
-                <h2 className="modal-title">🚨 Incomplete Story</h2>
-                <p>Please make sure your story has a <strong>title</strong> and some <strong>text</strong> before saving.</p>
+              <div className="modal-content">
+                <h2 className="modal-title">🚨 {t('Incomplete Story')}</h2>
+                <p>
+                  <Trans i18nKey="incompleteStoryMessage">
+                    Please make sure your story has a <strong>title</strong> and some <strong>text</strong> before saving.
+                  </Trans>
+                </p>
                 <div className="modal-actions">
-                    <button className="button button-primary" onClick={() => setShowErrorModal(false)}>
-                    OK
-                    </button>
+                  <button className="button button-primary" onClick={() => setShowErrorModal(false)}>
+                    {t('OK')}
+                  </button>
                 </div>
-                </div>
+              </div>
             </div>
-            )}
+          )}
 
             {/* ERROR MESSAGE AUDIO IF NO TEXT */}
             {showAudioErrorModal && (
               <div className="modal-backdrop">
                 <div className="modal-content">
-                  <h2 className="modal-title">🚨 Incomplete Story</h2>
-                  <p>Please write or generate some story text before using <strong>Read Aloud</strong>.</p>
+                  <h2 className="modal-title">🚨 {t('Incomplete Story')}</h2>
+                  <p>
+                    <Trans i18nKey="audioErrorMessage">
+                      Please write or generate some story text before using <strong>Read Aloud</strong>.
+                    </Trans>
+                  </p>
                   <div className="modal-actions">
                     <button
                       className="button button-primary"
                       onClick={() => setShowAudioErrorModal(false)}
                     >
-                      OK
+                      {t('OK')}
                     </button>
                   </div>
                 </div>
               </div>
             )}
 
-
             {showResumeModal && (
               <div className="modal-backdrop">
                 <div className="modal-content">
-                  <h2 className="modal-title">📝 Resume Your Draft?</h2>
-                  <p>We found an unfinished story. Would you like to continue where you left off?</p>
+                  <h2 className="modal-title">📝 {t('Resume Your Draft?')}</h2>
+                  <p>{t('resumeMessage')}</p>
                   <div className="modal-actions">
                     <button
                       className="button button-primary"
@@ -464,7 +485,7 @@ const handleConvert = () => {
                         setShowResumeModal(false);
                       }}
                     >
-                      Yes, Resume
+                      {t('Yes, Resume')}
                     </button>
                     <button
                       className="button button-secondary"
@@ -473,7 +494,7 @@ const handleConvert = () => {
                         setShowResumeModal(false);
                       }}
                     >
-                      No, Start Fresh
+                      {t('No, Start Fresh')}
                     </button>
                   </div>
                 </div>

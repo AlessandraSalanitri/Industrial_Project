@@ -93,9 +93,38 @@
     "selectGenre": "Please select a genre.",
     "lengthMissing": "Big adventures or tiny tales? Pick a reading length!",
     "selectLength": "Please select a reading length."
-  }
+  },
+
+  "Write Your Own Story": "Write Your Own Story",
+
+  "Select Genre": "Select Genre",
 
 
+  "Generate Next": "Generate Next",
+
+
+  "storySavedModalMessage": "Your story <1>“{{title}}”</1> has been saved and is now in <3>My Stories</3>.",
+  "Untitled Story": "Untitled Story",
+
+  "Incomplete Story": "Incomplete Story",
+  "incompleteStoryMessage": "Please make sure your story has a <1>title</1> and some <3>text</3> before saving.",
+
+  "audioErrorMessage": "Please write or generate some story text before using <1>Read Aloud</1>.",
+
+  "Resume Your Draft?": "Resume Your Draft?",
+  "resumeMessage": "We found an unfinished story. Would you like to continue where you left off?",
+  "Yes, Resume": "Yes, Resume",
+  "No, Start Fresh": "No, Start Fresh",
+
+  "Enter your story title...": "Enter your story title...",
+  "Start writing your magical bedtime story here...": "Start writing your magical bedtime story here...",
+
+  "Title is required": "Title is required",
+  "✨ A magical story needs a title to begin!": "✨ A magical story needs a title to begin!",
+  "Genre is required": "Genre is required",
+  "📚 Pick a genre so we know what kind of adventure to tell!": "📚 Pick a genre so we know what kind of adventure to tell!"
+
+  
 
   }
   

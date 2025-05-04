@@ -72,9 +72,9 @@
   "Generate Story": "Genera storia",
   "Create Your Own Story": "Crea la tua storia",
 
-  "Save Story": "Salva storia",
-  "⏹ Stop Reading": "⏹ Ferma lettura",
-  "▶ Read Aloud": "▶ Leggi ad alta voce",
+  "Save Story": "Salva",
+  "⏹ Stop Reading": "⏹ Ferma",
+  "▶ Read Aloud": "▶ Leggi",
 
   "Name Your Story": "Dai un nome alla tua storia",
 
@@ -92,5 +92,35 @@
     "selectGenre": "Seleziona un genere.",
     "lengthMissing": "Grandi avventure o racconti brevi? Scegli una durata!",
     "selectLength": "Seleziona una durata di lettura."
-  }
+  },
+
+  "Write Your Own Story": "Scrivi la tua storia",
+
+  "Select Genre": "Seleziona genere",
+
+  "Generate Next": "Genera il prossimo",
+
+
+  "storySavedModalMessage": "La tua storia <1>“{{title}}”</1> è stata salvata ed è ora in <3>Le mie storie</3>.",
+  "Untitled Story": "Storia senza titolo",
+
+  "Incomplete Story": "Storia incompleta",
+  "incompleteStoryMessage": "Assicurati che la tua storia abbia un <1>titolo</1> e del <3>testo</3> prima di salvarla.",
+
+  "audioErrorMessage": "Scrivi o genera del testo prima di usare <1>Leggi ad alta voce</1>.",
+
+  "Resume Your Draft?": "Riprendi la tua bozza?",
+  "resumeMessage": "Abbiamo trovato una storia non completata. Vuoi continuare da dove hai interrotto?",
+  "Yes, Resume": "Sì, riprendi",
+  "No, Start Fresh": "No, ricomincia da capo",
+
+  "Enter your story title...": "Inserisci il titolo della tua storia...",
+  "Start writing your magical bedtime story here...": "Inizia a scrivere la tua magica storia della buonanotte qui...",
+
+  "Title is required": "Il titolo è obbligatorio",
+  "✨ A magical story needs a title to begin!": "✨ Una storia magica ha bisogno di un titolo per iniziare!",
+  "Genre is required": "Il genere è obbligatorio",
+  "📚 Pick a genre so we know what kind of adventure to tell!": "📚 Scegli un genere così sappiamo che tipo di avventura raccontare!"
+
+
 }
