@@ -43,7 +43,10 @@ export default function WriteStory() {
   const { user, setUser } = useUser();
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [draftData, setDraftData] = useState(null);
+
   const router = useRouter();
+  const { locale } = router;
+  
   const [offlineError, setOfflineError] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(null);
   const { t } = useTranslation('common');
@@ -126,6 +129,7 @@ const pickRandomImageForGenre = (genre) => {
 //   GENERATE NEXT IDEEA FOR THE STORY
 const handleGenerateNext = async () => {
   const newErrors = {};
+    console.log("🌍 Sending story continuation in locale:", locale);
 
   if (!title.trim()) {
     newErrors.title = t('Title is required');
@@ -154,6 +158,7 @@ const handleGenerateNext = async () => {
         title: title.trim(),
         genre: genre.trim(),
         storyText: storyText.trim(),
+        locale,
       }),
     });
 

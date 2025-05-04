@@ -70,8 +70,11 @@ export default function CreateStory() {
   const [creditsLeft, setCreditsLeft] = useState(null);
   const { t } = useTranslation('common');
 
+
   const router = useRouter();
 
+  const { locale } = useRouter();
+  
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
@@ -174,6 +177,7 @@ export default function CreateStory() {
           tone,
           length,
           character,
+          locale,
         }),
       });
 
