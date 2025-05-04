@@ -14,6 +14,7 @@ import '../../styles/alertmodal.css'
 import CuteError from '../../components/CuteError';
 import { useUser } from '../../context/UserContext';
 import AlertModal from '../../components/AlertModal';
+import { speakWithUserVoice } from '../../utils/tts';
 
 export default function WriteStory() {
   const [storyText, setStoryText] = useState('');
@@ -264,28 +265,22 @@ const handleGenerateNext = async () => {
   
   
 // CONVERT TO AUDIO
-    const handleConvert = () => {
-      if (!storyText.trim()) {
-        setShowAudioErrorModal(true); // ✅ show modal
-        return;
-      }
+const handleConvert = () => {
+  if (!storyText.trim()) {
+    setShowAudioErrorModal(true); 
+    return;
+  }
 
-      const cleanedStory = storyText.replace(/\*\*/g, '').trim();
+  const cleanedStory = storyText.replace(/\*\*/g, '').trim();
 
-      if (!isReading) {
-        const utterance = new SpeechSynthesisUtterance(cleanedStory);
-        utterance.lang = "en-GB";
-        utterance.rate = 1;
-        utterance.pitch = 1;
-        utterance.onend = () => setIsReading(false);
-
-        window.speechSynthesis.speak(utterance);
-        setIsReading(true);
-      } else {
-        window.speechSynthesis.cancel();
-        setIsReading(false);
-      }
-    };
+  if (!isReading) {
+    speakWithUserVoice(cleanedStory, () => setIsReading(false));
+    setIsReading(true);
+  } else {
+    window.speechSynthesis.cancel();
+    setIsReading(false);
+  }
+};
 
   
 

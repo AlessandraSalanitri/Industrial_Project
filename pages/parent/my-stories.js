@@ -13,6 +13,7 @@ import {
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { firestoreDB } from '../../firebase/firebaseConfig';
 import '../../styles/mystories.css';
+import { speakWithUserVoice } from '../../utils/tts';
 import StoryEditorModal from '../../components/StoryEditorModal';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
@@ -131,11 +132,7 @@ export default function MyStories() {
   };
 
   const handleReadStory = (content) => {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(content);
-    u.lang = 'en-GB';
-    u.rate = 1;
-    window.speechSynthesis.speak(u);
+    speakWithUserVoice(content);
   };
 
   const handlePauseStory = () => window.speechSynthesis.pause();

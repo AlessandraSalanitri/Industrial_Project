@@ -62,15 +62,6 @@ export default function MyLinks() {
     <Layout>
       <div className="container">
         <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          {/* Back to Dashboard Button */}
-          <button className="button button-primary" onClick={() => router.push('/parent/dashboard')}>
-            <i className="fas fa-arrow-left"></i> Back to Dashboard
-          </button>
-
-          {/* Link Another Account Button */}
-          <button className="button button-primary" onClick={() => router.push('/parent/settings')}>
-            <i className="fas fa-link"></i> Link Another Account
-          </button>
         </div>
 
         <h3 className="page-title">Linked Accounts</h3>

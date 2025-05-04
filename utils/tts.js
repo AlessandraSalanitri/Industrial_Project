@@ -4,7 +4,7 @@ import { getAuth } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestoreDB } from '../firebase/firebaseConfig';
 
-// 🔹 Fetch the user's selected voice from Firestore
+// Fetch the user's selected voice from Firestore
 export const fetchUserSelectedVoice = async () => {
   const auth = getAuth();
   const user = auth.currentUser;

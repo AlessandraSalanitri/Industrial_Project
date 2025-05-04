@@ -1,10 +1,14 @@
 /* Page Title */
 .page-title {
-  color: var(--primary-color);
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 28px;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--primary-color);
+  text-stroke: 1.5px var(--primary-color); /* fallback for other browsers */
   font-weight: bold;
+  text-align: center;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  background-color: var(--white);
+  text-shadow: 0 5 20px rgb(224, 178, 235);
+  margin-bottom: 20px;
 }
 
 /* Links Table */
@@ -12,6 +16,7 @@
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 30px;
+
 }
 
 .links-table th,
@@ -26,6 +31,7 @@
 .links-table th {
   background-color: var(--primary-color);
   color: var(--white);
+
 }
 
 .no-links {
@@ -42,35 +48,6 @@
   gap: 10px; /* space out buttons */
   margin-top: 20px;
 }
-
-
-/* 
-.button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-
-.button-primary {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-
-.button-primary:hover {
-  background-color: #3e8e41; 
-}
- */
-
-
 
 /* Danger Button (Delete Button) */
 .button-danger {
@@ -91,4 +68,16 @@
 .button:hover {
   transform: translateY(-2px); /* Small lift effect */
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1050px) {
+  .container {
+    margin-top: 10%;
+  }
+}
+
+@media (max-width: 800px) {
+  .container {
+    margin-top: 20%;
+  }
 }
