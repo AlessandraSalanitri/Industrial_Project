@@ -1,4 +1,6 @@
-/* Navbar styles */
+/* Navbar Styles */
+
+/* Ensure header stays fixed at the top */
 header {
   width: 100%;
   position: fixed;
@@ -253,16 +255,11 @@ nav ul li a:hover, .active {
   nav.main-nav.show {
     max-height: 400px; 
   }
-  
-  nav.main-nav.show ul {
-    display: flex;
-  }
 
   nav.main-nav ul {
     flex-direction: column;
     gap: 20px;
     margin: 20px 0;
-    display: none;
   }
 
   nav.main-nav ul li a {

@@ -50,7 +50,12 @@ html.dark nav {
     background-color: transparent;
     color: var(--white);
 }
-   
+
+
+html.dark nav.main-nav.show ul {
+    display: flex;
+}
+
 html.dark nav ul li a:hover,
 html.dark nav ul li .active {
     color: var(--alt);
@@ -212,6 +217,102 @@ html.dark .plan-credits {
 }
 
 
+/* === CREATE STORY PAGE DARK MODE === */
+html.dark .container {
+    background-color: var(--background-color);
+}
+  
+html.dark h1 {
+    -webkit-text-stroke: 1.5px var(--alt);
+    text-stroke: 1.5px var(--alt);
+    text-shadow: 0 5px 20px rgba(255, 255, 150, 0.5);
+    background-color: var(--background-color);
+}
+  
+html.dark label {
+    color: var(--alt);
+}
+  
+html.dark select,
+html.dark input,
+html.dark textarea {
+    background-color: #2a2a2a;
+    color: var(--white);
+    border: 1px solid var(--primary-color);
+}
+  
+html.dark select:focus,
+html.dark input:focus,
+html.dark textarea:focus {
+    border-color: var(--alt);
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+}
+  
+html.dark textarea {
+    background-color: #1f1f1f;
+}
+  
+/* AI-generated output box */
+html.dark  #story,
+html.dark  .generated-story textarea {
+    background-color: #1f1f1f;
+    color: var(--background-color);
+    border-color: var(--alt);
+    box-shadow: 0 2px 6px rgba(255, 255, 255, 0.05);
+}
+  
+/* Title for output */
+html.dark  .generated-story label {
+    -webkit-text-stroke: 1.5px var(--alt);
+    text-stroke: 1.5px var(--alt);
+    text-shadow: 0 5px 20px rgba(255, 255, 150, 0.5);
+    background-color: var(--background-color);
+}
+  
+/* Modal fix */
+html.dark .modal-content {
+    background-color: #1e1e1e;
+    color: var(--white);
+    box-shadow: 0 6px 18px rgba(255, 255, 255, 0.1);
+}
+  
+html.dark  .modal-content h2 {
+    color: var(--alt);
+}
+  
+html.dark  .modal-content input {
+    background-color: #2e2e2e;
+    color: var(--white);
+    border: 1px solid var(--alt);
+}
+  
+html.dark .save-btn {
+    background-color: var(--alt);
+    color: var(--background-color);
+}
+  
+html.dark .cancel-btn {
+    background-color: #333;
+    color: var(--white);
+}
+
+html.dark .back-button {
+    width: 20%;
+    margin: 20px auto;
+  }
+  
+/* Errors */
+html.dark .error,
+html.dark .friendly-error-message,
+html.dark .error-message {
+    color: #ff4c4c;
+}
+  
+html.dark .input-error {
+    border-color: #ff4c4c;
+    background-color: #331e1e;
+}
+
 
 /* === PERSONAL DETAILS PAGE DARK MODE === */
 
@@ -341,6 +442,11 @@ html.dark .info-box {
 
 html.dark .voice-card.selected {
     border: 2px solid var(--primary-color);
+}
+
+/* ======== CHILD DASHBOARD DARK MODE ======== */
+html.dark .child-dashboard .dashboard-header{
+    background-color: var(--background-color);
 }
 
 /* ======== STORY LIST DARK MODE ======== */
@@ -482,3 +588,162 @@ html.dark .toggle-btn.active {
 html.dark .top-controls {
     background-color: var(--background-color);
 }
+
+/* === DARK MODE: Container & Title === */
+html.dark .container {
+    background-color: var(--background-color);
+    color: var(--white);
+}
+  
+html.dark .title {
+    -webkit-text-stroke: 1.5px var(--alt);
+    text-stroke: 1.5px var(--alt);
+    background-color: var(--background-color);
+    text-shadow: 0 5px 20px rgb(240, 240, 137);
+}
+  
+/* === DARK MODE: Table Styling === */
+html.dark table {
+    background-color: #1e1e1e;
+    color: var(--white);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+  
+html.dark thead {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+  
+html.dark tbody tr:nth-child(even) {
+    background-color: #2a2a2a;
+}
+  
+html.dark tbody tr:hover {
+    background-color: #333;
+}
+  
+/* === DARK MODE: Buttons === */
+html.dark .action-buttons button {
+    background-color: var(--gray);
+    color: var(--white);
+    border: 1px solid #666;
+}
+  
+html.dark .action-buttons button:hover {
+    background-color: var(--alt);
+    color: var(--primary-color);
+}
+  
+html.dark .action-buttons button.bin-btn {
+    background-color: #b00020;
+}
+  
+html.dark .action-buttons button.bin-btn:hover {
+    background-color: #ff1744;
+}
+  
+html.dark .favourite-btn {
+    color: #999;
+}
+  
+html.dark .favourite-active {
+    color: red;
+}
+  
+/* === DARK MODE: Story Paragraph === */
+html.dark .story-content {
+    background-color: #1f1f1f;
+    color: #f0f0f0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+  
+/* === DARK MODE: Filters & Toggles === */
+html.dark .alphabet-filter button,
+html.dark .reset-btn,
+html.dark .toggle-btn {
+    background-color: #333;
+    color: #eee;
+    border-color: #666;
+}
+  
+html.dark .alphabet-filter button.active,
+html.dark .alphabet-filter button:hover,
+html.dark .toggle-btn:hover,
+html.dark .reset-btn:hover {
+    background-color: var(--alt);
+    color: var(--primary-color);
+}
+  
+html.dark .toggle-btn.primary {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+  
+html.dark .toggle-btn.secondary {
+    background-color: #444;
+    color: #ccc;
+}
+  
+  /* === DARK MODE: Create & Delete Round Buttons === */
+html.dark .create-story-btn,
+html.dark .delete-selected-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+  
+html.dark .create-story-btn:hover,
+html.dark .delete-selected-btn:hover {
+    background-color: #fff700;
+    color: #4B0082;
+}
+
+/* === DARK MODE: MOBILE CARD VIEW === */
+html.dark .mobile-story-cards .story-card-mobile {
+    background-color: #222;
+    color: var(--white);
+    border: 1px solid #444;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.03);
+  }
+  
+  html.dark .story-card-mobile p {
+    color: var(--white);
+  }
+  
+  html.dark .action-buttons button {
+    background-color: var(--primary-color);
+    color: var(--white);
+  }
+  
+  html.dark .action-buttons button:hover {
+    background-color: var(--alt);
+    color: var(--primary-color);
+  }
+  
+  html.dark .action-buttons .bin-btn {
+    background-color: #c0392b;
+    color: white;
+  }
+  
+  html.dark .action-buttons .bin-btn:hover {
+    background-color: #e74c3c;
+  }
+  
+  html.dark .action-buttons .favourite-btn {
+    background: transparent;
+    color: gray;
+  }
+  
+  html.dark .action-buttons .favourite-active {
+    color: red;
+  }
+  
+  html.dark .back-button {
+    background-color: #333;
+    color: var(--white);
+    border: 1px solid var(--primary-color);
+  }
+  
+  html.dark .back-button:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }

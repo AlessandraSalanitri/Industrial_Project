@@ -10,7 +10,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { MoonStars } from 'phosphor-react';
 import StoryPageTour from '../../components/StoryPageTour';
 import AlertModal from '../../components/AlertModal';
-
+import { speakWithUserVoice, stopSpeech } from '../../utils/tts';
 
 
 
@@ -100,6 +100,8 @@ export default function CreateStory() {
     };
   }, [router.events]);
 
+
+
     if (authLoading) {
       return (
         <Layout>
@@ -113,8 +115,6 @@ export default function CreateStory() {
 
 
   // GENERATE STORY AI+ handle missing mandatry imput
-
-
   const handleGenerateAI = async () => {
     const newErrors = {};
   
@@ -212,97 +212,31 @@ export default function CreateStory() {
   };
   
   
-  // Fetch user-selected voice from Firestore
-  const fetchUserSelectedVoice = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-  
-    if (!user) {
-      console.error('No user is currently signed in.');
-      return null;
-    }
-  
-    try {
-      const userDocRef = doc(firestoreDB, 'users', user.uid);
-      const userDocSnap = await getDoc(userDocRef);
-  
-      if (userDocSnap.exists()) {
-        return userDocSnap.data().selectedVoice; // { name: 'Voice Name', lang: 'en-GB' }
-      } else {
-        console.error('User document does not exist.');
-        return null;
-      }
-    } catch (error) {
-      console.error('Error fetching user voice preference:', error);
-      return null;
-    }
-  };
+ // AUDIO
+ const handleConvertToAudio = async () => {
+  if (!story.trim()) return alert("Please generate a story first!");
 
-  const speakStory = async (storyText) => {
-    const selectedVoice = await fetchUserSelectedVoice();
-  
-    if (!selectedVoice) {
-      console.error('No voice selected. Using default voice.');
-      return;
-    }
-  
-    const synth = window.speechSynthesis;
-  
-    // Ensure voices are loaded
-    const loadVoices = () =>
-      new Promise((resolve) => {
-        let voices = synth.getVoices();
-        if (voices.length) {
-          resolve(voices);
-        } else {
-          synth.onvoiceschanged = () => {
-            voices = synth.getVoices();
-            resolve(voices);
-          };
-        }
-      });
-  
-    const voices = await loadVoices();
-    const voice = voices.find((v) => v.name === selectedVoice.name && v.lang === selectedVoice.lang);
-  
-    if (!voice) {
-      console.error('Selected voice not found. Using default voice.');
-    }
-  
-    const utterance = new SpeechSynthesisUtterance(storyText);
-    utterance.voice = voice || null; // Use default if not found
-    utterance.lang = selectedVoice.lang || 'en-GB';
-    utterance.rate = 1;
-    utterance.pitch = 1;
-  
-    synth.speak(utterance);
-  };
+  const cleanedStory = story.replace(/\*\*/g, '').trim();
 
-  const handleConvertToAudio = async () => {
-    if (!story.trim()) return alert("Please generate a story first!");
-  
-    const cleanedStory = story
-      .replace(/\*\*/g, '')
-      .trim();
-  
-    if (!isReading) {
-      await speakStory(cleanedStory);
-      setIsReading(true);
-    } else {
-      window.speechSynthesis.cancel();
-      setIsReading(false);
-    }
-  };
-  
-  const handleResumeAudio = () => {
-    if (window.speechSynthesis.paused) {
-      window.speechSynthesis.resume();
-    }
-  };
-  const handleStopAudio = () => {
-    window.speechSynthesis.cancel();
-  };
-  
+  if (!isReading) {
+    await speakWithUserVoice(cleanedStory, () => setIsReading(false));
+    setIsReading(true);
+  } else {
+    stopSpeech();
+    setIsReading(false);
+  }
+};
+
+
+const handleResumeAudio = () => {
+  if (window.speechSynthesis.paused) {
+    window.speechSynthesis.resume();
+  }
+};
+const handleStopAudio = () => {
+  window.speechSynthesis.cancel();
+};
+
 
   
 const handleBack = () => router.push('/parent/my-stories');

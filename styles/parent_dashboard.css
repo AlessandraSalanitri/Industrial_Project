@@ -146,16 +146,16 @@
   
 @media (max-width: 600px) {
     .top-controls {
-        padding: 25px 20px;
+        padding: 0 20px;
+    }
+
+    .top-controls-inner {
+        gap: 10px;
     }
 }
 
 
-@media (max-width: 460px) {
-    .top-controls {
-        padding: 25px 20px;
-    }
-
+@media (max-width: 480px) {
     .dashboard-title {
       font-size: 24px;
     }
@@ -171,10 +171,3 @@
     }
 
 }
-
-@media (max-width: 418px) {
-    .top-controls {
-        padding: 25px 20px;
-    }
-}
-
