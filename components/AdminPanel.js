@@ -7,9 +7,12 @@ import { firebaseAuth, firestoreDB } from '../firebase/firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import '../styles/admin_panel.css';
 import { doc, getDoc } from 'firebase/firestore';
-
+import LanguageSelector from './LanguageSelector';
+import { useTranslation } from 'next-i18next';
 
 export default function AdminPanel({ onClose }) {
+  const { t } = useTranslation('common');
+
   const { user, setUser, logout } = useUser();
   const router = useRouter();
 
@@ -109,37 +112,43 @@ export default function AdminPanel({ onClose }) {
         {user?.subscriptionPlan && (
           <div className="admin-plan-info">
             <div className="plan-name">
-              <strong>Current Plan:</strong> {planLabel}
+              <strong>{t('currentPlan')}:</strong> {planLabel}
             </div>
 
             {/* Show credits if on free or pro */}
             {["free", "pro"].includes(user.subscriptionPlan) && (
               <div className="plan-credits">
-                <strong>🪙 Credits:</strong> {user.creditsToday ?? 0} left today
+                <strong>🪙 {t('credits')}:</strong> {user.creditsToday ?? 0}
               </div>
             )}
           </div>
         )}
 
           <button className="admin-btn" onClick={handlePersonalDetails}>
-            <i className="icon">👤</i> Personal details
+            <i className="icon">👤</i> {t('personalDetails')}
           </button>
 
           <button className="admin-btn" onClick={handleSubscription}>
-            <i className="icon">🧾</i> Subscription
+            <i className="icon">🧾</i> {t('subscription')}
           </button>
 
           <button className="admin-btn" onClick={goToMyLinks}>
-          <i className="icon">🔗</i> Linked account 
+          <i className="icon">🔗</i> {t('linkedAccounts')}
           </button>
 
           <button className="admin-btn" onClick={handleSettings}>
-            <i className="icon">⚙️</i> Settings
+            <i className="icon">⚙️</i> {t('settings')}
           </button>
 
           <button className="admin-btn logout" onClick={handleLogout}>
-            <i className="icon">🔒</i> Logout
+            <i className="icon">🔒</i> {t('logout')}
           </button>
+
+          <div className="language-section">
+            <LanguageSelector />
+          </div>
+
+
         </div>
       </div>
     </motion.div>
