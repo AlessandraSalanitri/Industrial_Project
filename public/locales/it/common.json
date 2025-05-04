@@ -1,0 +1,11 @@
+{
+    "personalDetails": "Dettagli personali",
+    "subscription": "Abbonamento",
+    "linkedAccounts": "Account collegati",
+    "settings": "Impostazioni",
+    "logout": "Disconnetti",
+    "creditsLeftToday": "🪙 Crediti: {{count}} rimasti oggi",
+
+    "language": "Lingua"
+  }
+  

@@ -114,7 +114,7 @@ export default function StoryList() {
         <button onClick={() => { setSearchText(""); setSelectedGenre(""); }}>Reset Filters</button>
 
         <button className="favorites-toggle" onClick={() => setShowFavoritesOnly(prev => !prev)}>
-          ❤️ {showFavoritesOnly ? "Show All" : "Your Favourite Stories"}
+           {showFavoritesOnly ? "❤ Show All" : "❤️ Your Favourite Stories"}
         </button>
       </div>
 
@@ -145,7 +145,7 @@ export default function StoryList() {
 
               {/* Updated favourite icon logic */}
               <div className="favorite-icon">
-                {story.favourite ? "❤️" : "🤍"}
+                {story.favourite ? "❤️" : "❤"}
               </div>
 
               <button className="play-action" onClick={() => setModalStory(story)}>Play Story</button>

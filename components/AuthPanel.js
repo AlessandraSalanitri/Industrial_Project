@@ -194,9 +194,7 @@ export default function AuthPanel({ mode }) {
                 )}
                 <button
                   type="submit"
-                  className={`button ${
-                    isSignUp ? "button-primary" : "button-secondary"
-                  }`}
+                  className={`button ${isSignUp ? "button-secondary signup-btn" : "button-primary login-btn"}`}
                   disabled={loading || redirecting}
                 >
                   {loading

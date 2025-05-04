@@ -157,6 +157,10 @@ tbody tr:hover {
   opacity: 0.8;
 }
 
+table {
+  border-collapse: collapse;
+}
+
 /* Checkbox column fit to content */
 table td:first-child,
 table th:first-child {
@@ -180,6 +184,15 @@ td button:hover {
 }
 
 /* Filter section */
+.filters-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
 .alphabet-filter,
 .additional-filters {
   margin: 20px 0;
@@ -311,6 +324,23 @@ button.active {
   margin-top: 20px;
 }
 
+.filters-actions select {
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+.filters-actions .toggle-btn {
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 18px;
+  height: auto;
+}
+
+.select-delete-controls {
+  margin-bottom: 20px;
+}
+
 .favourites-toggle {
   margin-left: auto;
 }
@@ -368,4 +398,111 @@ button.active {
 
 .delete-selected-btn:hover {
   background-color: #2b6cb0;
+}
+
+/* Default: Show desktop table, hide mobile cards */
+.story-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mobile-story-cards {
+  display: none;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+  .story-table {
+    display: none;
+  }
+
+  .mobile-story-cards {
+    display: block;
+  }
+
+  .story-card-mobile {
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .story-card-mobile p {
+    margin: 5px 0;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .action-buttons button {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+  }
+
+  .action-buttons .bin-btn {
+    background-color: #e53935;
+  }
+
+  .action-buttons .favourite-btn {
+    background: transparent;
+    border: none;
+    color: gray;
+  }
+
+  .action-buttons .favourite-active {
+    color: red;
+  }
+}
+
+@media (max-width: 600px) {
+  .filters-actions {
+    gap: 8px;
+  }
+
+  .filters-actions label {
+    margin-bottom: 4px;
+  }
+
+  .favourites-toggle {
+    margin-top: 8px;
+  }
+
+  .filters-actions label,
+  .filters-actions select,
+  .filters-actions .toggle-btn,
+  .filters-actions .favourites-toggle {
+    width: 100%;
+    text-align: left;
+  }
+
+  .filters-actions select {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  .toggle-btn {
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 20px;
+    width: 100%;
+  }
+
+  .create-story-btn,
+  .delete-selected-btn {
+    width: 50px;
+    height: 40px;
+    font-size: 20px;
+    padding: 0;
+    transition: background-color 0.3s ease;
+  }
 }

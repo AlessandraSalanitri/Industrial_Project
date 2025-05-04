@@ -1,16 +1,18 @@
-import '@/styles/global.css'
-import '@/styles/darkMode.css'
+import '@/styles/global.css';
+import '@/styles/darkMode.css';
 import { UserProvider } from '../context/UserContext';
 import { ThemeProvider } from 'next-themes';
 import { useEffect } from 'react';
+import { appWithTranslation } from 'next-i18next';
 
 function MyApp({ Component, pageProps }) {
 
-  // Clear dark mode on logout (when no user is saved)
   useEffect(() => {
     const unsubscribe = window.addEventListener('storage', () => {
       const storedUser = localStorage.getItem('user');
-      if (!storedUser) setDarkMode(false);
+      if (!storedUser) {
+        document.documentElement.classList.remove('dark'); // safer fallback than calling setDarkMode
+      }
     });
     return () => window.removeEventListener('storage', unsubscribe);
   }, []);
@@ -29,4 +31,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

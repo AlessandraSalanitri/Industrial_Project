@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { firebaseAuth, firestoreDB } from '../../firebase/firebaseConfig';
 import { doc, updateDoc, collection, addDoc, getDoc } from 'firebase/firestore';
+import { ThemeToggle } from '../../components/ThemeToggle';
 import '../../styles/settings.css';
 
 export default function Settings() {
@@ -116,12 +117,8 @@ export default function Settings() {
         <h2 className="settings-title">SETTINGS</h2>
 
         {/* Mode Toggle */}
-        <div className="setting-row">
-          <span className="setting-label">Choose light or dark mode</span>
-          <div className="toggle-group">
-            <button className={`toggle-btn ${!darkMode ? 'active' : ''}`} onClick={() => setDarkMode(false)}>Light</button>
-            <button className={`toggle-btn ${darkMode ? 'active' : ''}`} onClick={() => setDarkMode(true)}>Dark</button>
-          </div>
+        <div className="theme-toggle">
+          <ThemeToggle />
         </div>
 
         {/* Notifications Toggle */}

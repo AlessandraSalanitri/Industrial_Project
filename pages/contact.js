@@ -83,33 +83,15 @@ export default function Contact() {
       <div className="contact-page">
         <div className="contact-info">
           <a href="#" className="contact-item" aria-label="Phone Number">
-            <Image
-              src={isDarkMode ? "/assets/phoneDark.svg" : "/assets/phoneLight.svg"}
-              alt="Phone Icon"
-              width={24}
-              height={24}
-            />
-            <span>077 XXX XX</span>
+            <span> 🕿 077 XXX XX</span>
           </a>
 
           <a href="#" className="contact-item" aria-label="Email">
-            <Image
-              src={isDarkMode ? "/assets/emailDark.svg" : "/assets/emailLight.svg"}
-              alt="Email Icon"
-              width={24}
-              height={24}
-            />
-            <span>studioo@info.com</span>
+            <span>✉️ studioo@info.com</span>
           </a>
 
           <a href="#" className="contact-item" aria-label="Address">
-            <Image
-              src={isDarkMode ? "/assets/locationDark.png" : "/assets/locationLight.png"}
-              alt="Location Icon"
-              width={45}
-              height={35}
-            />
-            <span>LONDON</span>
+            <span>📍 LONDON</span>
           </a>
         </div>
 

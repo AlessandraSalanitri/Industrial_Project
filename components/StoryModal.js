@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { X, MoonStars } from "phosphor-react";
 import "../styles/story_modal.css";
+import { speakWithUserVoice, stopSpeech } from '../utils/tts';
+
 
 export default function StoryModal({ isOpen = true, story, onClose, onChangeImageClick }) {
 
@@ -11,40 +13,32 @@ export default function StoryModal({ isOpen = true, story, onClose, onChangeImag
   const utteranceRef = useRef(null);
   const queueRef = useRef([]);
 
-  const handlePlay = () => {
+  const handlePlay = async () => {
     if (!story?.content) return;
-
+  
     const paragraphs = story.content.split("\n\n");
     queueRef.current = [...paragraphs];
     setActiveParagraphIndex(0);
-    speakParagraph(0);
+  
+    await speakParagraphWithVoice(0);
   };
-
-  const speakParagraph = (index) => {
+  
+  const speakParagraphWithVoice = async (index) => {
     const paragraphs = queueRef.current;
     if (index >= paragraphs.length) {
       handleStop();
       return;
     }
-
-    const utterance = new SpeechSynthesisUtterance(paragraphs[index]);
-    utterance.lang = "en-GB";
-    utterance.rate = 1;
-    utterance.pitch = 1;
-
-    utterance.onend = () => {
-      setActiveParagraphIndex((prevIndex) => {
-        const newIndex = prevIndex + 1;
-        const progressPercent = ((newIndex + 1) / paragraphs.length) * 100;
-        setProgress(progressPercent);
-        speakParagraph(newIndex);
-        return newIndex;
-      });
-    };
-
-    utteranceRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
+  
+    const currentParagraph = paragraphs[index];
     setIsPlaying(true);
+  
+    await speakWithUserVoice(currentParagraph, () => {
+      const newIndex = index + 1;
+      setActiveParagraphIndex(newIndex);
+      setProgress(((newIndex + 1) / paragraphs.length) * 100);
+      speakParagraphWithVoice(newIndex);
+    });
   };
 
   const handlePause = () => {
@@ -58,7 +52,7 @@ export default function StoryModal({ isOpen = true, story, onClose, onChangeImag
   };
 
   const handleStop = () => {
-    window.speechSynthesis.cancel();
+    stopSpeech();
     setIsPlaying(false);
     setProgress(0);
     setActiveParagraphIndex(null);

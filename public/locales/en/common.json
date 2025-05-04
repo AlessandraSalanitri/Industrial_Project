@@ -1,0 +1,19 @@
+{
+    "personalDetails": "Personal details",
+    "subscription": "Subscription",
+    "linkedAccounts": "Linked account",
+    "settings": "Settings",
+    "logout": "Logout",
+    "currentPlan": "Current Plan",
+    "credits": "Credits",
+    "language": "Language",
+    "adminDashboard": "Parent Dashboard",
+    "createNewStory": "Create New Story",
+    "manageSavedStory": "Manage Saved Story",
+    "enterChildMode": "Enter Child Mode",
+    "noNotifications": "You're all caught up!",
+    "untitledStory": "Untitled Story",
+    "unknownTime": "Unknown time"
+
+  }
+  

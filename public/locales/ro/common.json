@@ -1,0 +1,17 @@
+{
+  "personalDetails": "Detalii personale",
+  "subscription": "Abonament",
+  "linkedAccounts": "Conturi conectate",
+  "settings": "Setări",
+  "logout": "Deconectare",
+  "currentPlan": "Plan curent",
+  "credits": "Credite",
+  "language": "Limbă",
+  "adminDashboard": "Panou principal",
+  "createNewStory": "Creează o poveste nouă",
+  "manageSavedStory": "Gestionează povestea salvată",
+  "enterChildMode": "Intră în modul copil",
+  "noNotifications": "Ai citit tot!",
+  "untitledStory": "Poveste fără titlu",
+  "unknownTime": "Timp necunoscut"
+}
