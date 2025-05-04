@@ -626,40 +626,46 @@ html.dark .dashboard-controls button:hover {
 
 
 /* === STORY MODAL DARK MODE === */
+html.dark .story-modal-wrapper {
+  background: rgba(0, 0, 0, 0.95);
+}
+
 html.dark .story-modal {
-    background-color: #1c1c1c;
-    color: #eee;
-}
-  
-html.dark .story-modal-title {
-    color: var(--secondary-color);
-}
-  
-html.dark .story-modal-text {
-    color: #f1f1f1;
+  background-color: #1e1e1e;
+  color: #f5f5f5;
 }
 
 html.dark .story-modal .modal-close {
-    color: #fff;
+  color: #f5f5f5;
 }
 
-html.dark .story-modal-progress {
-    background-color: #333;
+html.dark .story-modal .story-title-modal {
+  color: var(--secondary-color);
 }
-  
-html.dark .story-modal-progress-bar {
-    background-color: var(--secondary-color);
+
+html.dark .story-modal .progress-bar {
+  background: #444;
 }
-  
-html.dark .story-modal-controls button {
-    background-color: #2c2c2c;
-    color: var(--white);
-    border: 1px solid var(--secondary-color);
+
+html.dark .story-modal .progress {
+  background: var(--secondary-color); 
 }
-  
-html.dark .story-modal-controls button:hover {
-    background-color: var(--secondary-color);
-    color: #1c1c1c;
+
+html.dark .story-modal .active-paragraph {
+  background-color: #ddb9eb;
+  border-left: 4px solid var(--secondary-color);
+  color: var(--background-color);
+}
+
+html.dark .story-modal.controls button {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+html.dark .story-modal .controls button:hover {
+  background-color: var(--primary-color);
+  color: white;
 }
 
 /* ======== FOOTER DARK MODE REMAINS PURPLE======== */
