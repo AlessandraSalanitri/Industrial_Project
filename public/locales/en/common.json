@@ -126,8 +126,14 @@
 
   "HOME": "HOME",
   "ABOUT": "ABOUT",
-  "CONTACT": "CONTACT"
+  "CONTACT": "CONTACT",
 
+  "Location": "Location",
+  "Email": "Email",
+  "Follow Us": "Follow Us",
+  "Quick Links": "Quick Links"
+
+  
   }
   
 

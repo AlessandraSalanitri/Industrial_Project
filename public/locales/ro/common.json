@@ -126,8 +126,11 @@
 
   "HOME": "ACASĂ",
   "ABOUT": "INFORMAŢII",
-  "CONTACT": "CONTACT"
+  "CONTACT": "CONTACT",
 
-
+  "Location": "Locație",
+  "Email": "Email",
+  "Follow Us": "Urmărește-ne",
+  "Quick Links": "Linkuri rapide"
 
 }
