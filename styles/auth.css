@@ -162,22 +162,20 @@ h2 {
 
   /* Google Sign-In Button Style */
   .google-btn {
-    background-color: white;  /* Google Blue */
+    background-color: white;
     color: rgb(25, 24, 24);
-    padding: 12px 24px;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 100%;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    width: auto;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
-    
-    border: 2px solid #4285F4;  /* Google Blue border */
-    transition: border-color 0.3s ease;  /* Smooth transition on hover */
+    margin: 10px auto 0; /* centers horizontally */
+    border: 2px solid #4285F4;
+    transition: border-color 0.3s ease;
   }
-  
 
 .google-btn:hover {
   background-color: #357AE8;
@@ -187,4 +185,13 @@ h2 {
   width: 20px;
   height: 20px;
   margin-right: 8px;
+}
+
+.button.button-primary,
+.button.button-secondary {
+  padding: 10px 24px;
+  font-size: 14px;
+  border-radius: 20px;
+  width: auto;
+  align-self: center; /* Center the button in the form */
 }
