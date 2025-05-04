@@ -253,7 +253,7 @@ export default function MyStories() {
             className="toggle-btn primary favourites-toggle"
             onClick={() => setViewFavourites((v) => !v)}
           >
-            {viewFavourites ? '🤍 All Stories' : '❤️ View Favourites'}
+            {viewFavourites ? '❤ All Stories' : '❤️ View Favourites'}
           </button>
         </div>
 

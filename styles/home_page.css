@@ -142,3 +142,13 @@
     justify-content: center;
   }
 }
+
+@media (max-width: 1024px) {
+  .buttons .button {
+    padding: 10px 24px;
+    font-size: 14px;
+    border-radius: 20px;
+    width: auto;
+    align-self: center;
+  }
+}

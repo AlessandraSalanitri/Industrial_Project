@@ -187,11 +187,13 @@ h2 {
   margin-right: 8px;
 }
 
-.button.button-primary,
-.button.button-secondary {
-  padding: 10px 24px;
-  font-size: 14px;
-  border-radius: 20px;
-  width: auto;
-  align-self: center; /* Center the button in the form */
+@media (max-width: 1024px) {
+  .auth-wrapper .button.button-primary,
+  .auth-wrapper .button.button-secondary {
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+    border-radius: 20px !important;
+    width: auto !important;
+    align-self: center !important;
+  }
 }
