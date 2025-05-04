@@ -703,47 +703,72 @@ html.dark .mobile-story-cards .story-card-mobile {
     color: var(--white);
     border: 1px solid #444;
     box-shadow: 0 0 12px rgba(255, 255, 255, 0.03);
-  }
+}
   
-  html.dark .story-card-mobile p {
+html.dark .story-card-mobile p {
     color: var(--white);
-  }
+}
   
-  html.dark .action-buttons button {
+html.dark .action-buttons button {
     background-color: var(--primary-color);
     color: var(--white);
-  }
+}
   
-  html.dark .action-buttons button:hover {
+html.dark .action-buttons button:hover {
     background-color: var(--alt);
     color: var(--primary-color);
-  }
+}
   
-  html.dark .action-buttons .bin-btn {
+html.dark .action-buttons .bin-btn {
     background-color: #c0392b;
     color: white;
-  }
+}
   
-  html.dark .action-buttons .bin-btn:hover {
+html.dark .action-buttons .bin-btn:hover {
     background-color: #e74c3c;
-  }
+}
   
-  html.dark .action-buttons .favourite-btn {
+html.dark .action-buttons .favourite-btn {
     background: transparent;
     color: gray;
-  }
+}
   
-  html.dark .action-buttons .favourite-active {
+html.dark .action-buttons .favourite-active {
     color: red;
-  }
+}
   
-  html.dark .back-button {
+html.dark .back-button {
     background-color: #333;
     color: var(--white);
     border: 1px solid var(--primary-color);
-  }
+}
   
-  html.dark .back-button:hover {
+html.dark .back-button:hover {
     background-color: var(--primary-color);
     color: white;
-  }
+}
+
+/* === DARK MODE: Notification Bell === */
+html.dark .notification-bell-icon {
+    color: white;
+}
+  
+html.dark .notification-badge {
+    background: #FFD700; /* golden yellow for dark mode contrast */
+    color: black;
+}
+  
+html.dark .notification-dropdown {
+    background: #1f1f1f;
+    border: 1px solid #555;
+    box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.1);
+}
+  
+html.dark .notification-item strong {
+    color: white;
+}
+  
+html.dark .notification-item p,
+  html.dark .notification-empty {
+    color: #aaa;
+}

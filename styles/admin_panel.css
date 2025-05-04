@@ -5,6 +5,8 @@
     width: 25vw;
     max-width: 350px;
     height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
     background-color: var(--gray);
     box-shadow: -5px 0 20px rgba(0, 0, 0, 0.15);
     z-index: 1500;
@@ -13,6 +15,7 @@
     flex-direction: column;
 }
   
+
 .admin-header {
     display: flex;
     justify-content: flex-end;
@@ -31,6 +34,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+    margin-bottom: 40px;
 }
   
 .admin-avatar img {
@@ -54,7 +58,7 @@
     margin-top: 40px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 8px;
 }
 
 
@@ -79,10 +83,33 @@
 .logout {
     color: crimson;
 }
+
+.admin-plan-info {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 0 10px; /* Ensures spacing on narrow screens */
+    color: #707070;
+    word-break: break-word; /* Prevents long text from overflowing */
+}
+  
+.admin-plan-info .plan-name,
+.admin-plan-info .plan-credits {
+    font-size: clamp(0.85rem, 2.5vw, 1rem); /* Responsive font size */
+    line-height: 1.4;
+}
   
 @media (max-width: 767px) {
     .admin-panel {
         width: 45vw;
+    }
+
+    .admin-links {
+        gap: 8px; 
+        margin-bottom: 10%;
+    }
+    
+    .admin-btn {
+        padding: 12px 10px;
     }
 }
 

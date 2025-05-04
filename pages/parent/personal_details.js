@@ -76,9 +76,9 @@ export default function PersonalDetailsPage() {
   return (
     <Layout>
         <div className="container">
-        <h2 className="personal_details-title">Personal Details</h2>
-        <h2 className="settings-title">Edit Your Details</h2>
-        <p>If you want to edit your password, click the Forgot password on the login page.</p>
+        <h1 className="personal_details-title">Personal Details</h1>
+        <p>Edit here your details. To edit your password, please click the <strong>"Forgot password" </strong> on the login page.</p>
+
             
             <div className="details-wrapper">
                 {renderField("Full Name", "fullName")}
