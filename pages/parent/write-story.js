@@ -53,8 +53,19 @@ export default function WriteStory() {
 
   const [creditsLeft, setCreditsLeft] = useState(null);
 
-  // SAVE DRAFT-continue the story - conected to user
 
+  // Stop speech when navigating away
+  useEffect(() => {
+  const handleBeforeUnload = () => {
+      window.speechSynthesis.cancel();
+    };
+    router.events.on('routeChangeStart', handleBeforeUnload);
+    return () => {
+      router.events.off('routeChangeStart', handleBeforeUnload);
+    };
+  }, [router.events]);
+
+  // SAVE DRAFT-continue the story - conected to user
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {

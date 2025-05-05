@@ -1,21 +1,19 @@
-/* Container */
 .container {
+  margin-top: 60px; 
   margin-bottom: 20px;
-  padding: 10%;
 }
 
-.title {
+.my-stories-header h1 {
   color: transparent;
   -webkit-text-stroke: 1.5px var(--primary-color);
   font-weight: bold;
   text-align: center;
-  font-size: 48px;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   background-color: var(--white);
   text-shadow: 0 5 20px rgb(224, 178, 235);
-  margin-bottom: 40px;  /* Increased margin to prevent overlap */
+  margin-bottom: 40px; 
 }
 
-/* Table styles */
 table {
   width: 100%;
   border-collapse: collapse; /* Collapse borders to remove extra spacing */
@@ -27,72 +25,62 @@ table {
   table-layout: auto;
 }
 
-/* Table Header Styles */
+/* table head */
 thead {
   background: var(--primary-color);
   color: white;
 }
 
-/* Ensure header columns fit content and adjust padding */
-th {
-  padding: 10px 14px;    /* Adjusted padding for better fit */
+th, td {
+  padding: 10px 8px;    /* Adjusted padding for better fit */
   text-align: left;
   font-size: 14px;        /* Adjust font size for better fit */
   white-space: nowrap;    /* Prevent wrapping */
   overflow: hidden;       /* Hide overflow to ensure content fits */
   text-overflow: ellipsis; /* Add ellipsis if content overflows */
+  vertical-align: middle;   
+  white-space: nowrap;   
 }
+
+tbody tr {
+  height: 60px; /* More vertical room */
+}
+
+tbody tr:nth-child(even) {
+  background: #e8defa;
+}
+
+.story-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.story-table tbody tr:hover {
+  background-color: #f4f0fc;
+  cursor: pointer;
+  color: var(--primary-color);
+}
+
+
 
 td input[type="checkbox"] {
   width: auto; /* Makes the checkbox column fit to the content size */
 }
 
-/* First column (checkbox): minimal width, no padding or margin */
+
+/* Checkbox column fit to content */
 th:first-child,
 td:first-child {
-  width: 1%;
-  padding: 0;
-  margin: 0;
+  width: 36px;
   text-align: center;
+  padding: 0;
 }
 
-/* Checkbox: small, centered, no padding or margin */
-th:first-child input[type="checkbox"],
-td:first-child input[type="checkbox"] {
-  width: 14px;
-  height: 14px;
-  margin: 0 auto;
+td input[type="checkbox"],
+th input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: auto;
   display: block;
-}
-/* Directly target the checkbox to make it as compact as possible */
-td input[type="checkbox"] {
-  width: 14px;           
-  height: 14px;      
-  margin: 0;             
-  padding: 0;              
-  display: inline-block;   
-}
-
-/* Adjust the table cells' padding for better alignment */
-td {
-  padding: 10px 14px;     
-  text-align: left;
-  font-size: 14px;
-  white-space: nowrap;   
-}
-
-
-tbody tr {
-  height: 40px;        
-}
-
-/* Optional: Adjust even row color */
-tbody tr:nth-child(even) {
-  background: var(--gray);
-}
-
-tbody tr:hover {
-  background-color: #f0eaff;
 }
 
 /* Action Buttons */
@@ -118,7 +106,7 @@ tbody tr:hover {
 }
 
 .action-buttons button:hover {
-  background-color: #e0e0e0;
+  background-color: #4e59f1;
 }
 
 /* Red bin button */
@@ -133,18 +121,13 @@ tbody tr:hover {
 }
 
 .action-buttons button.bin-btn:hover {
-  background-color: #d32f2f; /* Darker red on hover */
-}
-
-
-.action-buttons button.bin-btn:hover {
-  background-color: #d32f2f;
+  background-color: #c72222; /* Darker red on hover */
 }
 
 /* Heart icons */
 .action-buttons .favourite-btn {
   background: transparent;
-  border: none;
+  border: 1px solid var(--primary-color);
   padding: 0;
   color: gray;
 }
@@ -157,16 +140,19 @@ tbody tr:hover {
   opacity: 0.8;
 }
 
-table {
-  border-collapse: collapse;
+.edit-btn {
+  background-color: #4CAF50; 
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Checkbox column fit to content */
-table td:first-child,
-table th:first-child {
-  width: 1%;
-  white-space: nowrap;
-  text-align: center;
+.edit-btn:hover {
+  background-color: #45a049; 
 }
 
 td button {
@@ -189,9 +175,23 @@ td button:hover {
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   margin-top: 20px;
 }
+
+.filters-actions select {
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 30px;
+}
+
+.filters-actions .toggle-btn {
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 18px;
+  height: auto;
+}
+
 
 .alphabet-filter,
 .additional-filters {
@@ -201,13 +201,6 @@ td button:hover {
   justify-content: space-between;
   gap: 10px;
   align-items: center;
-}
-
-.additional-filters select {
-  padding: 5px;
-  font-size: 14px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
 }
 
 .alphabet-filter button {
@@ -228,6 +221,28 @@ td button:hover {
   color: white;
 }
 
+.alphabet-btn {
+  background-color: #f0f0f0; /* Default background color */
+  color: black; /* Default text color */
+}
+
+.alphabet-btn:hover {
+  background-color: #a16aaf; /* Darker blue on hover */
+}
+
+
+.alphabet-btn.primary {
+  background-color: var(--primary-color); 
+  color: white; 
+}
+
+.additional-filters select {
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+} 
+
 .reset-btn {
   background: var(--primary-color);
   color: #37006b;
@@ -236,6 +251,7 @@ td button:hover {
   border: none;
   cursor: pointer;
 }
+
 
 .story-content {
   margin-top: 30px;
@@ -257,6 +273,7 @@ td button:hover {
   background-color: #4B0082;
   color: #fff;
 }
+
 
 .view-favourites-toggle {
   display: flex;
@@ -285,7 +302,8 @@ td button:hover {
 }
 
 .toggle-btn:hover {
-  background-color: #ddd;
+  background-color: #f4f0fc;
+  color: var(--primary-color);
 }
 
 .reset-btn {
@@ -307,6 +325,7 @@ button.active {
   margin-top: 10px;
 }
 
+/* select, bin and add */
 .select-delete-controls {
   display: flex;
   justify-content: flex-start;
@@ -315,50 +334,9 @@ button.active {
   padding-top: 20px;
 }
 
-.filters-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.filters-actions select {
-  font-size: 13px;
-  padding: 8px 10px;
-  border-radius: 8px;
-}
-
-.filters-actions .toggle-btn {
-  font-size: 13px;
-  padding: 8px 10px;
-  border-radius: 18px;
-  height: auto;
-}
-
 .select-delete-controls {
   margin-bottom: 20px;
 }
-
-.favourites-toggle {
-  margin-left: auto;
-}
-
-.alphabet-btn.primary {
-  background-color: #4B0082; /* Primary color (blue) */
-  color: white; /* Text color */
-}
-
-.alphabet-btn {
-  background-color: #f0f0f0; /* Default background color */
-  color: black; /* Default text color */
-}
-
-.alphabet-btn:hover {
-  background-color: #a16aaf; /* Darker blue on hover */
-}
-
 
 .create-story-btn {
   width: 3rem;
@@ -366,7 +344,7 @@ button.active {
   font-size: 2rem;
   line-height: 1.5rem;
   border-radius: 50%;
-  background-color:#4B0082;;
+  background-color: var(--primary-color);
   color: White;
   border: none;
   cursor: pointer;
@@ -386,7 +364,7 @@ button.active {
   font-size: 2rem;
   line-height: 1.5rem;
   border-radius: 50%;
-  background-color:#4B0082;;
+  background-color: var(--primary-color);
   color: White;
   border: none;
   cursor: pointer;
@@ -397,21 +375,16 @@ button.active {
 }
 
 .delete-selected-btn:hover {
-  background-color: #2b6cb0;
+  background-color: #d81414;
 }
 
-/* Default: Show desktop table, hide mobile cards */
-.story-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
+/* When screen's large don't show the cards */
 .mobile-story-cards {
   display: none;
 }
 
 /* Mobile View */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .story-table {
     display: none;
   }
@@ -463,6 +436,12 @@ button.active {
   }
 }
 
+@media (max-width: 800px) {
+  .container {
+    margin-top: 80px; 
+  }
+}
+
 @media (max-width: 600px) {
   .filters-actions {
     gap: 8px;
@@ -505,4 +484,6 @@ button.active {
     padding: 0;
     transition: background-color 0.3s ease;
   }
-}
+} 
+
+

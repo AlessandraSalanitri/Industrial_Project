@@ -282,33 +282,55 @@ export default function MyStories() {
           {/* Desktop Table */}
           <table className="story-table desktop-only">
               <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Age</th>
-                  <th>Genre</th>
-                  <th>Character</th>
-                  <th>Actions</th>
-                </tr>
+              <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    checked={selectedStoryIds.length === sortedStories.length && sortedStories.length > 0}
+                    onChange={toggleSelectAll}
+                  />
+                </th>
+                <th></th>
+                <th onClick={() => handleSort('title')} style={{ cursor: 'pointer' }}>
+                  Title {renderArrow('title')}
+                </th>
+                <th onClick={() => handleSort('age')} style={{ cursor: 'pointer' }}>
+                  Age {renderArrow('age')}
+                </th>
+                <th onClick={() => handleSort('genre')} style={{ cursor: 'pointer' }}>
+                  Genre {renderArrow('genre')}
+                </th>
+                <th>Character</th>
+                <th>Actions</th>
+              </tr>
               </thead>
               <tbody>
-                {sortedStories.map((story) => (
-                  <tr key={story.id}>
-                    <td>{story.title}</td>
-                    <td>{story.age}</td>
-                    <td>{story.genre}</td>
-                    <td>{story.character}</td>
-                    <td className="action-buttons">
-                      <button onClick={() => { setSelectedStory(story); setModalMode('view'); }}>View</button>
-                      <button onClick={() => { setSelectedStory(story); setModalMode('edit'); }}>Edit</button>
-                      <button className="bin-btn" onClick={() => handleDeleteStory(story.id)}>🗑</button>
-                      <button
-                        className={`favourite-btn ${story.favourite ? 'favourite-active' : ''}`}
-                        onClick={() => handleToggleFavourite(story.id, story.favourite)}
-                      >
-                        {story.favourite ? <FaHeart /> : <FaRegHeart />}
-                      </button>
-                    </td>
-                  </tr>
+                {sortedStories.map((story, index) => (
+                <tr key={story.id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedStoryIds.includes(story.id)}
+                      onChange={() => toggleSelect(story.id)}
+                    />
+                  </td>
+                  <td><strong>{index + 1} .</strong></td>
+                  <td>{story.title}</td>
+                  <td>{story.age}</td>
+                  <td>{story.genre}</td>
+                  <td>{story.character}</td>
+                  <td className="action-buttons">
+                    <button onClick={() => { setSelectedStory(story); setModalMode('view'); }}>View</button>
+                    <button className="edit-btn" onClick={() => {setSelectedStory(story); setModalMode('edit');}}> Edit</button>
+                    <button className="bin-btn" onClick={() => handleDeleteStory(story.id)}>🗑</button>
+                    <button
+                      className={`favourite-btn ${story.favourite ? 'favourite-active' : ''}`}
+                      onClick={() => handleToggleFavourite(story.id, story.favourite)}
+                    >
+                      {story.favourite ? <FaHeart /> : <FaRegHeart />}
+                    </button>
+                  </td>
+                </tr>
                 ))}
               </tbody>
             </table>

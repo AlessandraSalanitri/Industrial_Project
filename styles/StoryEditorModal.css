@@ -44,6 +44,11 @@
   overflow-x: hidden;
 }
 
+.story-icon,
+.story-title {
+  color: var(--primary-color); 
+}
+
     .input-field {
       width: 100%;
       padding: 12px;
@@ -132,4 +137,66 @@ text-align: center; /* only the "Edit Your Story" or "The Lost Scroll" title sta
 .story-paragraphs p {
 margin-bottom: 20px; /* or 16px if you want it a little tighter */
 line-height: 1.6; /* improves reading flow */
+}
+
+
+
+@media (max-width: 768px) {
+  .view-button-group {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .same-size-button {
+    width: 40px;
+    height: 40px;
+    min-width: 0 !important; 
+    padding: 0 !important;    
+    font-size: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .same-size-button .btn-text {
+    display: none;
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .same-size-button:hover .btn-text {
+    display: block;
+    opacity: 1;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .button-group .same-size-button {
+    width: 90%;
+    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .modal-overlay {
+    padding: 0px;
+  }
 }

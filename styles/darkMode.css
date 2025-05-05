@@ -704,6 +704,9 @@ html.dark .top-controls {
 
 /* === DARK MODE: Container & Title === */
 html.dark .container {
+    margin-top: 60px; 
+    margin-bottom: 20px;
+    
     background-color: var(--background-color);
     color: var(--white);
 }
@@ -731,9 +734,9 @@ html.dark tbody tr:nth-child(even) {
     background-color: #2a2a2a;
 }
   
-html.dark tbody tr:hover {
-    background-color: #333;
-}
+html.dark .story-table tbody tr:hover {
+    background-color: #d6c2ff;
+  }
   
 /* === DARK MODE: Buttons === */
 html.dark .action-buttons button {
@@ -867,7 +870,7 @@ html.dark .notification-bell-icon {
 }
   
 html.dark .notification-badge {
-    background: #FFD700; /* golden yellow for dark mode contrast */
+    background: #FFD700;
     color: black;
 }
   
@@ -884,4 +887,48 @@ html.dark .notification-item strong {
 html.dark .notification-item p,
   html.dark .notification-empty {
     color: #aaa;
+}
+
+
+/* === ALERT MODAL === */
+
+html.dark .modal-backdrop {
+    background: rgba(0, 0, 0, 0.6);
+}
+  
+html.dark .modal-content {
+    background: #1e1e1e;
+    color: var(--white);
+    box-shadow: 0 6px 45px rgba(255, 255, 255, 0.1);
+}
+  
+html.dark .modal-content h2,
+html.dark .modal-title {
+    color: var(--alt); 
+}
+  
+html.dark .modal-message {
+    color: #ccc;
+}
+  
+html.dark .modal-content input {
+    background-color: #2a2a2a;
+    color: var(--white);
+    border: 1px solid var(--alt);
+}
+  
+html.dark .save-btn {
+    background-color: var(--alt); /* e.g. gold/yellow */
+    color: var(--background-color);
+}
+  
+html.dark .cancel-btn {
+    background-color: #333;
+    color: var(--white);
+}
+
+/* === STORY EDITOR MODAL === */
+html.dark .story-icon,
+html.dark .story-title {
+    color: var(--alt); 
 }

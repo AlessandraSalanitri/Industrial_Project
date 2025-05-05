@@ -117,23 +117,23 @@ nav.main-nav {
 
 /* Font Sizes */
 h1 {
-  font-size: 48px;
+  font-size: clamp(2rem, 5vw, 3rem); /* 32px–48px */
   font-weight: bold;
 }
-  
+
 h2 {
-  font-size: 32px;
-  font-weight: semi-bold;
+  font-size: clamp(1.5rem, 4vw, 2rem); /* 24px–32px */
+  font-weight: 600;
 }
-  
+
 h3 {
-  font-size: 24px;
-  font-weight: medium;
+  font-size: clamp(1.25rem, 3vw, 1.5rem); /* 20px–24px */
+  font-weight: 500;
 }
-  
+
 p {
-  font-size: 16px;
-  font-weight: regular;
+  font-size: clamp(1rem, 2.5vw, 1.125rem); /* 16px–18px */
+  font-weight: 400;
 }
 
 h1, h2, h3, p {
