@@ -74,56 +74,41 @@ export default function StoryEditorModal({ isOpen, mode = "view", story, onClose
         <div className="view-button-group">
           {/* Left Side */}
           <div className="left-buttons">
-            <button 
-              onClick={handleClose} 
-              className="button button-back same-size-button"
-            >
-              ← Back
-            </button>
+          <button onClick={handleClose} className="button button-back same-size-button">
+            ← <span className="btn-text">Back</span>
+          </button>
           </div>
 
           {/* Right Side */}
           <div className="right-buttons">
           {!isPlaying && !isPaused && (
-            <button 
-              onClick={handlePlay} 
-              className="button button-primary same-size-button"
-            >
-              ▶ Play
-            </button>
+            <button onClick={handlePlay} className="button button-primary same-size-button">
+            ▶  <span className="btn-text"> Play</span>
+          </button>
           )}
 
           {isPlaying && !isPaused && (
-            <button 
-              onClick={handlePause} 
-              className="button button-secondary same-size-button"
-            >
-              ⏸ Pause
-            </button>
+            <button onClick={handlePause} className="button button-secondary same-size-button">
+            ⏸ <span className="btn-text">Pause</span>
+          </button>
           )}
 
           {isPaused && (
-            <button 
-              onClick={handleResume} 
-              className="button button-primary same-size-button"
-            >
-              ↻ Resume
-            </button>
+            <button onClick={handleResume} className="button button-primary same-size-button">
+            ↻ <span className="btn-text">Resume</span>
+          </button>
           )}
 
-          <button 
-            onClick={handleStop} 
-            className="button button-primary same-size-button"
-          >
-            ⏹ Stop
+          <button onClick={handleStop}  className="button button-primary same-size-button">
+            ⏹ <span className="btn-text">Stop</span>
           </button>
         </div>
         </div>
 
 
         <div className="story-title">
-          <MoonStars size={28} weight="fill" style={{ color: '#4B0082', marginRight: '8px' }} />
-          <strong>{story.title.replace(/\*\*/g, '')}</strong>
+        <MoonStars size={28} weight="fill" className="story-icon" style={{ marginRight: '8px' }} />
+        <strong>{story.title.replace(/\*\*/g, '')}</strong>
         </div>
 
         <p><strong>Age:</strong> {story.age}</p>
@@ -144,7 +129,7 @@ export default function StoryEditorModal({ isOpen, mode = "view", story, onClose
         <div className="story-content">
           {/* Section Title */}
           <div className="story-title">
-            <PencilLine  size={28} weight="fill" style={{ color: '#4B0082', marginRight: '8px' }} />
+            <PencilLine size={28} weight="fill" className="story-icon" style={{ marginRight: '8px' }} />
             <strong>Refine Your Tale</strong>
           </div>
 

@@ -190,6 +190,16 @@ export default function MyStories() {
           <button className="create-story-btn" onClick={handleCreateStory}>+</button>
         </div>
 
+        {/* Favourites Toggle - top right */}
+        <div className="view-favourites-toggle">
+          <button
+            className="toggle-btn primary"
+            onClick={() => setViewFavourites((v) => !v)}
+          >
+            {viewFavourites ? '❤ Show All Stories' : '❤️ View Favourites'}
+          </button>
+        </div>
+
         {/* Desktop Table */}
         <table className="story-table desktop-only">
           <thead>
