@@ -138,13 +138,37 @@ export default function MyStories() {
     }
   };
 
-  const sortedStories = [...stories].filter((s) => {
-    const startsWith = !filters.letter || s.title?.[0]?.toUpperCase() === filters.letter;
-    const matchesGenre = !filters.genre || s.genre === filters.genre;
-    const matchesAge = !filters.age || s.age === filters.age;
-    const matchesFav = !viewFavourites || s.favourite;
-    return startsWith && matchesGenre && matchesAge && matchesFav;
-  });
+  const handleSort = (key) => {
+    setSortConfig((prev) => ({
+      key,
+      direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc',
+    }));
+  };
+
+  const renderArrow = (key) => {
+    const isActive = sortConfig.key === key;
+    return (
+      <span style={{ marginLeft: 4 }}>
+        {isActive ? (sortConfig.direction === 'asc' ? '↑' : '↓') : '↕'}
+      </span>
+    );
+  };
+
+  const sortedStories = [...stories]
+    .filter((s) => {
+      const startsWith = !filters.letter || s.title?.[0]?.toUpperCase() === filters.letter;
+      const matchesGenre = !filters.genre || s.genre === filters.genre;
+      const matchesAge = !filters.age || s.age === filters.age;
+      const matchesFav = !viewFavourites || s.favourite;
+      return startsWith && matchesGenre && matchesAge && matchesFav;
+    })
+    .sort((a, b) => {
+      const aVal = a[sortConfig.key] || '';
+      const bVal = b[sortConfig.key] || '';
+      return sortConfig.direction === 'asc'
+        ? aVal.localeCompare(bVal)
+        : bVal.localeCompare(aVal);
+    });
 
   return (
     <Layout>
@@ -163,30 +187,40 @@ export default function MyStories() {
           >
             🗑
           </button>
-          <button
-            className="create-story-btn"
-            onClick={handleCreateStory}
-          >
-            +
-          </button>
+          <button className="create-story-btn" onClick={handleCreateStory}>+</button>
         </div>
 
+        {/* Desktop Table */}
         <table className="story-table desktop-only">
           <thead>
             <tr>
-              <th style={{ width: '10px', padding: '0', margin: '0', textAlign: 'left' }}><input type="checkbox" onChange={toggleSelectAll} checked={selectedStoryIds.length === sortedStories.length} /></th>
+              <th style={{ width: '30px', padding: 0, textAlign: 'center' }}>
+                <input
+                  type="checkbox"
+                  onChange={toggleSelectAll}
+                  checked={selectedStoryIds.length === sortedStories.length}
+                />
+              </th>
               <th>#</th>
-              <th>Title</th>
-              <th>Age</th>
-              <th>Genre</th>
-              <th>Character</th>
+              <th onClick={() => handleSort('title')} style={{ cursor: 'pointer' }}>
+                Title {renderArrow('title')}
+              </th>
+              <th onClick={() => handleSort('age')} style={{ cursor: 'pointer' }}>
+                Age {renderArrow('age')}
+              </th>
+              <th onClick={() => handleSort('genre')} style={{ cursor: 'pointer' }}>
+                Genre {renderArrow('genre')}
+              </th>
+              <th onClick={() => handleSort('character')} style={{ cursor: 'pointer' }}>
+                Character {renderArrow('character')}
+              </th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {sortedStories.map((story, index) => (
               <tr key={story.id}>
-                <td style={{ width: '1%', textAlign: 'center' }}>
+                <td style={{ width: '30px', textAlign: 'center' }}>
                   <input
                     type="checkbox"
                     checked={selectedStoryIds.includes(story.id)}
@@ -214,6 +248,7 @@ export default function MyStories() {
           </tbody>
         </table>
 
+        {/* Mobile Cards */}
         <div className="mobile-story-cards mobile-only">
           {sortedStories.map((story, index) => (
             <div className="story-card-mobile" key={story.id}>
@@ -256,7 +291,9 @@ export default function MyStories() {
           onStop={handleStopStory}
         />
 
-        <button className="button button-secondary back-button" onClick={() => router.push('/')}>Back</button>
+        <button className="button button-secondary back-button" onClick={() => router.push('/')}>
+          Back
+        </button>
       </div>
     </Layout>
   );
