@@ -493,11 +493,7 @@ const confirmSave = async () => {
           <div className="generated-story">
             {storyName && (
               <div className="story-title">
-                <MoonStars
-                  size={28}
-                  weight="fill"
-                  style={{ marginRight: '6px', color: '#4B0082', verticalAlign: 'middle' }}
-                />
+                <MoonStars size={28} weight="fill" className="moon-icon" />
                 <strong>{storyName}</strong>
               </div>
             )}

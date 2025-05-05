@@ -8,6 +8,7 @@
   max-width: 1000px;
   width: 100%; /* Full width */
   margin: 0 auto; /* Centers the container */
+  text-align: center;
 }
 
 
@@ -60,7 +61,7 @@
 /* Added for home page writting -diana */
 
 .hero-heading {
-  font-size: clamp(1.2rem, 4vw, 2rem);
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
   color: var(--primary-color);
   margin-bottom: 15px;
   font-weight: 700;
@@ -69,13 +70,14 @@
 
 .tagline,
 .closing {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  text-align: center;
+  display: inline-block;
+  margin: 0 auto;
   color: #444;
   line-height: 1.5;
-  font-size: clamp(0.8rem, 2.5vw, 1.3rem);
-  gap: 6px;
+  font-size: clamp(0.95rem, 2.5vw, 1.3rem);
+  word-break: keep-all;
+  hyphens: auto;
 }
 
 .features {
@@ -117,6 +119,14 @@
     flex-direction: column;
     gap: 15px;
   }
+
+  .buttons .button {
+    padding: 10px 24px;
+    font-size: 14px;
+    border-radius: 20px;
+    width: auto;
+    align-self: center;
+  }
 }
 
 @media (max-width: 700px) {
@@ -143,12 +153,8 @@
   }
 }
 
-@media (max-width: 1024px) {
-  .buttons .button {
-    padding: 10px 24px;
-    font-size: 14px;
-    border-radius: 20px;
-    width: auto;
-    align-self: center;
+@media (max-width: 600px) {
+  .home-container {
+    padding: 10% 0; 
   }
 }
