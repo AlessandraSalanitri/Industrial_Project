@@ -7,12 +7,15 @@ import AdminPanel from './AdminPanel';
 import { useUser } from '../context/UserContext';
 import { AnimatePresence } from "framer-motion";
 import '../styles/nav.css';
+import { useTranslation, Trans } from 'next-i18next';
+
 
 export default function Navbar() {
   const router = useRouter();
   const { user } = useUser();
   const [showAvatarPanel, setShowAvatarPanel] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // 👈 New state
+  const { t } = useTranslation('common');
 
   const isChildMode = router.pathname.startsWith('/child');
 
@@ -50,21 +53,20 @@ export default function Navbar() {
           <ul>
             <li>
               <Link href="/" className={router.pathname === '/' ? 'active' : ''}>
-                HOME
+                {t('HOME')}
               </Link>
             </li>
 
-            {/* Show About and Contact ONLY for parent */}
             {user?.role !== 'child' && !user?.isSimulated && (
               <>
                 <li>
                   <Link href="/about" className={router.pathname === '/about' ? 'active' : ''}>
-                    ABOUT
+                    {t('ABOUT')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/contact" className={router.pathname === '/contact' ? 'active' : ''}>
-                    CONTACT
+                    {t('CONTACT')}
                   </Link>
                 </li>
               </>
@@ -84,7 +86,6 @@ export default function Navbar() {
             </div>
           )}
         </nav>
-
 
           <Image
             src="/assets/side_logo.png"

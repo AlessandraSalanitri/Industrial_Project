@@ -1,17 +1,136 @@
 {
-  "personalDetails": "Detalii personale",
+  "personalDetails": "Detalii Personale",
   "subscription": "Abonament",
-  "linkedAccounts": "Conturi conectate",
+  "linkedAccounts": "Conturi Conectate",
   "settings": "Setări",
   "logout": "Deconectare",
-  "currentPlan": "Plan curent",
+  "currentPlan": "Plan Curent",
   "credits": "Credite",
   "language": "Limbă",
-  "adminDashboard": "Panou principal",
+  "adminDashboard": "Panou Principal",
   "createNewStory": "Creează o poveste nouă",
   "manageSavedStory": "Gestionează povestea salvată",
   "enterChildMode": "Intră în modul copil",
   "noNotifications": "Ai citit tot!",
   "untitledStory": "Poveste fără titlu",
-  "unknownTime": "Timp necunoscut"
+  "unknownTime": "Timp necunoscut",
+  "createYourStory": "Creează-ți povestea",
+  "loadingYourProfile...": "Se încarcă profilul tău...",
+  "age": "Vârstă",
+  "under": "Sub",
+  "* Genre": "* Gen",
+  "Fantasy": "Fantezie",
+  "Adventure": "Aventură",
+  "Science Fiction": "SF",
+  "Mystery": "Mister",
+  "Humor": "Umor",
+  "Historical Fiction": "Ficțiune istorică",
+  "Animal Stories": "Povești cu animale",
+
+  "Setting": "Cadru",
+  "Historical": "Istoric",
+  "Modern-Day": "Zilele noastre",
+  "Urban": "Urban",
+  "Urban Fantasy": "Fantezie urbană",
+  "Animal-Based": "Bazat pe animale",
+  "Magical Realism": "Realism magic",
+  "Survival": "Supraviețuire",
+
+  "Moral": "Morală",
+  "Friendship & Teamwork": "Prietenie & Lucru în echipă",
+  "Courage & Bravery": "Curaj & Îndrăzneală",
+  "Kindness & Empathy": "Bunătate & Empatie",
+  "Honesty & Integrity": "Onestitate & Integritate",
+  "Perseverance & Hard Work": "Perseverență & Muncă asiduă",
+  "Responsibility & Accountability": "Responsabilitate & Asumare",
+  "Self-Respect & Confidence": "Respect de sine & Încredere",
+  "Fairness & Justice": "Corectitudine & Justiție",
+  "Patience & Temperance": "Răbdare & Echilibru",
+  "Gratitude & Contentment": "Recunoștință & Mulțumire",
+  "Environmental Awareness": "Conștientizare ecologică",
+  "Creativity & Imagination": "Creativitate & Imaginație",
+
+  "Tone": "Ton",
+  "Lighthearted & Fun": "Vesel & Distractiv",
+  "Serious & Reflective": "Serios & Reflexiv",
+  "Adventurous & Exciting": "Aventuros & Palpitant",
+  "Mysterious & Suspenseful": "Misterios & Plin de suspans",
+  "Optimistic & Hopeful": "Optimist & Plin de speranță",
+  "Funny & Humorous": "Amuzant & Plin de umor",
+  "Romantic & Heartfelt": "Romantic & Emoționant",
+  "Educational & Informative": "Educativ & Informativ",
+  "Fantasy & Magical": "Fantezie & Magic",
+  "Heroic & Noble": "Eroic & Nobil",
+
+  "* Reading Length": "* Durata lecturii",
+  "Short (2 minutes)": "Scurtă (2 minute)",
+  "Medium (5 minutes)": "Medie (5 minute)",
+  "Long (7 minutes)": "Lungă (7 minute)",
+  "Main Character": "Personaj principal",
+
+  "Back": "Înapoi",
+  "Generate Story": "Generează poveste",
+  "Create Your Own Story": "Creează-ți Propria Poveste",
+
+
+  "Save Story": "Salvează",
+  "⏹ Stop Reading": "⏹ Oprește",
+  "▶ Read Aloud": "▶ Citește",
+
+  "Name Your Story": "Dă un nume poveștii tale",
+
+  "Save": "Salvează",
+  "Cancel": "Anulează",
+
+  "Story Saved Successfully!": "Poveste salvată cu succes!",
+  "storySavedMessage": "Povestea ta <1>„{{storyName}}”</1> a fost salvată și se află acum în <3>Poveștile mele</3>.",
+  "OK": "OK",
+
+
+  "error": {
+    "ageMissing": "Spune-ne vârsta ta ca să creăm povestea perfectă!",
+    "selectAge": "Te rugăm să selectezi o categorie de vârstă.",
+    "genreMissing": "Abia așteptăm să-ți creăm povestea! Te rugăm să alegi un gen.",
+    "selectGenre": "Te rugăm să alegi un gen.",
+    "lengthMissing": "Aventuri mari sau povești scurte? Alege o durată!",
+    "selectLength": "Te rugăm să alegi o durată de lectură."
+  },
+
+  "Write Your Own Story": "Scrie-ți Propria Poveste",
+
+  "Select Genre": "Alege Genul",
+
+  "Generate Next": "Generează următorul",
+
+
+  "storySavedModalMessage": "Povestea ta <1>„{{title}}”</1> a fost salvată și se află acum în <3>Poveștile mele</3>.",
+  "Untitled Story": "Poveste fără titlu",
+
+  "Incomplete Story": "Poveste incompletă",
+  "incompleteStoryMessage": "Asigură-te că povestea ta are un <1>titlu</1> și ceva <3>text</3> înainte de a salva.",
+
+  "audioErrorMessage": "Scrie sau generează un text înainte de a folosi <1>Citește cu voce tare</1>.",
+
+  "Resume Your Draft?": "Reia schița ta?",
+  "resumeMessage": "Am găsit o poveste neterminată. Vrei să continui de unde ai rămas?",
+  "Yes, Resume": "Da, continuă",
+  "No, Start Fresh": "Nu, începe de la zero",
+
+  "Enter your story title...": "Scrie titlul poveștii tale...",
+  "Start writing your magical bedtime story here...": "Începe să scrii aici povestea ta magică de noapte bună...",
+
+  "Title is required": "Titlul este obligatoriu",
+  "✨ A magical story needs a title to begin!": "✨ O poveste magică are nevoie de un titlu pentru a începe!",
+  "Genre is required": "Genul este obligatoriu",
+  "📚 Pick a genre so we know what kind of adventure to tell!": "📚 Alege un gen ca să știm ce fel de aventură să spunem!",
+
+  "HOME": "ACASĂ",
+  "ABOUT": "INFORMAŢII",
+  "CONTACT": "CONTACT",
+
+  "Location": "Locație",
+  "Email": "Email",
+  "Follow Us": "Urmărește-ne",
+  "Quick Links": "Linkuri rapide"
+
 }

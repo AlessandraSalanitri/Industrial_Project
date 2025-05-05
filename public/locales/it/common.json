@@ -1,11 +1,135 @@
 {
-    "personalDetails": "Dettagli personali",
-    "subscription": "Abbonamento",
-    "linkedAccounts": "Account collegati",
-    "settings": "Impostazioni",
-    "logout": "Disconnetti",
-    "creditsLeftToday": "🪙 Crediti: {{count}} rimasti oggi",
+  "personalDetails": "Dati personali",
+  "subscription": "Abbonamento",
+  "linkedAccounts": "Account collegati",
+  "settings": "Impostazioni",
+  "logout": "Disconnetti",
+  "currentPlan": "Piano attuale",
+  "credits": "Crediti",
+  "language": "Lingua",
+  "adminDashboard": "Pannello genitori",
+  "createNewStory": "Crea nuova storia",
+  "manageSavedStory": "Gestisci storie salvate",
+  "enterChildMode": "Entra in modalità bambino",
+  "noNotifications": "Sei aggiornato!",
+  "untitledStory": "Storia senza titolo",
+  "unknownTime": "Ora sconosciuta",
+  "createYourStory": "Crea la tua storia",
+  "loadingYourProfile...": "Caricamento del profilo...",
+  "age": "Età",
+  "under": "Sotto",
+  "* Genre": "* Genere",
+  "Fantasy": "Fantasia",
+  "Adventure": "Avventura",
+  "Science Fiction": "Fantascienza",
+  "Mystery": "Mistero",
+  "Humor": "Umorismo",
+  "Historical Fiction": "Narrativa storica",
+  "Animal Stories": "Storie di animali",
 
-    "language": "Lingua"
-  }
-  
+  "Setting": "Ambientazione",
+  "Historical": "Storico",
+  "Modern-Day": "Tempi moderni",
+  "Urban": "Urbano",
+  "Urban Fantasy": "Fantasia urbana",
+  "Animal-Based": "Con animali",
+  "Magical Realism": "Realismo magico",
+  "Survival": "Sopravvivenza",
+
+  "Moral": "Morale",
+  "Friendship & Teamwork": "Amicizia & Lavoro di squadra",
+  "Courage & Bravery": "Coraggio & Audacia",
+  "Kindness & Empathy": "Gentilezza & Empatia",
+  "Honesty & Integrity": "Onestà & Integrità",
+  "Perseverance & Hard Work": "Perseveranza & Impegno",
+  "Responsibility & Accountability": "Responsabilità & Affidabilità",
+  "Self-Respect & Confidence": "Autostima & Fiducia",
+  "Fairness & Justice": "Giustizia & Equità",
+  "Patience & Temperance": "Pazienza & Moderazione",
+  "Gratitude & Contentment": "Gratitudine & Soddisfazione",
+  "Environmental Awareness": "Consapevolezza ambientale",
+  "Creativity & Imagination": "Creatività & Immaginazione",
+
+  "Tone": "Tono",
+  "Lighthearted & Fun": "Leggero & Divertente",
+  "Serious & Reflective": "Serio & Riflessivo",
+  "Adventurous & Exciting": "Avventuroso & Emozionante",
+  "Mysterious & Suspenseful": "Misterioso & Avvincente",
+  "Optimistic & Hopeful": "Ottimista & Pieno di speranza",
+  "Funny & Humorous": "Divertente & Spiritoso",
+  "Romantic & Heartfelt": "Romantico & Sentito",
+  "Educational & Informative": "Educativo & Informativo",
+  "Fantasy & Magical": "Fantasia & Magia",
+  "Heroic & Noble": "Eroico & Nobile",
+
+  "* Reading Length": "* Durata lettura",
+  "Short (2 minutes)": "Breve (2 minuti)",
+  "Medium (5 minutes)": "Media (5 minuti)",
+  "Long (7 minutes)": "Lunga (7 minuti)",
+  "Main Character": "Protagonista",
+
+  "Back": "Indietro",
+  "Generate Story": "Genera storia",
+  "Create Your Own Story": "Crea la tua storia",
+
+  "Save Story": "Salva",
+  "⏹ Stop Reading": "⏹ Ferma",
+  "▶ Read Aloud": "▶ Leggi",
+
+  "Name Your Story": "Dai un nome alla tua storia",
+
+  "Save": "Salva",
+  "Cancel": "Annulla",
+
+  "Story Saved Successfully!": "Storia salvata con successo!",
+  "storySavedMessage": "La tua storia <1>“{{storyName}}”</1> è stata salvata ed è ora in <3>Le mie storie</3>.",
+  "OK": "OK",
+
+  "error": {
+    "ageMissing": "Dicci la tua età così possiamo creare la storia perfetta!",
+    "selectAge": "Seleziona una fascia d'età.",
+    "genreMissing": "Non vediamo l’ora di creare la tua storia! Seleziona un genere.",
+    "selectGenre": "Seleziona un genere.",
+    "lengthMissing": "Grandi avventure o racconti brevi? Scegli una durata!",
+    "selectLength": "Seleziona una durata di lettura."
+  },
+
+  "Write Your Own Story": "Scrivi la tua storia",
+
+  "Select Genre": "Seleziona genere",
+
+  "Generate Next": "Genera il prossimo",
+
+
+  "storySavedModalMessage": "La tua storia <1>“{{title}}”</1> è stata salvata ed è ora in <3>Le mie storie</3>.",
+  "Untitled Story": "Storia senza titolo",
+
+  "Incomplete Story": "Storia incompleta",
+  "incompleteStoryMessage": "Assicurati che la tua storia abbia un <1>titolo</1> e del <3>testo</3> prima di salvarla.",
+
+  "audioErrorMessage": "Scrivi o genera del testo prima di usare <1>Leggi ad alta voce</1>.",
+
+  "Resume Your Draft?": "Riprendi la tua bozza?",
+  "resumeMessage": "Abbiamo trovato una storia non completata. Vuoi continuare da dove hai interrotto?",
+  "Yes, Resume": "Sì, riprendi",
+  "No, Start Fresh": "No, ricomincia da capo",
+
+  "Enter your story title...": "Inserisci il titolo della tua storia...",
+  "Start writing your magical bedtime story here...": "Inizia a scrivere la tua magica storia della buonanotte qui...",
+
+  "Title is required": "Il titolo è obbligatorio",
+  "✨ A magical story needs a title to begin!": "✨ Una storia magica ha bisogno di un titolo per iniziare!",
+  "Genre is required": "Il genere è obbligatorio",
+  "📚 Pick a genre so we know what kind of adventure to tell!": "📚 Scegli un genere così sappiamo che tipo di avventura raccontare!",
+
+  "HOME": "HOME",
+  "ABOUT": "INFORMAZZIONI",
+  "CONTACT": "CONTATTO",
+
+  "Location": "Posizione",
+  "Email": "Email",
+  "Follow Us": "Seguici",
+  "Quick Links": "Link rapidi"
+
+
+}

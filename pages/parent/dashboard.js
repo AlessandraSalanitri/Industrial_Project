@@ -10,12 +10,23 @@ import '../../styles/parent_dashboard.css';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import '../../styles/darkMode.css';
 import '../../styles/notification_bell.css'; // Separate new CSS for the bell
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
+
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
+}
 
 export default function ParentDashboard() {
   const [notifications, setNotifications] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true); // new state
-
+  const { t } = useTranslation('common');
+  
   useEffect(() => {
     const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -179,7 +190,7 @@ export default function ParentDashboard() {
             {dropdownOpen && (
               <div className="notification-dropdown">
                 {notifications.length === 0 ? (
-                  <p className="notification-empty">No notifications</p>
+                  <p className="notification-empty">{t('noNotifications')}</p>
                 ) : (
                   notifications.map((notification) => (
                     <div key={notification.id} className="notification-item">
@@ -200,7 +211,7 @@ export default function ParentDashboard() {
   
       {/* === Main Dashboard === */}
       <div className="admin-dashboard">
-        <h1 className="dashboard-title">Admin Dashboard</h1>
+        <h1 className="dashboard-title">{t('adminDashboard')}</h1>
   
         <div className="dashboard-actions">
           <div className="dashboard-card">
@@ -212,7 +223,7 @@ export default function ParentDashboard() {
               className="dashboard-image"
             />
             <Link href="/parent/create-story" className="button button-primary">
-              Create new story
+            {t('createNewStory')}
             </Link>
           </div>
   
@@ -225,7 +236,7 @@ export default function ParentDashboard() {
               className="dashboard-image"
             />
             <Link href="/parent/my-stories" className="button button-primary">
-              Manage saved story
+            {t('manageSavedStory')}
             </Link>
           </div>
   
@@ -241,7 +252,7 @@ export default function ParentDashboard() {
               className="button button-primary"
               onClick={switchToChildMode}
             >
-              Enter Child Mode
+              {t('enterChildMode')}
             </button>
           </div>
         </div>

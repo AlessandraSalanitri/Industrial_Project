@@ -1,7 +1,7 @@
 {
-    "personalDetails": "Personal details",
+    "personalDetails": "Personal Details",
     "subscription": "Subscription",
-    "linkedAccounts": "Linked account",
+    "linkedAccounts": "Linked Account",
     "settings": "Settings",
     "logout": "Logout",
     "currentPlan": "Current Plan",
@@ -13,7 +13,127 @@
     "enterChildMode": "Enter Child Mode",
     "noNotifications": "You're all caught up!",
     "untitledStory": "Untitled Story",
-    "unknownTime": "Unknown time"
+    "unknownTime": "Unknown Time",
+    "createYourStory": "Create Your Story",
+    "loadingYourProfile...": "Loading your profile...",
+    "age": "Age",
+    "under": "Under",
+    "* Genre": "* Genre",
+    "Fantasy": "Fantasy",
+    "Adventure": "Adventure",
+    "Science Fiction": "Science Fiction",
+    "Mystery": "Mystery",
+    "Humor": "Humor",
+    "Historical Fiction": "Historical Fiction",
+    "Animal Stories": "Animal Stories",
 
+    "Setting": "Setting",
+    "Historical": "Historical",
+    "Modern-Day": "Modern-Day",
+    "Urban": "Urban",
+    "Urban Fantasy": "Urban Fantasy",
+    "Animal-Based": "Animal-Based",
+    "Magical Realism": "Magical Realism",
+    "Survival": "Survival",
+
+    "Moral": "Moral",
+    "Friendship & Teamwork": "Friendship & Teamwork",
+    "Courage & Bravery": "Courage & Bravery",
+    "Kindness & Empathy": "Kindness & Empathy",
+    "Honesty & Integrity": "Honesty & Integrity",
+    "Perseverance & Hard Work": "Perseverance & Hard Work",
+    "Responsibility & Accountability": "Responsibility & Accountability",
+    "Self-Respect & Confidence": "Self-Respect & Confidence",
+    "Fairness & Justice": "Fairness & Justice",
+    "Patience & Temperance": "Patience & Temperance",
+    "Gratitude & Contentment": "Gratitude & Contentment",
+    "Environmental Awareness": "Environmental Awareness",
+    "Creativity & Imagination": "Creativity & Imagination",
+
+    "Tone": "Tone",
+    "Lighthearted & Fun": "Lighthearted & Fun",
+    "Serious & Reflective": "Serious & Reflective",
+    "Adventurous & Exciting": "Adventurous & Exciting",
+    "Mysterious & Suspenseful": "Mysterious & Suspenseful",
+    "Optimistic & Hopeful": "Optimistic & Hopeful",
+    "Funny & Humorous": "Funny & Humorous",
+    "Romantic & Heartfelt": "Romantic & Heartfelt",
+    "Educational & Informative": "Educational & Informative",
+    "Fantasy & Magical": "Fantasy & Magical",
+    "Heroic & Noble": "Heroic & Noble",
+
+    "* Reading Length": "* Reading Length",
+    "Short (2 minutes)": "Short (2 minutes)",
+    "Medium (5 minutes)": "Medium (5 minutes)",
+    "Long (7 minutes)": "Long (7 minutes)",
+    "Main Character": "Main Character",
+
+    "Back": "Back",
+    "Generate Story": "Generate Story",
+    "Create Your Own Story": "Create Your Own Story",
+
+
+    "Save Story": "Save Story",
+    "⏹ Stop Reading": "⏹ Stop Reading",
+    "▶ Read Aloud": "▶ Read Aloud",
+
+   "Name Your Story": "Name Your Story",
+
+   "Save": "Save",
+   "Cancel": "Cancel",
+
+   "Story Saved Successfully!": "Story Saved Successfully!",
+   "storySavedMessage": "Your story <1>“{{storyName}}”</1> has been saved and is now in <3>My Stories</3>.",
+   "OK": "OK",
+
+   "error": {
+    "ageMissing": "Tell us your age so we can make the story just right!",
+    "selectAge": "Please select an age range.",
+    "genreMissing": "We can't wait to create your story! Please select a genre.",
+    "selectGenre": "Please select a genre.",
+    "lengthMissing": "Big adventures or tiny tales? Pick a reading length!",
+    "selectLength": "Please select a reading length."
+  },
+
+  "Write Your Own Story": "Write Your Own Story",
+
+  "Select Genre": "Select Genre",
+
+
+  "Generate Next": "Generate Next",
+
+
+  "storySavedModalMessage": "Your story <1>“{{title}}”</1> has been saved and is now in <3>My Stories</3>.",
+  "Untitled Story": "Untitled Story",
+
+  "Incomplete Story": "Incomplete Story",
+  "incompleteStoryMessage": "Please make sure your story has a <1>title</1> and some <3>text</3> before saving.",
+
+  "audioErrorMessage": "Please write or generate some story text before using <1>Read Aloud</1>.",
+
+  "Resume Your Draft?": "Resume Your Draft?",
+  "resumeMessage": "We found an unfinished story. Would you like to continue where you left off?",
+  "Yes, Resume": "Yes, Resume",
+  "No, Start Fresh": "No, Start Fresh",
+
+  "Enter your story title...": "Enter your story title...",
+  "Start writing your magical bedtime story here...": "Start writing your magical bedtime story here...",
+
+  "Title is required": "Title is required",
+  "✨ A magical story needs a title to begin!": "✨ A magical story needs a title to begin!",
+  "Genre is required": "Genre is required",
+  "📚 Pick a genre so we know what kind of adventure to tell!": "📚 Pick a genre so we know what kind of adventure to tell!",
+
+  "HOME": "HOME",
+  "ABOUT": "ABOUT",
+  "CONTACT": "CONTACT",
+
+  "Location": "Location",
+  "Email": "Email",
+  "Follow Us": "Follow Us",
+  "Quick Links": "Quick Links"
+
+  
   }
   
+

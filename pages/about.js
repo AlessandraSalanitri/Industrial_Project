@@ -32,6 +32,20 @@ export default function About() {
         <p className="closing-line">And we’re just getting started 🚀</p>
       </div>
 
+      {/* VIDEO COMERCIAL */}
+      <div className="about-video">
+        <iframe
+          width="100%"
+          height="510"
+          src="https://www.youtube.com/embed/TxQwuLELm2E"
+          title="Studioo Promo Video"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+
+      {/* IMAGE */}
         <div className="about-image">
           <Image
             src="/assets/about_img.png"
@@ -40,6 +54,9 @@ export default function About() {
             height={400}
           />
         </div>
+
+
+
       </div>
     </Layout>
   );

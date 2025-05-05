@@ -45,28 +45,31 @@ html.dark .button-secondary:hover {
 html.dark header {
     background-color: var(--background-color);
 }
-  
-html.dark nav {
-    background-color: transparent;
-    color: var(--white);
-}
 
+html.dark nav.main-nav {
+    background-color: var(--background-color);
+}
 
 html.dark nav.main-nav.show ul {
     display: flex;
 }
 
-html.dark nav ul li a:hover,
-html.dark nav ul li .active {
-    color: var(--alt);
+html.dark nav ul li a {
+    color: var(--white);
 }
   
+  
+html.dark nav ul li a:hover,  
+html.dark nav ul li a.active {
+    color: var(--alt);
+}
+ 
 html.dark .avatar-icon {
     border: 2px solid var(--secondary-color);
 }
 
 html.dark .container {
-    background-color: transparent;
+    background-color: (transparent);
     padding: 40px 80px;
     margin-top: 130px;
     max-width: 1200px;
@@ -77,9 +80,7 @@ html.dark .hamburger .bar{
     color: var(--alt);
 }
 
-nav.main-nav {
-    background-color: var(--background-color);
-}
+
   
 /* === CONTACT PAGE DARK MODE === */
 html.dark .contact-page {
@@ -103,7 +104,7 @@ html.dark .contact-item img {
 }
   
 html.dark .contact-form-container {
-    background-color: #222;
+    background-color: var(--background-color);
     border: 1px solid #FFD700;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
 }
@@ -114,14 +115,14 @@ html.dark .contact-form-container h2 {
   
 html.dark input,
 html.dark textarea {
-    background-color: #333;
+    background-color: #3f3c3c;
     color: var(--white);
     border: 1px solid #FFD700;
 }
   
 html.dark input::placeholder,
 html.dark textarea::placeholder {
-    color: #aaa;
+    color: #ffffff;
 }
   
 html.dark .socials {
@@ -222,7 +223,9 @@ html.dark .container {
     background-color: var(--background-color);
 }
   
-html.dark h1 {
+html.dark h1,
+html.dark .generated-story .story-title {
+    gap: 10px;
     -webkit-text-stroke: 1.5px var(--alt);
     text-stroke: 1.5px var(--alt);
     text-shadow: 0 5px 20px rgba(255, 255, 150, 0.5);
@@ -253,12 +256,14 @@ html.dark textarea {
 }
   
 /* AI-generated output box */
-html.dark  #story,
-html.dark  .generated-story textarea {
-    background-color: #1f1f1f;
-    color: var(--background-color);
-    border-color: var(--alt);
-    box-shadow: 0 2px 6px rgba(255, 255, 255, 0.05);
+
+html.dark .generated-story textarea,
+html.dark #story {
+  background-color: #3d3b3b !important; 
+  color: var(--white) !important;
+  border: 1px solid var(--alt);
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.05);
+  background-image: none !important;
 }
   
 /* Title for output */
@@ -313,6 +318,9 @@ html.dark .input-error {
     background-color: #331e1e;
 }
 
+html.dark .moon-icon {
+    color: var(--alt); 
+}
 
 /* === PERSONAL DETAILS PAGE DARK MODE === */
 

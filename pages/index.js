@@ -40,7 +40,7 @@ export default function Home() {
 
         <p className="tagline">
         <MoonStars size={20} weight="fill" color="#4B0082" style={{ marginRight: '6px' }} />
-        Bedtime just got easier and more magical.
+        Bedtime just got easier <br></br> and more magical.
         {/* <Sparkle size={20} weight="fill" color="#4B0082" style={{ marginLeft: '6px' }} /> */}
         </p>
 

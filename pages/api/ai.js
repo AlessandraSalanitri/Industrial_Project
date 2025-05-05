@@ -8,8 +8,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { userId, age, genre, setting, moral, tone, length, character, title, storyText, mode } = req.body;
-
+  const { userId, age, genre, setting, moral, tone, length, character, title, storyText, mode, locale } = req.body;
+  console.log("🌐 Story requested in:", locale);
+  
   if (!userId) {
     console.error("❌ Missing userId in request body");
     return res.status(400).json({ error: "Missing user ID." });
@@ -56,12 +57,22 @@ export default async function handler(req, res) {
 
   // STEP 2: Continue story mode
   if (mode === "continue") {
+    let continueInstruction = '';
+    if (locale === 'ro') {
+      continueInstruction = 'Continuă această poveste în limba română.';
+    } else if (locale === 'it') {
+      continueInstruction = 'Continua questa storia in italiano.';
+    } else {
+      continueInstruction = 'Continue this story in English.';
+    }
+  
     const continuePrompt = `
-    Continue this ${genre.toLowerCase()} children's story titled "${title}":
-    ${storyText || "Start a fun story that fits the title."}
-
-    Write the next sentance or complete the sentance in a magical, imaginative, warm tone. Keep it friendly, age-appropriate, and fun to read aloud.
-    Only include the sentance, no extra commentary.
+      ${continueInstruction}
+      Continue this ${genre.toLowerCase()} children's story titled "${title}":
+      ${storyText || "Start a fun story that fits the title."}
+  
+      Write the next sentence or complete the sentence in a magical, imaginative, warm tone. Keep it friendly, age-appropriate, and fun to read aloud.
+      Only include the sentence, no extra commentary.
     `;
 
     try {
@@ -172,7 +183,17 @@ export default async function handler(req, res) {
   };
   const maxTokens = lengthToTokens[length] || 700;
 
+  let languageInstruction = '';
+    if (locale === 'ro') {
+      languageInstruction = 'Scrie această poveste în limba română.';
+    } else if (locale === 'it') {
+      languageInstruction = 'Scrivi questa storia in italiano.';
+    } else {
+      languageInstruction = 'Write this story in English.';
+    }
+
   const prompt = `
+    ${languageInstruction}
   A magical bedtime story for a ${age}-year-old child.
   Genre: ${genre}.
   Setting: ${finalSetting || "a magical world"}.
