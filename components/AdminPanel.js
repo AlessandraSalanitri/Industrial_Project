@@ -125,23 +125,23 @@ export default function AdminPanel({ onClose }) {
         )}
 
           <button className="admin-btn" onClick={handlePersonalDetails}>
-            <span className="icon" style={{ fontSize: '1rem' }}> 🤵 {t('personalDetails')}</span>
+            <span className="icon" style={{ fontSize: '1rem' }}> 🤵 {t('Personal Details')}</span>
           </button>
 
           <button className="admin-btn" onClick={handleSubscription}>
-            <span className="icon" style={{ fontSize: '1rem' }}>🧾 {t('subscription')}</span>
+            <span className="icon" style={{ fontSize: '1rem' }}>🧾 {t('Subscription')}</span>
           </button>
 
           <button className="admin-btn" onClick={goToMyLinks}>
-            <span className="icon" style={{ fontSize: '1rem' }}>🔗 {t('linkedAccounts')}</span>
+            <span className="icon" style={{ fontSize: '1rem' }}>🔗 {t('Linked Accounts')}</span>
           </button>
 
           <button className="admin-btn" onClick={handleSettings}>
-            <span className="icon" style={{ fontSize: '1rem' }}>⚙️ {t('settings')}</span>
+            <span className="icon" style={{ fontSize: '1rem' }}>⚙️ {t('Settings')}</span>
           </button>
 
           <button className="admin-btn logout" onClick={handleLogout}>
-            <span className="icon" style={{ fontSize: '1rem' }}>🔒 {t('logout')}</span>
+            <span className="icon" style={{ fontSize: '0.8rem' }}>🔒 {t('LOGOUT')}</span>
           </button>
 
           <div className="language-section">
