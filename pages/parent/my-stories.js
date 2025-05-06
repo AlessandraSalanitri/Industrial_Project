@@ -176,6 +176,54 @@ export default function MyStories() {
         <h1 className="title">My Stories</h1>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
 
+        <div className="alphabet-filter">
+        {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => {
+          // Check if there's any story starting with this letter
+          const hasAny = stories.some((s) => s.title?.[0]?.toUpperCase() === letter);
+
+          return (
+            <button
+              key={letter}
+              type="button"
+              onClick={() => setFilters((f) => ({ ...f, letter }))}
+              className={`alphabet-btn ${hasAny ? 'primary' : ''}`} // Apply 'primary' class if a story exists
+            >
+              {letter}
+            </button>
+          );
+        })}
+        </div>
+
+        <div className="inline-filters">
+          <select
+            value={filters.age || ''}
+            onChange={(e) => setFilters((f) => ({ ...f, age: e.target.value || null }))}
+          >
+            <option value="">All Ages</option>
+            {[...new Set(stories.map((s) => s.age).filter(Boolean))].map((ageOption) => (
+              <option key={ageOption} value={ageOption}>{ageOption}</option>
+            ))}
+          </select>
+
+          <select
+            value={filters.genre || ''}
+            onChange={(e) => setFilters((f) => ({ ...f, genre: e.target.value || null }))}
+          >
+            <option value="">All Genres</option>
+            {[...new Set(stories.map((s) => s.genre).filter(Boolean))].map((genreOption) => (
+              <option key={genreOption} value={genreOption}>{genreOption}</option>
+            ))}
+          </select>
+
+          <button
+            className={`toggle-btn ${filters.age || filters.genre || filters.letter ? 'primary' : 'secondary'} spaced-button`}
+            onClick={() => setFilters({ letter: null, genre: null, age: null })}
+          >
+            {filters.age || filters.genre || filters.letter ? 'Clear Filter' : 'Filter'}
+          </button>
+        </div>
+
+
         <div className="select-delete-controls">
           <button className="toggle-btn secondary" onClick={toggleSelectAll}>
             {selectedStoryIds.length === sortedStories.length ? 'Deselect All' : 'Select All'}
