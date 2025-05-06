@@ -7,7 +7,6 @@ import Layout from '../../components/Layout';
 import Image from 'next/image';
 import Link from 'next/link';
 import '../../styles/parent_dashboard.css';
-import { ThemeToggle } from '../../components/ThemeToggle';
 import '../../styles/darkMode.css';
 import '../../styles/notification_bell.css'; // Separate new CSS for the bell
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -175,12 +174,7 @@ export default function ParentDashboard() {
       {(notificationsEnabled || true) && (
         <div className="top-controls">
         <div className="top-controls-inner">
-      
-          {/* LEFT: THEME TOGGLE */}
-          <div className="theme-toggle">
-            <ThemeToggle />
-          </div>
-      
+           
           {/* RIGHT: NOTIFICATION BELL */}
           <div className={`notification-container shake-on-new ${unreadCount > 0 ? 'has-unread' : ''}`}>
             <Bell size={32} onClick={toggleDropdown} className="notification-bell-icon" />

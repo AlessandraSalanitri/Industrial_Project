@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import StoryList from '../../components/StoryList';
 import '../../styles/child_dashboard.css';
-import { ThemeToggle } from '../../components/ThemeToggle';
 import '../../styles/darkMode.css';
 import { firebaseAuth, firestoreDB } from '../../firebase/firebaseConfig';
 import { collection, getDoc, doc, query, where, getDocs } from 'firebase/firestore';
@@ -96,30 +95,29 @@ export default function ChildDashboard() {
   }
 
   return (
-<Layout>
-  <div className="child-dashboard">
+  <Layout>
+    <div className="child-dashboard">
 
-    {/* --- New Dashboard Header --- */}
-    <div className="dashboard-header">
-      <h1 className="dashboard-title">Your Stories</h1>
-        <ThemeToggle />
-    </div>
-
-    {/* --- Search and Filters are already inside StoryList --- */}
-    <StoryList stories={stories} onPlay={handlePlayStory} />
-
-    {selectedStory && (
-      <div className="story-content-view">
-        <h2>{selectedStory.title}</h2>
-        <p><strong>Age:</strong> {selectedStory.age}</p>
-        <p><strong>Genre:</strong> {selectedStory.genre}</p>
-        <p><strong>Main Character:</strong> {selectedStory.character}</p>
-        <p><strong>Story:</strong></p>
-        <p>{selectedStory.content}</p>
-        <button onClick={() => setSelectedStory(null)}>Close Story</button>
+      {/* --- New Dashboard Header --- */}
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">Your Stories</h1>
       </div>
-    )}
-  </div>
-</Layout>
+
+      {/* --- Search and Filters are already inside StoryList --- */}
+      <StoryList stories={stories} onPlay={handlePlayStory} />
+
+      {selectedStory && (
+        <div className="story-content-view">
+          <h2>{selectedStory.title}</h2>
+          <p><strong>Age:</strong> {selectedStory.age}</p>
+          <p><strong>Genre:</strong> {selectedStory.genre}</p>
+          <p><strong>Main Character:</strong> {selectedStory.character}</p>
+          <p><strong>Story:</strong></p>
+          <p>{selectedStory.content}</p>
+          <button onClick={() => setSelectedStory(null)}>Close Story</button>
+        </div>
+      )}
+    </div>
+  </Layout>
   );
 }

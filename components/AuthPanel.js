@@ -136,6 +136,7 @@ export default function AuthPanel({ mode }) {
   };
 
   return (
+  
     <div className="auth-wrapper">
       <div className={`auth-panel ${isSignUp ? "signup-mode" : ""}`}>
         <AnimatePresence mode="wait">

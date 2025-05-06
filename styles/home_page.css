@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center; /* Center content */
   gap: 50px; /* Space between text and image */
-  padding: 120px 30px; /* Top and bottom padding */
+  padding: 3% 30px; /* Top and bottom padding */
   max-width: 1000px;
   width: 100%; /* Full width */
   margin: 0 auto; /* Centers the container */
@@ -100,7 +100,6 @@
   hyphens: auto;
   line-height: 1.6;
 }
-
 
 @media (max-width: 1024px) {
   .home-container {

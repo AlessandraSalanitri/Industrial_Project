@@ -32,6 +32,9 @@ nav.main-nav {
   justify-content: space-between;
 }
 
+.theme-toggle { 
+  margin: 3px 40px; 
+}
 
 /* Position logos correctly */
 /* main logo*/
@@ -109,19 +112,18 @@ nav ul li a:hover, .active {
 }
 
 
-@media (max-width: 1100px) {
+@media (max-width: 1240px) {
   .navbar-wrapper {
       padding: 0 300px;
   }
 }
 
-@media (max-width: 800px) {
-  .navbar-wrapper {
-      padding: 0 200px;
-  }
-}
 
-@media (max-width: 700px) {
+@media (max-width: 850px) {
+  .navbar-wrapper {
+    padding: 0 200px;
+  }
+
   nav ul{
       gap: 2%;
   }
@@ -144,6 +146,12 @@ nav ul li a:hover, .active {
       width: 30px;
       height: 30px;
 
+  }
+}
+
+@media (max-width: 930px) {
+  .logo-right {
+    display: none; /* decorative line right logo hidden for smaller screen - hamburger nav instead */
   }
 }
 
@@ -200,10 +208,6 @@ nav ul li a:hover, .active {
     top: 30px; 
     right: 20px;
     z-index: 1100; 
-  }
-
-  .logo-right {
-    display: none; /* decorative line right logo hidden for smaller screen - hamburger nav instead */
   }
 
   .top-bar {

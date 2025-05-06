@@ -6,6 +6,7 @@ import AvatarPanel from './AvatarPanel';
 import AdminPanel from './AdminPanel';
 import { useUser } from '../context/UserContext';
 import { AnimatePresence } from "framer-motion";
+import { ThemeToggle } from '../components/ThemeToggle';
 import '../styles/nav.css';
 import { useTranslation, Trans } from 'next-i18next';
 
@@ -73,6 +74,10 @@ export default function Navbar() {
             )}
           </ul>
 
+          <div className="theme-toggle">
+            <ThemeToggle />
+          </div>
+
           {user && (
             <div className="account-icon">
               <Image
@@ -106,6 +111,8 @@ export default function Navbar() {
           <AdminPanel onClose={() => setShowAvatarPanel(false)} />
         )}
       </AnimatePresence>
+
+      
     </header>
   );
 }

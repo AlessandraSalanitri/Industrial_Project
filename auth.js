@@ -1,5 +1,6 @@
 // pages/api/auth.js (Next.js API Route)
 
+
 import {
   getAuth,
   signInWithEmailAndPassword,

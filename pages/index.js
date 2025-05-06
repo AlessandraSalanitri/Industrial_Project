@@ -28,6 +28,7 @@ export default function Home() {
     <Layout>
       <div className="container">
       <div className="home-container">
+    
         {/* Image on the left */}
         <div className="image-container">
           <Image src="/assets/home_img.png" alt="Family reading" width={500} height={400} />
