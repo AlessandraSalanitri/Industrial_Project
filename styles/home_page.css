@@ -1,3 +1,12 @@
+.container {
+  padding-top: 100px;
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
 
 .home-container {
   display: flex;
@@ -8,7 +17,8 @@
   max-width: 1000px;
   width: 100%; /* Full width */
   margin: 0 auto; /* Centers the container */
-  text-align: center;
+  text-align: initial;
+  flex-wrap: wrap;
 }
 
 
@@ -65,10 +75,24 @@
   color: var(--primary-color);
   margin-bottom: 15px;
   font-weight: 700;
+  text-align: center;
 }
 
 
-.tagline,
+.tagline {
+  text-align: center;
+  display: inline-block;
+  margin: 0 auto;
+  color: #444;
+  line-height: 1.4;
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  white-space: nowrap;         /* 💥 force one line */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+
 .closing {
   text-align: center;
   display: inline-block;
@@ -78,6 +102,9 @@
   font-size: clamp(0.95rem, 2.5vw, 1.3rem);
   word-break: keep-all;
   hyphens: auto;
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .features {
@@ -149,6 +176,7 @@
     flex-direction: column;
     text-align: center;
     justify-content: center;
+    text-align: center;
   }
 }
 

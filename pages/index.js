@@ -40,10 +40,10 @@ export default function Home() {
 
 
         <p className="tagline">
-        <MoonStars size={20} weight="fill" color="#4B0082" style={{ marginRight: '6px' }} />
-        Bedtime just got easier <br></br> and more magical.
-        {/* <Sparkle size={20} weight="fill" color="#4B0082" style={{ marginLeft: '6px' }} /> */}
+          <MoonStars size={20} weight="fill" color="#4B0082" style={{ marginRight: '6px' }} />
+          Bedtime just got easier and more magical.
         </p>
+
 
 
         <p>
@@ -66,10 +66,10 @@ export default function Home() {
         </ul>
 
         <p className="closing">
-        <span>Because every child deserves a story</span><br />
-        <span>that’s just for them</span>
-        <Heart size={20} weight="fill" color="#c4c4c4" style={{ marginLeft: '8px' }} />
-        </p>
+            Because every child deserves a story that’s just for them
+            <Heart size={20} weight="fill" color="#c4c4c4" style={{ marginLeft: '8px' }} />
+          </p>
+
 
 
           <div className="buttons">
