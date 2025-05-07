@@ -69,15 +69,21 @@ export default function WriteStory() {
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-  
       if (currentUser) {
-        // 🔍 Fetch credits
         const userDocRef = doc(firestoreDB, "users", currentUser.uid);
         const userSnap = await getDoc(userDocRef);
+  
         if (userSnap.exists()) {
           const data = userSnap.data();
           setCreditsLeft(data.creditsToday ?? 0);
+  
+          setUser({
+            ...currentUser,
+            ...data,
+            userId: currentUser.uid,
+          });
+        } else {
+          setUser(currentUser);
         }
   
         // 📝 Check for saved draft
@@ -320,7 +326,7 @@ const handleConvert = () => {
 
         {creditsLeft !== null && (
           <div className="credit-info-right">
-            🪙 <strong>{creditsLeft}</strong>
+            🪙 <strong>{user?.subscriptionPlan === "unlimited" ? "♾️" : creditsLeft}</strong>
           </div>
         )}
 

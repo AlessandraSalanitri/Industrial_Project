@@ -82,7 +82,6 @@ export default function CreateStory() {
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
       setAuthLoading(false);
   
       if (currentUser) {
@@ -92,12 +91,25 @@ export default function CreateStory() {
         if (userSnap.exists()) {
           const data = userSnap.data();
           setCreditsLeft(data.creditsToday ?? 0);
+  
+          // Set merged user data
+          setUser({
+            ...currentUser,
+            ...data,
+            userId: currentUser.uid,
+          });
+        } else {
+          // No Firestore data found, fallback
+          setUser(currentUser);
         }
+      } else {
+        setUser(null);
       }
     });
   
     return () => unsubscribe();
   }, []);
+  
   
 
   // Stop speech when navigating away
@@ -302,9 +314,9 @@ const confirmSave = async () => {
         <h1 className="title">{t('createYourStory')}</h1>
 
         {creditsLeft !== null && (
-        <div className="credit-info-right">
-          🪙 <strong>{creditsLeft}</strong>
-        </div>
+          <div className="credit-info-right">
+            🪙 <strong>{user?.subscriptionPlan === "unlimited" ? "♾️" : creditsLeft}</strong>
+          </div>
         )}
 
         <select 
