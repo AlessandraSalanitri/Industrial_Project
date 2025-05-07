@@ -1,4 +1,5 @@
 // components/AlertModal.js
+import { useEffect, useState } from 'react';
 import '../styles/alertmodal.css';
 
 export default function AlertModal({
@@ -8,8 +9,18 @@ export default function AlertModal({
   onClose,
   onConfirm,
   confirmLabel = "OK",
+  cancelLabel = "Cancel",
   emoji: customEmoji
 }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    console.log("🔍 Modal mounted with props:", { title, message, type });
+  }, []);
+
+  if (!mounted) return null; // prevent hydration mismatch
+
   const emoji = customEmoji !== undefined
     ? customEmoji
     : type === "success"
@@ -21,23 +32,25 @@ export default function AlertModal({
   return (
     <div className="modal-backdrop">
       <div className="modal-content">
-      <h2 className="modal-title" style={{ color: titleColor }}>
-        {emoji && <span>{emoji} </span>}{title}
-      </h2>
+        <h2 className="modal-title" style={{ color: titleColor }}>
+          {emoji && <span>{emoji} </span>}{title}
+        </h2>
 
         <div className="modal-message">{message}</div>
+
         <div className="modal-actions">
-          {onClose && (
-            <button className="button button-secondary" onClick={onClose}>
-              {onConfirm ? "Back" : confirmLabel}
-            </button>
-          )}
           {onConfirm && (
             <button className="button button-primary" onClick={onConfirm}>
               {confirmLabel}
             </button>
           )}
+          {onClose && (
+            <button className="button button-secondary" onClick={onClose}>
+              {cancelLabel || "Cancel"}
+            </button>
+          )}
         </div>
+
       </div>
     </div>
   );

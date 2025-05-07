@@ -16,6 +16,8 @@ import '../../styles/mystories.css';
 import { speakWithUserVoice } from '../../utils/tts';
 import StoryEditorModal from '../../components/StoryEditorModal';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import AlertModal from '../../components/AlertModal';
+
 
 export default function MyStories() {
   const [stories, setStories] = useState([]);
@@ -28,6 +30,8 @@ export default function MyStories() {
   const [sortConfig, setSortConfig] = useState({ key: 'title', direction: 'asc' });
   const [selectedStoryIds, setSelectedStoryIds] = useState([]);
   const router = useRouter();
+  const [showAlertModal, setShowAlertModal] = useState(null); // for confirm + success
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), setUser);
@@ -52,46 +56,80 @@ export default function MyStories() {
 
   const handleCreateStory = () => router.push('/parent/create-story');
 
-  const handleDeleteStory = async (id) => {
-    try {
-      await deleteDoc(doc(firestoreDB, 'stories', id));
-      setStories((prev) => prev.filter((s) => s.id !== id));
-      setSelectedStoryIds((prev) => prev.filter((sid) => sid !== id));
-      alert('Story deleted successfully!');
-    } catch (e) {
-      console.error('Error deleting story:', e);
-      setErrorMessage('Failed to delete the story. Please try again.');
-    }
-  };
+const handleDeleteStory = async (id) => {
+  try {
+    await deleteDoc(doc(firestoreDB, 'stories', id));
+    setStories((prev) => prev.filter((s) => s.id !== id));
+    setSelectedStoryIds((prev) => prev.filter((sid) => sid !== id));
+    setShowAlertModal({
+      type: "success",
+      title: "STORY DELETED",
+      message: "The story has been successfully deleted.",
+      onConfirm: () => setShowAlertModal(null),
+      confirmLabel: "OK",
+      emoji: "🎉"
+    });
+  } catch (e) {
+    console.error('Error deleting story:', e);
+    setErrorMessage('Failed to delete the story. Please try again.');
+  }
+};
 
-  const handleDeleteSelected = async () => {
-    if (!window.confirm('Are you sure you want to delete selected stories?')) return;
-    try {
-      await Promise.all(selectedStoryIds.map((id) => deleteDoc(doc(firestoreDB, 'stories', id))));
-      setStories((prev) => prev.filter((s) => !selectedStoryIds.includes(s.id)));
-      setSelectedStoryIds([]);
-      alert('Selected stories deleted!');
-    } catch (e) {
-      console.error('Error deleting selected stories:', e);
-      setErrorMessage('Failed to delete some stories. Try again.');
-    }
-  };
+
+const handleDeleteSelected = () => {
+  setShowAlertModal({
+    title: "DELETE SELECTED?",
+    message: "Are you sure you want to permanently delete the selected stories?",
+    emoji: "🚨",
+    onConfirm: async () => {
+      try {
+        await Promise.all(selectedStoryIds.map((id) => deleteDoc(doc(firestoreDB, 'stories', id))));
+        setStories((prev) => prev.filter((s) => !selectedStoryIds.includes(s.id)));
+        setSelectedStoryIds([]);
+        setShowAlertModal({
+          type: "success",
+          title: "STORIES DELETED",
+          message: "Selected stories were deleted successfully.",
+          emoji: "🎉",
+          onConfirm: () => setShowAlertModal(null),
+          confirmLabel: "OK"
+        });
+      } catch (e) {
+        console.error('Error deleting selected stories:', e);
+        setShowAlertModal({
+          type: "error",
+          title: "Oops!",
+          message: "Failed to delete some stories. Please try again.",
+          confirmLabel: "OK",
+          onConfirm: () => setShowAlertModal(null)
+        });
+      }
+    },
+    onClose: () => setShowAlertModal(null),
+    confirmLabel: "Yes",
+    cancelLabel: "No"
+  });
+};
+
 
   const handleToggleFavourite = async (storyId, currentStatus) => {
     try {
       const storyRef = doc(firestoreDB, 'stories', storyId);
       const snap = await getDoc(storyRef);
       if (!snap.exists()) return setErrorMessage('Story not found; please refresh.');
+
       await updateDoc(storyRef, { favourite: !currentStatus });
       setStories((prev) =>
         prev.map((s) => (s.id === storyId ? { ...s, favourite: !currentStatus } : s))
       );
-      alert(`Story ${!currentStatus ? 'added to' : 'removed from'} favourites`);
+
+      // ✅ No message shown here
     } catch (e) {
       console.error('Error toggling favourite:', e);
       setErrorMessage('Could not update favourite. Please try again.');
     }
   };
+
 
   const handleUpdateStory = async (updated) => {
     try {
@@ -352,6 +390,21 @@ export default function MyStories() {
         <button className="button button-secondary back-button" onClick={() => router.push('/')}>
           Back
         </button>
+
+          {/* ALERT MODAL FOR CONFIRM MESSAGES */}
+        {showAlertModal && (
+          <AlertModal
+            type={showAlertModal.type}
+            title={showAlertModal.title}
+            message={showAlertModal.message}
+            onConfirm={showAlertModal.onConfirm}
+            onClose={showAlertModal.onClose}
+            confirmLabel={showAlertModal.confirmLabel}
+            cancelLabel={showAlertModal.cancelLabel}
+          />
+        )}
+
+
       </div>
     </Layout>
   );

@@ -252,7 +252,7 @@ const handleStopAudio = () => {
 
 
   
-const handleBack = () => router.push('/parent/my-stories');
+const handleBack = () => window.location.href = '/parent/my-stories';
 
 
 // CREATE STORY

@@ -199,7 +199,7 @@ export default function SubscriptionPage() {
               title="Plan Updated!"
               message="All set! Your subscription has been updated and your daily credits are refreshed. Time to create more magical stories!"
               confirmLabel="OK"
-              onConfirm={() => router.push("/parent/dashboard")}
+              onConfirm={() => window.location.href = "/parent/dashboard"}
             />
           )}
         </div>

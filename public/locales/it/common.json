@@ -107,7 +107,7 @@
   "Incomplete Story": "Storia incompleta",
   "incompleteStoryMessage": "Assicurati che la tua storia abbia un <1>titolo</1> e del <3>testo</3> prima di salvarla.",
 
-  "audioErrorMessage": "Scrivi o genera del testo prima di usare <1>Leggi ad alta voce</1>.",
+  "audioErrorMessage": "Per favore scrivi o genera del <strong>testo della storia</strong> prima di usare <strong>Leggi ad alta voce</strong>.",
 
   "Resume Your Draft?": "Riprendi la tua bozza?",
   "resumeMessage": "Abbiamo trovato una storia non completata. Vuoi continuare da dove hai interrotto?",

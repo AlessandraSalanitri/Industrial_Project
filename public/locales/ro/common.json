@@ -109,7 +109,7 @@
   "Incomplete Story": "Poveste incompletă",
   "incompleteStoryMessage": "Asigură-te că povestea ta are un <1>titlu</1> și ceva <3>text</3> înainte de a salva.",
 
-  "audioErrorMessage": "Scrie sau generează un text înainte de a folosi <1>Citește cu voce tare</1>.",
+  "audioErrorMessage": "Te rugăm să scrii sau să generezi ceva <strong>text de poveste</strong> înainte de a folosi <strong>Citește cu voce tare</strong>.",
 
   "Resume Your Draft?": "Reia schița ta?",
   "resumeMessage": "Am găsit o poveste neterminată. Vrei să continui de unde ai rămas?",

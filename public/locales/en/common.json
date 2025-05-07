@@ -109,7 +109,7 @@
   "Incomplete Story": "Incomplete Story",
   "incompleteStoryMessage": "Please make sure your story has a <1>title</1> and some <3>text</3> before saving.",
 
-  "audioErrorMessage": "Please write or generate some story text before using <1>Read Aloud</1>.",
+   "audioErrorMessage": "Please write or generate some <strong>story text</strong> before using <strong>Read Aloud</strong>.",
 
   "Resume Your Draft?": "Resume Your Draft?",
   "resumeMessage": "We found an unfinished story. Would you like to continue where you left off?",

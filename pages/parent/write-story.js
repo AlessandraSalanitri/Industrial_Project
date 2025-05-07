@@ -419,72 +419,65 @@ const handleConvert = () => {
 
             {/* SAVE STORY MESSAGE */}
             {showSuccessModal && (
-              <div className="modal-backdrop">
-              <div className="modal-content">
-                <h2 className="success-heading">🎉 {t('Story Saved Successfully!')}</h2>
-                <p>
-                  <Trans i18nKey="storySavedModalMessage" values={{ title: title || t('Untitled Story') }}>
-                    Your story <strong>“{{title}}”</strong> has been saved and is now in <strong>My Stories</strong>.
-                  </Trans>
-                </p>
-                <div className="modal-actions">
-                  <button
-                    className="button button-primary"
-                    onClick={() => {
-                      setShowSuccessModal(false);
-                      setStoryText('');
-                      setTitle('');
-                      setGenre('');
-                      router.push('/parent/my-stories');
-                    }}
-                  >
-                    {t('OK')}
-                  </button>
-                </div>
-              </div>
-            </div>
+              <AlertModal
+                type="success"
+                title={t('Story Saved Successfully!')}
+                message={
+                  <span>
+                    {t('Your story')} <strong>“{title || t('Untitled Story')}”</strong> {t('has been saved and is now in')} <strong>My Stories</strong>.
+                  </span>
+                }
+                onConfirm={() => {
+                  setShowSuccessModal(false);
+                  setStoryText('');
+                  setTitle('');
+                  setGenre('');
+                  window.location.href = '/parent/my-stories';
+                }}
+                confirmLabel={t('OK')}
+                emoji="🎉"
+              />
             )}
 
-            {/* POP UP MESSAGE IF THE REQ FIELDS ARE NOT COMPLETED */}
+
+
+            {/* POP UP MESSAGE IF THE REQ FIELDS ARE NOT COMPLETED WHEN SAVING*/}
             {showErrorModal && (
-            <div className="modal-backdrop">
-              <div className="modal-content">
-                <h2 className="modal-title">🚨 {t('Incomplete Story')}</h2>
-                <p>
-                  <Trans i18nKey="incompleteStoryMessage">
-                    Please make sure your story has a <strong>title</strong> and some <strong>text</strong> before saving.
-                  </Trans>
-                </p>
-                <div className="modal-actions">
-                  <button className="button button-primary" onClick={() => setShowErrorModal(false)}>
-                    {t('OK')}
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+              <AlertModal
+                type="error"
+                title={t('Incomplete Story')}
+                message={
+                  <span>
+                    <Trans i18nKey="incompleteStoryMessage">
+                      Please make sure your story has a <strong>title</strong> and some <strong>text</strong> before saving.
+                    </Trans>
+                  </span>
+                }
+                onConfirm={() => setShowErrorModal(false)}
+                confirmLabel={t('OK')}
+                emoji="🚨"
+              />
+            )}
+
 
             {/* ERROR MESSAGE AUDIO IF NO TEXT */}
             {showAudioErrorModal && (
-              <div className="modal-backdrop">
-                <div className="modal-content">
-                  <h2 className="modal-title">🚨 {t('Incomplete Story')}</h2>
-                  <p>
-                    <Trans i18nKey="audioErrorMessage">
-                      Please write or generate some story text before using <strong>Read Aloud</strong>.
-                    </Trans>
-                  </p>
-                  <div className="modal-actions">
-                    <button
-                      className="button button-primary"
-                      onClick={() => setShowAudioErrorModal(false)}
-                    >
-                      {t('OK')}
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <AlertModal
+                type="error"
+                title={t('Incomplete Story')}
+                message={
+                  <Trans i18nKey="audioErrorMessage">
+                    Please write or generate some <strong>story text</strong> before using <strong>Read Aloud</strong>.
+                  </Trans>
+                }
+                onConfirm={() => setShowAudioErrorModal(false)}
+                confirmLabel={t('OK')}
+                emoji="🚨"
+              />
             )}
+
+
+
 
             {showResumeModal && (
               <div className="modal-backdrop">
@@ -517,7 +510,7 @@ const handleConvert = () => {
               </div>
             )}
 
-
+        {/* OUT OF CREDIT MESSAGE */}
         {showAlertModal && (
           <AlertModal
             type={showAlertModal.type}
