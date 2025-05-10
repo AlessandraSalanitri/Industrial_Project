@@ -209,206 +209,210 @@ const handleDeleteSelected = () => {
     });
 
   return (
-    <Layout>
-      <div className="container">
-        <h1 className="title">My Stories</h1>
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
-
-        <div className="alphabet-filter">
-        {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => {
-          // Check if there's any story starting with this letter
-          const hasAny = stories.some((s) => s.title?.[0]?.toUpperCase() === letter);
-
-          return (
-            <button
-              key={letter}
-              type="button"
-              onClick={() => setFilters((f) => ({ ...f, letter }))}
-              className={`alphabet-btn ${hasAny ? 'primary' : ''}`} // Apply 'primary' class if a story exists
-            >
-              {letter}
-            </button>
-          );
-        })}
-        </div>
-
-        <div className="inline-filters">
-          <select
-            value={filters.age || ''}
-            onChange={(e) => setFilters((f) => ({ ...f, age: e.target.value || null }))}
-          >
-            <option value="">All Ages</option>
-            {[...new Set(stories.map((s) => s.age).filter(Boolean))].map((ageOption) => (
-              <option key={ageOption} value={ageOption}>{ageOption}</option>
-            ))}
-          </select>
-
-          <select
-            value={filters.genre || ''}
-            onChange={(e) => setFilters((f) => ({ ...f, genre: e.target.value || null }))}
-          >
-            <option value="">All Genres</option>
-            {[...new Set(stories.map((s) => s.genre).filter(Boolean))].map((genreOption) => (
-              <option key={genreOption} value={genreOption}>{genreOption}</option>
-            ))}
-          </select>
-
-          <button
-            className={`toggle-btn ${filters.age || filters.genre || filters.letter ? 'primary' : 'secondary'} spaced-button`}
-            onClick={() => setFilters({ letter: null, genre: null, age: null })}
-          >
-            {filters.age || filters.genre || filters.letter ? 'Clear Filter' : 'Filter'}
-          </button>
-        </div>
-
-
-                {/* Favourites Toggle - top right */}
-        
-        <div className="view-favourites-toggle">
-          <button
-            className="toggle-btn primary"
-            onClick={() => setViewFavourites((v) => !v)}
-          >
-            {viewFavourites ? '❤ Show All Stories' : '❤️ View Favourites'}
-          </button>
-        </div>
-
-        <div className="select-delete-controls">
-          <button className="toggle-btn secondary" onClick={toggleSelectAll}>
-            {selectedStoryIds.length === sortedStories.length ? 'Deselect All' : 'Select All'}
-          </button>
-          <button
-            className="delete-selected-btn"
-            onClick={handleDeleteSelected}
-            disabled={selectedStoryIds.length === 0}
-          >
-            🗑
-          </button>
-          <button className="create-story-btn" onClick={handleCreateStory}>+</button>
-        </div>
-
-
-
-        {/* Desktop Table */}
-        <table className="story-table desktop-only">
-          <thead>
-            <tr>
-              <th style={{ width: '30px', padding: 0, textAlign: 'center' }}>
-                <input
-                  type="checkbox"
-                  onChange={toggleSelectAll}
-                  checked={selectedStoryIds.length === sortedStories.length}
-                />
-              </th>
-              <th>#</th>
-              <th onClick={() => handleSort('title')} style={{ cursor: 'pointer' }}>
-                Title {renderArrow('title')}
-              </th>
-              <th onClick={() => handleSort('age')} style={{ cursor: 'pointer' }}>
-                Age {renderArrow('age')}
-              </th>
-              <th onClick={() => handleSort('genre')} style={{ cursor: 'pointer' }}>
-                Genre {renderArrow('genre')}
-              </th>
-              <th onClick={() => handleSort('character')} style={{ cursor: 'pointer' }}>
-                Character {renderArrow('character')}
-              </th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedStories.map((story, index) => (
-              <tr key={story.id}>
-                <td style={{ width: '30px', textAlign: 'center' }}>
-                  <input
-                    type="checkbox"
-                    checked={selectedStoryIds.includes(story.id)}
-                    onChange={() => toggleSelect(story.id)}
-                  />
-                </td>
-                <td>{index + 1}</td>
-                <td>{story.title}</td>
-                <td>{story.age}</td>
-                <td>{story.genre}</td>
-                <td>{story.character}</td>
-                <td className="action-buttons">
-                  <button onClick={() => { setSelectedStory(story); setModalMode('view'); }}>View</button>
-                  <button onClick={() => { setSelectedStory(story); setModalMode('edit'); }}>Edit</button>
-                  <button className="bin-btn" onClick={() => handleDeleteStory(story.id)}>🗑</button>
-                  <button
-                    className={`favourite-btn ${story.favourite ? 'favourite-active' : ''}`}
-                    onClick={() => handleToggleFavourite(story.id, story.favourite)}
-                  >
-                    {story.favourite ? <FaHeart /> : <FaRegHeart />}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Mobile Cards */}
-        <div className="mobile-story-cards mobile-only">
-          {sortedStories.map((story, index) => (
-            <div className="story-card-mobile" key={story.id}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <input
-                  type="checkbox"
-                  checked={selectedStoryIds.includes(story.id)}
-                  onChange={() => toggleSelect(story.id)}
-                />
-                <strong>#{index + 1}</strong>
-              </div>
-              <p><strong>Title:</strong> {story.title}</p>
-              <p><strong>Age:</strong> {story.age}</p>
-              <p><strong>Genre:</strong> {story.genre}</p>
-              <p><strong>Character:</strong> {story.character}</p>
-              <div className="action-buttons">
-                <button onClick={() => { setSelectedStory(story); setModalMode('view'); }}>View</button>
-                <button onClick={() => { setSelectedStory(story); setModalMode('edit'); }}>Edit</button>
-                <button className="bin-btn" onClick={() => handleDeleteStory(story.id)}>🗑</button>
+      <Layout>
+        <div className="container">
+          <h1 className="title">My Stories</h1>
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+  
+          {/* Alphabet Filter */}
+          <div className="alphabet-filter">
+            {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) => {
+              const hasAny = stories.some((s) => s.title?.[0]?.toUpperCase() === letter);
+              return (
                 <button
-                  className={`favourite-btn ${story.favourite ? 'favourite-active' : ''}`}
-                  onClick={() => handleToggleFavourite(story.id, story.favourite)}
+                  key={letter}
+                  type="button"
+                  onClick={() => setFilters((f) => ({ ...f, letter }))}
+                  className={`alphabet-btn ${hasAny ? 'primary' : ''}`}
                 >
-                  {story.favourite ? <FaHeart /> : <FaRegHeart />}
+                  {letter}
                 </button>
+              );
+            })}
+          </div>
+  
+          {/* Inline Filters */}
+          <div className="inline-filters">
+            <select
+              value={filters.age || ''}
+              onChange={(e) => setFilters((f) => ({ ...f, age: e.target.value || null }))}
+            >
+              <option value="">All Ages</option>
+              {[...new Set(stories.map((s) => s.age).filter(Boolean))].map((ageOption) => (
+                <option key={ageOption} value={ageOption}>{ageOption}</option>
+              ))}
+            </select>
+  
+            <select
+              value={filters.genre || ''}
+              onChange={(e) => setFilters((f) => ({ ...f, genre: e.target.value || null }))}
+            >
+              <option value="">All Genres</option>
+              {[...new Set(stories.map((s) => s.genre).filter(Boolean))].map((genreOption) => (
+                <option key={genreOption} value={genreOption}>{genreOption}</option>
+              ))}
+            </select>
+  
+            <button
+              className={`toggle-btn ${filters.age || filters.genre || filters.letter ? 'primary' : 'secondary'} spaced-button`}
+              onClick={() => setFilters({ letter: null, genre: null, age: null })}
+            >
+              {filters.age || filters.genre || filters.letter ? 'Clear Filter' : 'Filter'}
+            </button>
+          </div>
+  
+          {/* View Favourites Button - Right Aligned */}
+          <div className="view-favourites-toggle" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button
+              className="toggle-btn primary"
+              onClick={() => setViewFavourites((v) => !v)}
+            >
+              {viewFavourites ? '❤ Show All Stories' : '❤️ View Favourites'}
+            </button>
+          </div>
+  
+          {/* No Stories Found Message */}
+          {sortedStories.length === 0 ? (
+            <p style={{ marginTop: '2rem', textAlign: 'center', color: '#555' }}>
+              No stories found, please change your selection.
+            </p>
+          ) : (
+            <>
+              <div className="select-delete-controls">
+                <button className="toggle-btn secondary" onClick={toggleSelectAll}>
+                  {selectedStoryIds.length === sortedStories.length ? 'Deselect All' : 'Select All'}
+                </button>
+                <button
+                  className="delete-selected-btn"
+                  onClick={handleDeleteSelected}
+                  disabled={selectedStoryIds.length === 0}
+                >
+                  🗑
+                </button>
+                <button className="create-story-btn" onClick={handleCreateStory}>+</button>
               </div>
-            </div>
-          ))}
-        </div>
-
-        <StoryEditorModal
-          isOpen={!!selectedStory}
-          mode={modalMode}
-          story={selectedStory}
-          onClose={() => { setSelectedStory(null); handleStopStory(); }}
-          onSave={handleUpdateStory}
-          onRead={handleReadStory}
-          onPause={handlePauseStory}
-          onResume={handleResumeStory}
-          onStop={handleStopStory}
-        />
-
-        <button className="button button-secondary back-button" onClick={() => router.push('/')}>
-          Back
-        </button>
-
-          {/* ALERT MODAL FOR CONFIRM MESSAGES */}
-        {showAlertModal && (
-          <AlertModal
-            type={showAlertModal.type}
-            title={showAlertModal.title}
-            message={showAlertModal.message}
-            onConfirm={showAlertModal.onConfirm}
-            onClose={showAlertModal.onClose}
-            confirmLabel={showAlertModal.confirmLabel}
-            cancelLabel={showAlertModal.cancelLabel}
+  
+              {/* Desktop Table */}
+              <table className="story-table desktop-only">
+                <thead>
+                  <tr>
+                    <th style={{ width: '30px', padding: 0, textAlign: 'center' }}>
+                      <input
+                        type="checkbox"
+                        onChange={toggleSelectAll}
+                        checked={selectedStoryIds.length === sortedStories.length}
+                      />
+                    </th>
+                    <th>#</th>
+                    <th onClick={() => handleSort('title')} style={{ cursor: 'pointer' }}>
+                      Title {renderArrow('title')}
+                    </th>
+                    <th onClick={() => handleSort('age')} style={{ cursor: 'pointer' }}>
+                      Age {renderArrow('age')}
+                    </th>
+                    <th onClick={() => handleSort('genre')} style={{ cursor: 'pointer' }}>
+                      Genre {renderArrow('genre')}
+                    </th>
+                    <th onClick={() => handleSort('character')} style={{ cursor: 'pointer' }}>
+                      Character {renderArrow('character')}
+                    </th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedStories.map((story, index) => (
+                    <tr key={story.id}>
+                      <td style={{ width: '30px', textAlign: 'center' }}>
+                        <input
+                          type="checkbox"
+                          checked={selectedStoryIds.includes(story.id)}
+                          onChange={() => toggleSelect(story.id)}
+                        />
+                      </td>
+                      <td>{index + 1}</td>
+                      <td>{story.title}</td>
+                      <td>{story.age}</td>
+                      <td>{story.genre}</td>
+                      <td>{story.character}</td>
+                      <td className="action-buttons">
+                        <button onClick={() => { setSelectedStory(story); setModalMode('view'); }}>View</button>
+                        <button onClick={() => { setSelectedStory(story); setModalMode('edit'); }}>Edit</button>
+                        <button className="bin-btn" onClick={() => handleDeleteStory(story.id)}>🗑</button>
+                        <button
+                          className={`favourite-btn ${story.favourite ? 'favourite-active' : ''}`}
+                          onClick={() => handleToggleFavourite(story.id, story.favourite)}
+                        >
+                          {story.favourite ? <FaHeart /> : <FaRegHeart />}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+  
+              {/* Mobile Cards */}
+              <div className="mobile-story-cards mobile-only">
+                {sortedStories.map((story, index) => (
+                  <div className="story-card-mobile" key={story.id}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <input
+                        type="checkbox"
+                        checked={selectedStoryIds.includes(story.id)}
+                        onChange={() => toggleSelect(story.id)}
+                      />
+                      <strong>#{index + 1}</strong>
+                    </div>
+                    <p><strong>Title:</strong> {story.title}</p>
+                    <p><strong>Age:</strong> {story.age}</p>
+                    <p><strong>Genre:</strong> {story.genre}</p>
+                    <p><strong>Character:</strong> {story.character}</p>
+                    <div className="action-buttons">
+                      <button onClick={() => { setSelectedStory(story); setModalMode('view'); }}>View</button>
+                      <button onClick={() => { setSelectedStory(story); setModalMode('edit'); }}>Edit</button>
+                      <button className="bin-btn" onClick={() => handleDeleteStory(story.id)}>🗑</button>
+                      <button
+                        className={`favourite-btn ${story.favourite ? 'favourite-active' : ''}`}
+                        onClick={() => handleToggleFavourite(story.id, story.favourite)}
+                      >
+                        {story.favourite ? <FaHeart /> : <FaRegHeart />}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+  
+          <StoryEditorModal
+            isOpen={!!selectedStory}
+            mode={modalMode}
+            story={selectedStory}
+            onClose={() => { setSelectedStory(null); handleStopStory(); }}
+            onSave={handleUpdateStory}
+            onRead={handleReadStory}
+            onPause={handlePauseStory}
+            onResume={handleResumeStory}
+            onStop={handleStopStory}
           />
-        )}
-
-
-      </div>
-    </Layout>
-  );
+  
+          <button className="button button-secondary back-button" onClick={() => router.push('/')}>
+            Back
+          </button>
+  
+          {showAlertModal && (
+            <AlertModal
+              type={showAlertModal.type}
+              title={showAlertModal.title}
+              message={showAlertModal.message}
+              onConfirm={showAlertModal.onConfirm}
+              onClose={showAlertModal.onClose}
+              confirmLabel={showAlertModal.confirmLabel}
+              cancelLabel={showAlertModal.cancelLabel}
+            />
+          )}
+        </div>
+      </Layout>
+    );
 }
+
+
