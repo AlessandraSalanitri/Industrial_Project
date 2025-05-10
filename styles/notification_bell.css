@@ -66,3 +66,21 @@
 .shake-on-new.has-unread {
   animation: shake 0.6s ease infinite;
 }
+
+.clear-notifications-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #ff4d4f;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.clear-notifications-btn:hover {
+  background-color: #d9363e;
+}

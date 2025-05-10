@@ -182,19 +182,39 @@ export default function ParentDashboard() {
               <span className="notification-badge">{unreadCount}</span>
             )}
             {dropdownOpen && (
-              <div className="notification-dropdown">
-                {notifications.length === 0 ? (
-                  <p className="notification-empty">{t('noNotifications')}</p>
-                ) : (
-                  notifications.map((notification) => (
-                    <div key={notification.id} className="notification-item">
-                      <strong>{notification.title}</strong>
-                      <p>{notification.createdAt}</p>
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
+  <div className="notification-dropdown">
+    {notifications.length === 0 ? (
+      <p className="notification-empty">{t('noNotifications')}</p>
+    ) : (
+      <>
+        {/* ✅ Clear Button on top */}
+        <button
+          className="clear-notifications-btn"
+          onClick={async () => {
+            await Promise.all(
+              notifications.map(async (notification) => {
+                const ref = doc(firestoreDB, "stories", notification.id);
+                await updateDoc(ref, { read: true });
+              })
+            );
+            setNotifications([]); // Clear local state
+            setDropdownOpen(false); // Optional: close dropdown
+          }}
+        >
+          {t('Clear All') || 'Clear All Notifications'}
+        </button>
+
+        {/* Notifications List */}
+        {notifications.map((notification) => (
+          <div key={notification.id} className="notification-item">
+            <strong>{notification.title}</strong>
+            <p>{notification.createdAt}</p>
+          </div>
+        ))}
+      </>
+    )}
+  </div>
+)}
           </div>
       
         </div>
