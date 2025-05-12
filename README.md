@@ -100,11 +100,11 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 
 ## WHAT'S LEFT?? :D
-* A FINAL CALL TO TEST IT ALL TOGETHER,
-* CHECK ALL DESIGN ADHERE TO DESIRED REQUIREMENTS BY CLIENT.
+* A FINAL CALL TO TEST IT ALL TOGETHER, ✅
+* CHECK ALL DESIGN ADHERE TO DESIRED REQUIREMENTS BY CLIENT. ✅
 
 # FINAL STEPSSSSS  🔥🔥🔥🔥🔥🔥🔥🔥🔥
-*** TESTING *** 
+*** TESTING ***  ✅ 
 🔥🔥🔥🔥🔥🔥🔥🔥🔥
 SUBMITTING, & DDDDDDONEEEEE!!!! 🔥🔥🔥🔥🔥🔥
 𝔾𝕆𝕆𝔻 𝔹𝕆𝕐 𝔾𝕆𝕆𝔻 𝔹𝕆𝕐 𝔾𝕆𝕆𝔻 𝔹𝕆𝕐 𝔾𝕆𝕆𝔻 𝔹𝕆𝕐 𝔾𝕆𝕆𝔻 𝔹𝕆𝕐 𝔾𝕆𝕆𝔻 𝔹𝕆𝕐 𝔾𝕆𝕆𝔻 𝔹𝕆𝕐 𝔾𝕆𝕆𝔻 𝔹𝕆𝕐 𝔾𝕆𝕆𝔻 𝔹𝕆𝕐 𝔾𝕆𝕆𝔻 𝔹𝕆𝕐
