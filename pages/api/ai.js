@@ -79,7 +79,7 @@ export default async function handler(req, res) {
       const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: {
-          Authorization: "Bearer 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",
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -215,7 +215,7 @@ export default async function handler(req, res) {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: "Bearer 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",
+        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
