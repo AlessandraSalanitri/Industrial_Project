@@ -11,7 +11,7 @@ export default function About() {
         <p>
           At <strong>Studioo</strong>, we believe bedtime should be a moment of connection, creativity, and calm.
           Our journey began with a simple question:
-          <em> “What if stories could be crafted in seconds, just for your child?”</em>
+          <em>&ldquo;What if stories could be crafted in seconds, just for your child?&rdquo;</em>
         </p>
 
         <p>
